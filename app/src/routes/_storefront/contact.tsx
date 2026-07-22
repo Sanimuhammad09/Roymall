@@ -1,5 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
+import { api } from '../../lib/api'
 
 export const Route = createFileRoute('/_storefront/contact')({
   component: Contact,
@@ -7,7 +8,14 @@ export const Route = createFileRoute('/_storefront/contact')({
 
 function Contact() {
   const revealRefs = useRef<Array<HTMLElement | null>>([])
-  const [buttonState, setButtonState] = useState<'IDLE' | 'SENDING' | 'RECEIVED'>('IDLE')
+  const [buttonState, setButtonState] = useState<'IDLE' | 'SENDING' | 'RECEIVED' | 'ERROR'>('IDLE')
+
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
+  const [type, setType] = useState('GENERAL INQUIRY')
+  const [message, setMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     const observerOptions = {
@@ -36,17 +44,27 @@ function Contact() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setButtonState('SENDING')
+    setErrorMessage('')
     
-    setTimeout(() => {
+    try {
+      await api.submitInquiry({ fullName, email, phone, type, message })
       setButtonState('RECEIVED')
       setTimeout(() => {
         setButtonState('IDLE')
-        e.currentTarget.reset()
-      }, 2000)
-    }, 1500)
+        setFullName('')
+        setEmail('')
+        setPhone('')
+        setType('GENERAL INQUIRY')
+        setMessage('')
+      }, 3000)
+    } catch (err: any) {
+      setButtonState('ERROR')
+      setErrorMessage(err.message || 'Failed to send inquiry')
+      setTimeout(() => setButtonState('IDLE'), 3000)
+    }
   }
 
   return (
@@ -147,22 +165,22 @@ function Contact() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-[32px]">
                 <div className="flex flex-col gap-2">
                   <label className="font-label-md text-label-md text-regal-navy uppercase tracking-tighter">Full Name</label>
-                  <input className="luxury-input py-3" placeholder="ALEXANDER STERLING" type="text" required />
+                  <input className="luxury-input py-3" placeholder="ALEXANDER STERLING" type="text" value={fullName} onChange={e => setFullName(e.target.value)} required />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="font-label-md text-label-md text-regal-navy uppercase tracking-tighter">Email Address</label>
-                  <input className="luxury-input py-3" placeholder="ALEXANDER@EXAMPLE.COM" type="email" required />
+                  <input className="luxury-input py-3" placeholder="ALEXANDER@EXAMPLE.COM" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
                 </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-[32px]">
                 <div className="flex flex-col gap-2">
                   <label className="font-label-md text-label-md text-regal-navy uppercase tracking-tighter">Telephone</label>
-                  <input className="luxury-input py-3" placeholder="+234 ..." type="tel" />
+                  <input className="luxury-input py-3" placeholder="+234 ..." type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="font-label-md text-label-md text-regal-navy uppercase tracking-tighter">Inquiry Type</label>
-                  <select className="luxury-input py-3 appearance-none bg-transparent cursor-pointer focus:outline-none">
+                  <select className="luxury-input py-3 appearance-none bg-transparent cursor-pointer focus:outline-none" value={type} onChange={e => setType(e.target.value)}>
                     <option>GENERAL INQUIRY</option>
                     <option>BESPOKE CONSULTATION</option>
                     <option>CORPORATE GIFTING</option>
@@ -173,22 +191,29 @@ function Contact() {
               
               <div className="flex flex-col gap-2">
                 <label className="font-label-md text-label-md text-regal-navy uppercase tracking-tighter">Message</label>
-                <textarea className="luxury-input py-3 resize-none" placeholder="HOW MAY WE ASSIST YOU?" rows={5} required></textarea>
+                <textarea className="luxury-input py-3 resize-none" placeholder="HOW MAY WE ASSIST YOU?" rows={5} value={message} onChange={e => setMessage(e.target.value)} required></textarea>
               </div>
               
+              {errorMessage && (
+                <div className="bg-red-50 text-red-600 p-4 font-body-md text-sm border border-red-100">
+                  {errorMessage}
+                </div>
+              )}
               <div className="pt-4">
                 <button 
                   className={`font-label-md text-label-md px-12 py-5 uppercase tracking-widest transition-all duration-300 active:scale-[0.98] ${
                     buttonState === 'SENDING' ? 'bg-regal-navy text-metallic-gold opacity-50 cursor-not-allowed' :
                     buttonState === 'RECEIVED' ? 'bg-metallic-gold text-regal-navy' :
+                    buttonState === 'ERROR' ? 'bg-red-600 text-white' :
                     'bg-regal-navy text-metallic-gold hover:bg-primary-container'
                   }`} 
                   type="submit"
-                  disabled={buttonState !== 'IDLE'}
+                  disabled={buttonState === 'SENDING' || buttonState === 'RECEIVED'}
                 >
                   {buttonState === 'IDLE' && 'Send Inquiry'}
                   {buttonState === 'SENDING' && 'Sending...'}
                   {buttonState === 'RECEIVED' && 'Received'}
+                  {buttonState === 'ERROR' && 'Error - Try Again'}
                 </button>
               </div>
             </form>
@@ -224,9 +249,9 @@ function Contact() {
           <span className="font-label-md text-label-md text-metallic-gold uppercase tracking-[0.3em] mb-6">The Royal Club</span>
           <h2 className="font-headline-lg text-headline-lg text-soft-cream mb-8 leading-tight">Private Scent Consultations</h2>
           <p className="font-body-lg text-body-lg text-soft-cream/70 mb-10 max-w-md">Reserve a private hour at our Lagos Atelier to discover your signature fragrance with our lead perfumer.</p>
-          <a className="border border-metallic-gold px-10 py-4 text-metallic-gold font-label-md text-label-md uppercase tracking-widest hover:bg-metallic-gold hover:text-regal-navy transition-all duration-300" href="#">
+          <Link to="/book-appointment" className="border border-metallic-gold px-10 py-4 text-metallic-gold font-label-md text-label-md uppercase tracking-widest hover:bg-metallic-gold hover:text-regal-navy transition-all duration-300">
             Book Appointment
-          </a>
+          </Link>
         </div>
         <div className="h-[600px] order-1 md:order-2">
           <img 

@@ -1,5 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '../../lib/api'
+import type { Product } from '../../lib/api'
 
 export const Route = createFileRoute('/_storefront/new-arrivals')({
   component: NewArrivals,
@@ -35,56 +38,12 @@ function NewArrivals() {
     }
   }
 
-  const products = [
-    {
-      id: 1,
-      name: 'Midnight Oudh',
-      type: 'Extrait de Parfum',
-      price: 85000,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAE2yDxALDATWQlhtP3wM1wqPX4mXp0GNEbyZ97XwQHI7QOhp3lVEbH4NIPHNDltoynanGMclJaA6RN2n7FB13PvOcKWEPXhEe4ay6yzL58Mt87InlfnDXDhdnasoNjOSCAxMLpI_R1rLclB7MbGtd5-4ASPzU5xfbFX-XwItsjmY9LbjIPX4mQJmCY5ccwsNjlfjNnQNn4_zfmAymiuCdhBxHsfs-qlprCEugByhyItFn_VJU_E7Te',
-      desc: 'A deep, mysterious blend of rare oudh, smoked vetiver, and dark rose petals.'
-    },
-    {
-      id: 2,
-      name: 'Desert Bloom',
-      type: 'Eau de Parfum',
-      price: 62500,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBwdty9Obnf3wXamv5cY8-GuPY2MV2qofUvjXrt4_BPhd_v-yE-rInZpF5YUEREHHlsoOtPW8aT3pwFQWWgMzXKXjXZQYV1GgbQRmMnck0yWQujrXoC4yMYsFgYgndHK8liapSNCPDJHfeFRVQyNkLjyekbB50jICar8dzy2Bh4uW7vNxgcl4DPY8OJYIyVILgn8sqRyE7AhCIsdB76Pn3-hJvNwwoBzcvgxB3uHDyN1vn87miVwX-9',
-      desc: 'Radiant notes of orange blossom, honeyed amber, and sun-drenched jasmine.'
-    },
-    {
-      id: 3,
-      name: 'Oceanic Silk',
-      type: 'Cologne Intense',
-      price: 55000,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCUguvYtNAWwF2hAeXjxTVaRapExRlFyshaHZYjZptgvEskmW_QB4DFzYemzpyw2kWMZ_vYYawoXoX0sydRzl_ufqqtwSZj-H7zthMCURPZKZkRabh-TV307BheW-lKdrhbuJqOQO1T9j3t4qc7wdAeT3DcBVIfcuyToHQ_L9Sr416UvTcQE3pzAwWvfKIXXZmx3bJX2vGBuqNOMau46kDKrx78JyUl2g58z7t4B2poK1Mx--ItxRWv',
-      desc: 'Crisp sea salt accord combined with white cedarwood and silk musk.'
-    },
-    {
-      id: 4,
-      name: 'Royal Saffron',
-      type: 'Limited Edition',
-      price: 110000,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBPyu0D4LtZaAZQVJRUPz8Rr1pOr_gZ8-uHv5JwYLAT5BIB6nTIi497vwmmpivVymLwdp6c4kRRrNwNvfT70wwJmXLtr2R_VAEHnq7MOwetOzviPs37mYSAKIL8RWzygSDuf6dwoN9sRcloHjMNpH0_kbPB0AqAmM8bdq1XEOWjpAhnnYu7IhxnZdfEu196nn6EiIBFm-EpiIvlN9jxCyEajZOymjzfLHVJYuPxHjZzxgBB5IgsJrFw',
-      desc: 'Opulent Iranian saffron infused with creamy sandalwood and black pepper.'
-    },
-    {
-      id: 5,
-      name: 'Citrus Serenade',
-      type: 'Daytime Cologne',
-      price: 48000,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAXVmYeqh69jv3seO6E9NwBaNHeSBqoAQAz_hIOkVT9i6yqGA2h-rb1RCoaXvW60pWdr-YbpAdfA8mjpzBtoUEzCIHQtMBrS-z6rgG2HaZkU0SPhtR8sODdoecRK2ozZR67rvci2iVuPW7e0nWj3Ld9I2kNf_JGTGLHVlyJf0uNGkbgAaPzLezhXrU6moZUh7op-eB6cxdPQ2UGF9O3xzVY8XRK3nfdBaMt4W98uGCad-ZYDX9YHTKC',
-      desc: 'A sparkling overture of Sicilian bergamot, lime zest, and cool mint leaves.'
-    },
-    {
-      id: 6,
-      name: 'Velvet Orchid',
-      type: 'Evening Parfum',
-      price: 78000,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA64sViadOrrEsLWulDO5rxvWcxBmghC3dij3K79lonuEoq4zhx4mWfll8pcL-X7Nu6N6IZyLymz6zT6gR90qKTHVZTdDC2BY9mqxX0zKeQQL5jSn0QqJi-BUYisP8vtyR2pi5oac3TjRSQ25gBhpDwVlrO3rj8B84P4cCt4OnR1KU1Cl11SpEB7XUUAROY7OamEnbtDWY_Aoui_cqTQ1MMA-J0jnQJGgipXIkPvVCvtxpwz6Ejt5oY',
-      desc: 'Intoxicating black orchid mingled with spices, dark chocolate, and patchouli.'
-    }
-  ]
+  const { data: newArrivalsData, isLoading } = useQuery({
+    queryKey: ['products', 'new-arrivals'],
+    queryFn: () => api.getProducts({ isNewArrival: true })
+  })
+
+  const products: Product[] = Array.isArray(newArrivalsData) ? newArrivalsData : (newArrivalsData?.data || [])
 
   return (
     <main className="bg-background text-on-background font-body-md min-h-screen">
@@ -133,33 +92,38 @@ function NewArrivals() {
           </div>
         </div>
 
-        {/* Bento/Grid Mix */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[32px]">
-          {products.map(product => (
-            <div key={product.id} className="group flex flex-col">
-              <div className="relative overflow-hidden bg-soft-cream aspect-[4/5] mb-6">
-                <img 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                  alt={product.name} 
-                  src={product.image}
-                />
-                <div className="absolute inset-0 bg-regal-navy/0 group-hover:bg-regal-navy/10 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-                  <button className="bg-white text-regal-navy px-6 py-3 font-label-md text-label-md shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Quick View</button>
+        {isLoading ? (
+          <div className="flex justify-center py-20 text-regal-navy font-bold">Loading collection...</div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[32px]">
+            {products.map(product => (
+              <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="group flex flex-col cursor-pointer">
+                <div className="relative overflow-hidden bg-soft-cream aspect-[4/5] mb-6">
+                  <img 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                    alt={product.name} 
+                    src={product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}
+                  />
+                  <div className="absolute inset-0 bg-regal-navy/0 group-hover:bg-regal-navy/10 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <button className="bg-white text-regal-navy px-6 py-3 font-label-md text-label-md shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Quick View</button>
+                  </div>
+                  <div className="absolute top-4 left-4 bg-metallic-gold text-regal-navy px-3 py-1 font-label-md text-[10px] tracking-wider uppercase">New</div>
                 </div>
-                <div className="absolute top-4 left-4 bg-metallic-gold text-regal-navy px-3 py-1 font-label-md text-[10px] tracking-wider uppercase">New</div>
-              </div>
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="font-label-md text-[12px] text-metallic-gold uppercase tracking-widest mb-1">{product.type}</p>
-                  <h3 className="font-headline-md text-headline-md text-regal-navy mb-2">{product.name}</h3>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-label-md text-[12px] text-metallic-gold uppercase tracking-widest mb-1">{product.category}</p>
+                    <h3 className="font-headline-md text-headline-md text-regal-navy mb-2">{product.name}</h3>
+                  </div>
+                  <span className="font-price-lg text-price-lg text-regal-navy">₦{product.price.toLocaleString()}</span>
                 </div>
-                <span className="font-price-lg text-price-lg text-regal-navy">₦{product.price.toLocaleString()}</span>
-              </div>
-              <p className="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-2">{product.desc}</p>
-              <button className="mt-auto border border-metallic-gold text-metallic-gold py-3 font-label-md text-label-md hover:bg-metallic-gold hover:text-white transition-all duration-300 uppercase">Discover More</button>
-            </div>
-          ))}
-        </div>
+                <p className="font-body-md text-body-md text-on-surface-variant mb-6 line-clamp-2">
+                  {product.notes ? `${product.notes.top} • ${product.notes.heart} • ${product.notes.base}` : 'Discover the new essence.'}
+                </p>
+                <button className="mt-auto border border-metallic-gold text-metallic-gold py-3 font-label-md text-label-md hover:bg-metallic-gold hover:text-white transition-all duration-300 uppercase">Discover More</button>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Story/About the Collection Section */}

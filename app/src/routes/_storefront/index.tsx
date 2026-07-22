@@ -1,17 +1,38 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { useEffect, useRef } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { useEffect, useRef, useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
+import type { Product } from '../../lib/api'
 
 export const Route = createFileRoute('/_storefront/')({
   component: Home,
 })
 
 function Home() {
-  const navigate = useNavigate()
-  const { data: products = [] } = useQuery({
-    queryKey: ['products'],
-    queryFn: api.getProducts
+  const queryClient = useQueryClient()
+  const [addedToast, setAddedToast] = useState(false)
+  
+  const { data: bestSellersData } = useQuery({
+    queryKey: ['products', 'best-sellers'],
+    queryFn: () => api.getProducts({ isBestSeller: true })
+  })
+  
+  const { data: newArrivalsData } = useQuery({
+    queryKey: ['products', 'new-arrivals'],
+    queryFn: () => api.getProducts({ isNewArrival: true })
+  })
+
+  const bestSellers: Product[] = Array.isArray(bestSellersData) ? bestSellersData : (bestSellersData?.data || [])
+  const newArrivals: Product[] = Array.isArray(newArrivalsData) ? newArrivalsData : (newArrivalsData?.data || [])
+
+  const addToCartMutation = useMutation({
+    mutationFn: ({ productId, quantity }: { productId: string; quantity: number }) =>
+      api.addToCart(productId, quantity),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] })
+      setAddedToast(true)
+      setTimeout(() => setAddedToast(false), 2500)
+    }
   })
 
   // Fade-in observer
@@ -135,10 +156,10 @@ function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-            {products.slice(0, 4).map((product, index) => (
+            {bestSellers.slice(0, 4).map((product, index) => (
               <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="group cursor-pointer block">
                 <div className="relative aspect-[4/5] bg-soft-cream overflow-hidden mb-6">
-                  <div className="absolute inset-0 scale-100 group-hover:scale-110 transition-transform duration-700 bg-cover bg-center" style={{backgroundImage: `url('${product.image}')`}}></div>
+                  <div className="absolute inset-0 scale-100 group-hover:scale-110 transition-transform duration-700 bg-cover bg-center" style={{backgroundImage: `url('${product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}')`}}></div>
                   {index === 0 && (
                     <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 font-label-md text-label-md text-regal-navy uppercase font-bold text-xs">Bestseller</div>
                   )}
@@ -176,10 +197,10 @@ function Home() {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {products.slice(4, 12).map((product) => (
+            {newArrivals.slice(0, 8).map((product) => (
               <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="bg-white p-6 group transition-all duration-300 hover:shadow-xl block">
                 <div className="aspect-square bg-soft-cream mb-6 overflow-hidden">
-                  <div className="w-full h-full scale-100 group-hover:scale-105 transition-transform duration-500 bg-cover bg-center" style={{backgroundImage: `url('${product.image}')`}}></div>
+                  <div className="w-full h-full scale-100 group-hover:scale-105 transition-transform duration-500 bg-cover bg-center" style={{backgroundImage: `url('${product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}')`}}></div>
                 </div>
                 <h4 className="font-headline-md text-body-lg font-bold text-regal-navy text-xl">{product.name}</h4>
                 <p className="font-label-md text-label-md text-gray-500 mb-4 uppercase text-[10px] font-bold">{product.notes?.top} • {product.notes?.heart}</p>
@@ -188,7 +209,8 @@ function Home() {
                   <button 
                     onClick={(e) => {
                       e.preventDefault()
-                      navigate({ to: '/cart' })
+                      e.stopPropagation()
+                      addToCartMutation.mutate({ productId: product.id, quantity: 1 })
                     }}
                     className="material-symbols-outlined text-regal-navy group-hover:text-metallic-gold transition-colors"
                   >
@@ -200,6 +222,14 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* Added to Cart Toast */}
+      {addedToast && (
+        <div className="fixed bottom-10 right-10 bg-regal-navy text-metallic-gold px-8 py-4 flex items-center gap-4 z-50 border border-metallic-gold shadow-2xl">
+          <span className="material-symbols-outlined text-green-400">check_circle</span>
+          <span className="font-label-md text-sm uppercase tracking-widest">Added to your bag</span>
+        </div>
+      )}
     </>
   )
 }

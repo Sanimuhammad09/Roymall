@@ -1,4 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '../../lib/api'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -35,6 +37,12 @@ export const Route = createFileRoute('/admin/analytics')({
 })
 
 function Analytics() {
+  const { data } = useQuery({
+    queryKey: ['admin-overview'],
+    queryFn: () => api.adminGetOverview()
+  })
+
+  const metrics = data || {}
   const lineOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -123,44 +131,34 @@ function Analytics() {
         <div className="bg-white p-8 border border-gray-200 relative overflow-hidden group hover:border-metallic-gold/50 transition-all">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <p className="font-label-md text-label-md text-gray-500 uppercase mb-1 font-bold tracking-widest">Revenue Growth</p>
-              <h3 className="font-price-lg text-price-lg text-regal-navy text-2xl font-bold">$428,590.00</h3>
+              <p className="font-label-md text-label-md text-gray-500 uppercase mb-1 font-bold tracking-widest">Revenue</p>
+              <h3 className="font-price-lg text-price-lg text-regal-navy text-2xl font-bold">
+                ${(metrics.totalRevenue || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+              </h3>
             </div>
             <span className="material-symbols-outlined text-metallic-gold">trending_up</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-green-600">+12.4%</span>
-            <span className="text-xs text-gray-500">vs last month</span>
-          </div>
           <div className="absolute bottom-0 left-0 w-full h-1 bg-metallic-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
         </div>
 
         <div className="bg-white p-8 border border-gray-200 relative overflow-hidden group hover:border-metallic-gold/50 transition-all">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <p className="font-label-md text-label-md text-gray-500 uppercase mb-1 font-bold tracking-widest">Avg. Order Value</p>
-              <h3 className="font-price-lg text-price-lg text-regal-navy text-2xl font-bold">$184.20</h3>
+              <p className="font-label-md text-label-md text-gray-500 uppercase mb-1 font-bold tracking-widest">Total Orders</p>
+              <h3 className="font-price-lg text-price-lg text-regal-navy text-2xl font-bold">{metrics.totalOrders || 0}</h3>
             </div>
             <span className="material-symbols-outlined text-metallic-gold">payments</span>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-green-600">+4.8%</span>
-            <span className="text-xs text-gray-500">vs last month</span>
-          </div>
           <div className="absolute bottom-0 left-0 w-full h-1 bg-metallic-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
         </div>
 
         <div className="bg-white p-8 border border-gray-200 relative overflow-hidden group hover:border-metallic-gold/50 transition-all">
           <div className="flex justify-between items-start mb-6">
             <div>
-              <p className="font-label-md text-label-md text-gray-500 uppercase mb-1 font-bold tracking-widest">Conversion Rate</p>
-              <h3 className="font-price-lg text-price-lg text-regal-navy text-2xl font-bold">3.42%</h3>
+              <p className="font-label-md text-label-md text-gray-500 uppercase mb-1 font-bold tracking-widest">Total Customers</p>
+              <h3 className="font-price-lg text-price-lg text-regal-navy text-2xl font-bold">{metrics.totalCustomers || 0}</h3>
             </div>
-            <span className="material-symbols-outlined text-metallic-gold">ads_click</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-red-500">-0.2%</span>
-            <span className="text-xs text-gray-500">vs last month</span>
+            <span className="material-symbols-outlined text-metallic-gold">group</span>
           </div>
           <div className="absolute bottom-0 left-0 w-full h-1 bg-metallic-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
         </div>
@@ -249,42 +247,34 @@ function Analytics() {
               </tr>
             </thead>
             <tbody className="text-body-md">
-              <tr className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                <td className="py-6 font-bold text-regal-navy">#LX-9021</td>
-                <td className="py-6 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[10px]">ED</div>
-                  Elena D'Amico
-                </td>
-                <td className="py-6 text-gray-600">Oud & Woods</td>
-                <td className="py-6">
-                  <span className="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider">Completed</span>
-                </td>
-                <td className="py-6 text-right font-bold text-regal-navy">$245.00</td>
-              </tr>
-              <tr className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                <td className="py-6 font-bold text-regal-navy">#LX-9022</td>
-                <td className="py-6 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[10px]">MR</div>
-                  Marcus Sterling
-                </td>
-                <td className="py-6 text-gray-600">Special Edition</td>
-                <td className="py-6">
-                  <span className="px-3 py-1 bg-yellow-50 text-yellow-700 text-xs font-bold uppercase tracking-wider">Processing</span>
-                </td>
-                <td className="py-6 text-right font-bold text-regal-navy">$512.40</td>
-              </tr>
-              <tr className="hover:bg-gray-50 transition-colors">
-                <td className="py-6 font-bold text-regal-navy">#LX-9023</td>
-                <td className="py-6 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[10px]">SW</div>
-                  Sarah Wu
-                </td>
-                <td className="py-6 text-gray-600">Floral Collection</td>
-                <td className="py-6">
-                  <span className="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider">Completed</span>
-                </td>
-                <td className="py-6 text-right font-bold text-regal-navy">$189.99</td>
-              </tr>
+              {(metrics.recentOrders || []).map((order: any, idx: number) => (
+                <tr key={order.id || idx} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                  <td className="py-6 font-bold text-regal-navy">#{order.orderNumber || order.id?.substring(0,8)}</td>
+                  <td className="py-6 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold text-[10px]">
+                      {order.user?.firstName?.[0]}{order.user?.lastName?.[0]}
+                    </div>
+                    {order.user?.firstName} {order.user?.lastName}
+                  </td>
+                  <td className="py-6 text-gray-600">{new Date(order.createdAt).toLocaleDateString()}</td>
+                  <td className="py-6">
+                    <span className={`px-3 py-1 text-xs font-bold uppercase tracking-wider ${
+                      order.status === 'DELIVERED' ? 'bg-green-50 text-green-700' :
+                      order.status === 'PENDING' ? 'bg-gray-100 text-gray-700' :
+                      order.status === 'CANCELLED' ? 'bg-red-50 text-red-700' :
+                      'bg-yellow-50 text-yellow-700'
+                    }`}>
+                      {order.status}
+                    </span>
+                  </td>
+                  <td className="py-6 text-right font-bold text-regal-navy">
+                    ${(order.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+                  </td>
+                </tr>
+              ))}
+              {(!metrics.recentOrders || metrics.recentOrders.length === 0) && (
+                <tr><td colSpan={5} className="py-6 text-center text-gray-500">No transactions</td></tr>
+              )}
             </tbody>
           </table>
         </div>

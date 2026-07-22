@@ -1,44 +1,51 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { api } from '../../lib/api'
 
 export const Route = createFileRoute('/_storefront/cart')({
   component: Cart,
 })
 
 function Cart() {
-  const [items, setItems] = useState([
-    {
-      id: '1',
-      name: 'Midnight Oud',
-      brand: 'Eau de Parfum',
-      volume: '100ml',
-      price: 125000,
-      qty: 1,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAxR6oppWcKwoUOqlcVEVkZHZRvlKqeLCdZczMR_uvCujrFIqFFf_dAb4KyScpt3WUbfXWEyRHKeQ3KnBuqXxTMDOXRCpXudXDQGiKBlE2o5cG4nXgiMhplk80v0c_bgMPHu4b0x8V3lKQfg4YK5QDngbKSooLhniRf3O5BMRDsBZC4EaV-iyvmjpGMX0PA0t_NAXC_TlSeqZlrzxfVMppi15Mfb4i4FvqJZ3w0l8kO3zHxak-jqFkE',
-    },
-    {
-      id: '2',
-      name: 'Saffron Gold',
-      brand: 'Extrait de Parfum',
-      volume: '100ml',
-      price: 98500,
-      qty: 1,
-      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC_cLHPv7zAKeLExhSEa5iustIAvK06sL136sUC_M3Jw6sb_iKT8zk8ilW-Bwivrzig3CHXSQpV7N-mnR_FY4R6yRj_aSIC1NrLT24xyBy_oRJ8MS4_wn2vXQgDCcwEZAcoz94D8sfVY0bVTekxLHLRrqgwjRePvNKwr2tGrmOu1T_xXuloVoOlyiKvUsMc6F4dCc-PPwDZlmrrGcKBKS59VH09BCDw0zyFJbFk8k_ZOOpcHLalB4is',
-    }
-  ])
+  const queryClient = useQueryClient()
+  
+  const { data: cartResponse } = useQuery({
+    queryKey: ['cart'],
+    queryFn: api.getCart
+  })
 
-  const subtotal = items.reduce((acc, item) => acc + (item.price * item.qty), 0)
-  const shipping = 5000
-  const tax = 0
-  const total = subtotal + shipping + tax
+  // The backend might return { data: { items: [], subtotal, tax, shipping, total } } or similar.
+  // Assuming array of items for now or an object with items array.
+  const cartData = cartResponse?.data || cartResponse || { items: [] }
+  const items = Array.isArray(cartData) ? cartData : (cartData.items || [])
+
+  const subtotal = cartData.subtotal || items.reduce((acc: number, item: any) => acc + ((item.price || item.product?.price || 0) * item.quantity), 0)
+  const shipping = cartData.shippingCost || (items.length > 0 ? 5000 : 0)
+  const tax = cartData.tax || 0
+  const total = cartData.total || (subtotal + shipping + tax)
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, qty }: { id: string, qty: number }) => api.updateCartItem(id, qty),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cart'] })
+  })
+
+  const removeMutation = useMutation({
+    mutationFn: (id: string) => api.removeFromCart(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cart'] })
+  })
+
+  const addToCartMutation = useMutation({
+    mutationFn: ({ id, qty }: { id: string, qty: number }) => api.addToCart(id, qty),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['cart'] })
+  })
 
   const updateQty = (id: string, newQty: number) => {
     if (newQty < 1) return
-    setItems(items.map(item => item.id === id ? { ...item, qty: newQty } : item))
+    updateMutation.mutate({ id, qty: newQty })
   }
 
   const removeItem = (id: string) => {
-    setItems(items.filter(item => item.id !== id))
+    removeMutation.mutate(id)
   }
 
   const crossSells = [
@@ -87,34 +94,34 @@ function Cart() {
       <div className="flex flex-col lg:flex-row gap-12 items-start">
         {/* Bag Items List */}
         <div className="flex-grow w-full lg:w-2/3 space-y-8">
-          {items.map((item) => (
+          {items.map((item: any) => (
             <div key={item.id} className="group relative flex flex-col md:flex-row gap-8 pb-8 border-b border-[#c5c6d0] hover:border-metallic-gold transition-colors duration-500">
               <div className="w-full md:w-48 h-64 bg-soft-cream flex items-center justify-center overflow-hidden">
                 <img 
                   className="object-contain w-full h-full transform group-hover:scale-105 transition-transform duration-700" 
-                  alt={item.name} 
-                  src={item.image}
+                  alt={item.product?.name || item.name} 
+                  src={item.product?.images?.[0]?.url || item.image || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}
                 />
               </div>
               <div className="flex-grow flex flex-col justify-between py-2">
-                <div>
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-headline-md text-headline-md text-regal-navy">{item.name}</h3>
-                    <span className="font-price-lg text-price-lg text-regal-navy">₦ {item.price.toLocaleString()}</span>
+                  <div>
+                    <div className="flex justify-between items-start">
+                      <h3 className="font-headline-md text-headline-md text-regal-navy">{item.product?.name || item.name}</h3>
+                      <span className="font-price-lg text-price-lg text-regal-navy">₦ {((item.product?.price || item.price || 0) * (item.quantity || item.qty)).toLocaleString()}</span>
+                    </div>
+                    <p className="font-label-md text-label-md text-muted-gold uppercase mt-1">{item.product?.brand || item.brand}</p>
+                    <p className="font-body-md text-body-md text-[#44474f] mt-2">Volume: {item.product?.size || item.volume}</p>
                   </div>
-                  <p className="font-label-md text-label-md text-muted-gold uppercase mt-1">{item.brand}</p>
-                  <p className="font-body-md text-body-md text-[#44474f] mt-2">Volume: {item.volume}</p>
-                </div>
-                <div className="flex flex-col md:flex-row md:items-center justify-between mt-6 gap-4 md:gap-0">
-                  <div className="flex items-center border border-[#c5c6d0] w-fit">
-                    <button onClick={() => updateQty(item.id, item.qty - 1)} className="px-4 py-2 hover:bg-soft-cream transition-colors text-regal-navy">
-                      <span className="material-symbols-outlined">remove</span>
-                    </button>
-                    <span className="px-4 font-label-md text-label-md border-x border-[#c5c6d0] min-w-[2rem] text-center">{item.qty}</span>
-                    <button onClick={() => updateQty(item.id, item.qty + 1)} className="px-4 py-2 hover:bg-soft-cream transition-colors text-regal-navy">
-                      <span className="material-symbols-outlined">add</span>
-                    </button>
-                  </div>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between mt-6 gap-4 md:gap-0">
+                    <div className="flex items-center border border-[#c5c6d0] w-fit">
+                      <button onClick={() => updateQty(item.id, (item.quantity || item.qty) - 1)} className="px-4 py-2 hover:bg-soft-cream transition-colors text-regal-navy">
+                        <span className="material-symbols-outlined">remove</span>
+                      </button>
+                      <span className="px-4 font-label-md text-label-md border-x border-[#c5c6d0] min-w-[2rem] text-center">{item.quantity || item.qty}</span>
+                      <button onClick={() => updateQty(item.id, (item.quantity || item.qty) + 1)} className="px-4 py-2 hover:bg-soft-cream transition-colors text-regal-navy">
+                        <span className="material-symbols-outlined">add</span>
+                      </button>
+                    </div>
                   <div className="flex gap-6 font-label-md text-label-md uppercase tracking-widest text-[#44474f]">
                     <button className="hover:text-metallic-gold transition-colors flex items-center gap-2">
                       <span className="material-symbols-outlined text-[18px]">favorite</span> 
@@ -214,7 +221,7 @@ function Cart() {
                 <img 
                   className="object-contain w-full h-full p-12 group-hover:scale-110 transition-transform duration-700" 
                   alt={product.name} 
-                  src={product.image}
+                  src={product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}
                 />
                 <button 
                   className="absolute bottom-4 left-4 right-4 bg-regal-navy text-soft-cream py-4 opacity-0 group-hover:opacity-100 transition-all duration-300 font-label-md text-label-md uppercase tracking-widest translate-y-4 group-hover:translate-y-0 hover:bg-metallic-gold hover:text-regal-navy"
@@ -222,10 +229,7 @@ function Cart() {
                     e.preventDefault();
                     e.stopPropagation();
                     // Basic add logic for demo
-                    setItems(current => {
-                      if(current.find(i => i.id === product.id)) return current;
-                      return [...current, { ...product, qty: 1, volume: '100ml' }]
-                    });
+                    addToCartMutation.mutate({ id: product.id, qty: 1 })
                   }}
                 >
                   Quick Add

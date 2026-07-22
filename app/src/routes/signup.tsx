@@ -1,5 +1,7 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
+import { useAuth } from '../lib/auth'
+import { api } from '../lib/api'
 
 export const Route = createFileRoute('/signup')({
   component: SignUp,
@@ -7,9 +9,17 @@ export const Route = createFileRoute('/signup')({
 
 function SignUp() {
   const navigate = useNavigate()
+  const { login } = useAuth()
+  
+  const [fullName, setFullName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+
   const [isScrolled, setIsScrolled] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,18 +29,41 @@ function SignUp() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
+      return
+    }
     setIsLoading(true)
+    setError('')
 
-    setTimeout(() => {
+    try {
+      const parts = fullName.trim().split(' ')
+      const firstName = parts[0]
+      const lastName = parts.slice(1).join(' ')
+
+      const response = await api.register({ firstName, lastName, email, password })
+      // Registration might auto-login or just return success
+      const token = response.accessToken || response.data?.accessToken || response.token || response.data?.token
+      const userData = response.user || response.data?.user
+      
+      if (token && userData) {
+        login(token, userData)
+      }
+      
       setIsSuccess(true)
-      setIsLoading(false)
-
       setTimeout(() => {
-        navigate({ to: '/account' })
+        navigate({ to: '/account' }) // Also goes to account
       }, 1000)
-    }, 1500)
+      
+    } catch (err: any) {
+      setError(err.message || 'Registration failed')
+    } finally {
+      if (!isSuccess) {
+        setIsLoading(false)
+      }
+    }
   }
 
   return (
@@ -80,16 +113,21 @@ function SignUp() {
             </div>
 
             <form className="space-y-8" onSubmit={handleSubmit}>
+              {error && (
+                <div className="bg-red-50 text-red-600 p-4 font-body-md text-sm border border-red-100">
+                  {error}
+                </div>
+              )}
               {/* Name Field */}
               <div className="relative group border-b border-[#1b1b1f]/20 focus-within:border-metallic-gold transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <label className="block text-label-md font-label-md text-[#1b1b1f]/40 group-focus-within:text-metallic-gold uppercase transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]" htmlFor="full_name">Full Name</label>
-                <input className="block w-full bg-transparent border-none px-0 py-3 text-body-md focus:outline-none focus:ring-0 placeholder-[#1b1b1f]/20" id="full_name" name="full_name" placeholder="ALEXANDER ROYCE" required type="text"/>
+                <input className="block w-full bg-transparent border-none px-0 py-3 text-body-md focus:outline-none focus:ring-0 placeholder-[#1b1b1f]/20" id="full_name" name="full_name" value={fullName} onChange={e => setFullName(e.target.value)} placeholder="ALEXANDER ROYCE" required type="text"/>
               </div>
 
               {/* Email Field */}
               <div className="relative group border-b border-[#1b1b1f]/20 focus-within:border-metallic-gold transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]">
                 <label className="block text-label-md font-label-md text-[#1b1b1f]/40 group-focus-within:text-metallic-gold uppercase transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]" htmlFor="email">Email Address</label>
-                <input className="block w-full bg-transparent border-none px-0 py-3 text-body-md focus:outline-none focus:ring-0 placeholder-[#1b1b1f]/20" id="email" name="email" placeholder="ALEX@ROYMALL.COM" required type="email"/>
+                <input className="block w-full bg-transparent border-none px-0 py-3 text-body-md focus:outline-none focus:ring-0 placeholder-[#1b1b1f]/20" id="email" name="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="ALEX@ROYMALL.COM" required type="email"/>
               </div>
 
               {/* Password Grid */}
@@ -97,13 +135,13 @@ function SignUp() {
                 {/* Password Field */}
                 <div className="relative group border-b border-[#1b1b1f]/20 focus-within:border-metallic-gold transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]">
                   <label className="block text-label-md font-label-md text-[#1b1b1f]/40 group-focus-within:text-metallic-gold uppercase transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]" htmlFor="password">Password</label>
-                  <input className="block w-full bg-transparent border-none px-0 py-3 text-body-md focus:outline-none focus:ring-0 placeholder-[#1b1b1f]/20" id="password" name="password" placeholder="••••••••" required type="password"/>
+                  <input className="block w-full bg-transparent border-none px-0 py-3 text-body-md focus:outline-none focus:ring-0 placeholder-[#1b1b1f]/20" id="password" name="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required type="password"/>
                 </div>
 
                 {/* Confirm Password Field */}
                 <div className="relative group border-b border-[#1b1b1f]/20 focus-within:border-metallic-gold transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]">
                   <label className="block text-label-md font-label-md text-[#1b1b1f]/40 group-focus-within:text-metallic-gold uppercase transition-all duration-400 ease-[cubic-bezier(0.16,1,0.3,1)]" htmlFor="confirm_password">Confirm Password</label>
-                  <input className="block w-full bg-transparent border-none px-0 py-3 text-body-md focus:outline-none focus:ring-0 placeholder-[#1b1b1f]/20" id="confirm_password" name="confirm_password" placeholder="••••••••" required type="password"/>
+                  <input className="block w-full bg-transparent border-none px-0 py-3 text-body-md focus:outline-none focus:ring-0 placeholder-[#1b1b1f]/20" id="confirm_password" name="confirm_password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="••••••••" required type="password"/>
                 </div>
               </div>
 

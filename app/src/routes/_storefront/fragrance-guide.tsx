@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 
 export const Route = createFileRoute('/_storefront/fragrance-guide')({
@@ -189,7 +189,7 @@ function FragranceGuide() {
             <h2 className="font-headline-lg text-headline-lg text-regal-navy mb-4">Mastering Application</h2>
             <p className="font-body-md text-body-md text-on-surface-variant">The difference between a scent that fades in an hour and one that lasts all night lies in the technique. Follow our expert guide to longevity.</p>
           </div>
-          <a className="font-label-md text-label-md text-regal-navy border-b-2 border-metallic-gold pb-1 hover:text-metallic-gold transition-colors" href="#">Shop All Accessories</a>
+          <Link to="/shop" className="font-label-md text-label-md text-regal-navy border-b-2 border-metallic-gold pb-1 hover:text-metallic-gold transition-colors">Shop All Accessories</Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-[32px]">
           <div className="p-10 border border-outline-variant hover:border-metallic-gold transition-colors duration-500">

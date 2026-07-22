@@ -1,5 +1,7 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useAuth } from '../lib/auth'
+import { api } from '../lib/api'
 
 export const Route = createFileRoute('/signin')({
   component: SignIn,
@@ -7,22 +9,47 @@ export const Route = createFileRoute('/signin')({
 
 function SignIn() {
   const navigate = useNavigate()
+  const { login } = useAuth()
+  
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [error, setError] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
+    setError('')
 
-    setTimeout(() => {
-      setIsSuccess(true)
-      setIsLoading(false)
-
-      setTimeout(() => {
-        navigate({ to: '/account' })
-      }, 1000)
-    }, 1500)
+    try {
+      const response = await api.login({ email, password })
+      // Assuming response has { accessToken, user: {...} } or { data: { accessToken, user } }
+      const token = response?.accessToken || response?.data?.accessToken || response?.token || response?.data?.token
+      const userData = response?.user || response?.data?.user
+      
+      if (token && userData) {
+        login(token, userData)
+        setIsSuccess(true)
+        setTimeout(() => {
+          if (userData.role === 'ADMIN') {
+            navigate({ to: '/admin' })
+          } else {
+            navigate({ to: '/account' })
+          }
+        }, 1000)
+      } else {
+        console.error('Invalid login response:', response)
+        setError(`Invalid response from server. Check console.`)
+      }
+    } catch (err: any) {
+      setError(err.message || 'Login failed')
+    } finally {
+      if (!isSuccess) {
+        setIsLoading(false)
+      }
+    }
   }
 
   return (
@@ -57,6 +84,11 @@ function SignIn() {
 
           {/* Sign In Form */}
           <form className="space-y-8" onSubmit={handleSubmit}>
+            {error && (
+              <div className="bg-red-50 text-red-600 p-4 font-body-md text-sm border border-red-100">
+                {error}
+              </div>
+            )}
             {/* Email Field */}
             <div className="relative group">
               <label className="block font-label-md text-label-md text-on-surface-variant uppercase mb-2" htmlFor="email">
@@ -66,6 +98,8 @@ function SignIn() {
                 className="w-full bg-transparent py-3 px-0 border-b border-regal-navy/20 focus:outline-none focus:border-metallic-gold transition-colors duration-300 font-body-lg text-regal-navy placeholder:text-outline/40" 
                 id="email" 
                 name="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address" 
                 required 
                 type="email"
@@ -81,14 +115,16 @@ function SignIn() {
                 <label className="block font-label-md text-label-md text-on-surface-variant uppercase" htmlFor="password">
                     Password
                 </label>
-                <a className="font-label-md text-[11px] text-muted-gold hover:text-metallic-gold transition-colors uppercase tracking-wider" href="#">
+                <Link to="/forgot-password" className="font-label-md text-[11px] text-muted-gold hover:text-metallic-gold transition-colors uppercase tracking-wider">
                     Forgot Password?
-                </a>
+                </Link>
               </div>
               <input 
                 className="w-full bg-transparent py-3 px-0 border-b border-regal-navy/20 focus:outline-none focus:border-metallic-gold transition-colors duration-300 font-body-lg text-regal-navy placeholder:text-outline/40" 
                 id="password" 
                 name="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your password" 
                 required 
                 type={showPassword ? 'text' : 'password'}

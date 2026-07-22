@@ -264,9 +264,9 @@ function Checkout() {
         </div>
         <div className="flex flex-col gap-3">
           <h5 className="text-label-md font-bold text-metallic-gold uppercase">Customer Care</h5>
-          <a className="text-soft-cream/80 hover:text-metallic-gold transition-colors underline decoration-transparent hover:decoration-metallic-gold" href="#">Shipping & Returns</a>
-          <a className="text-soft-cream/80 hover:text-metallic-gold transition-colors underline decoration-transparent hover:decoration-metallic-gold" href="#">Privacy Policy</a>
-          <a className="text-soft-cream/80 hover:text-metallic-gold transition-colors underline decoration-transparent hover:decoration-metallic-gold" href="#">Fragrance Guide</a>
+          <Link className="text-soft-cream/80 hover:text-metallic-gold transition-colors underline decoration-transparent hover:decoration-metallic-gold" to="/shipping-returns">Shipping & Returns</Link>
+          <Link className="text-soft-cream/80 hover:text-metallic-gold transition-colors underline decoration-transparent hover:decoration-metallic-gold" to="/">Privacy Policy</Link>
+          <Link className="text-soft-cream/80 hover:text-metallic-gold transition-colors underline decoration-transparent hover:decoration-metallic-gold" to="/fragrance-guide">Fragrance Guide</Link>
         </div>
         <div className="flex flex-col gap-3">
           <h5 className="text-label-md font-bold text-metallic-gold uppercase">Contact</h5>

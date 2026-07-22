@@ -83,8 +83,9 @@ function StorefrontLayout() {
         <div>
           <h4 className="text-metallic-gold font-label-md text-label-md mb-8 uppercase">Support</h4>
           <ul className="space-y-4">
-            <li><Link to="/shipping-returns" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Shipping &amp; Returns</Link></li>
+            <li><Link to="/shipping-returns" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Shipping & Returns</Link></li>
             <li><Link to="/" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Privacy Policy</Link></li>
+            <li><Link to="/terms-of-service" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Terms of Service</Link></li>
             <li><Link to="/contact" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Contact Us</Link></li>
             <li><Link to="/faq" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">FAQs</Link></li>
           </ul>

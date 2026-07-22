@@ -1,4 +1,6 @@
-import { createFileRoute, Outlet, Link, useLocation } from '@tanstack/react-router'
+import { createFileRoute, Outlet, Link, useLocation, useNavigate } from '@tanstack/react-router'
+import { useEffect } from 'react'
+import { useAuth } from '../lib/auth'
 
 export const Route = createFileRoute('/admin')({
   component: AdminLayout,
@@ -6,12 +8,26 @@ export const Route = createFileRoute('/admin')({
 
 function AdminLayout() {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { user, isLoading, logout } = useAuth()
+
+  useEffect(() => {
+    if (!isLoading && (!user || user.role !== 'ADMIN')) {
+      navigate({ to: '/signin' })
+    }
+  }, [user, isLoading, navigate])
+
+  if (isLoading || !user || user.role !== 'ADMIN') {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center text-regal-navy font-bold">Loading...</div>
+  }
   
   const navItems = [
     { name: 'Dashboard', path: '/admin', icon: 'dashboard' },
     { name: 'Orders', path: '/admin/orders', icon: 'shopping_cart' },
     { name: 'Inventory', path: '/admin/inventory', icon: 'inventory_2' },
     { name: 'Customers', path: '/admin/customers', icon: 'group' },
+    { name: 'Appointments', path: '/admin/appointments', icon: 'calendar_today' },
+    { name: 'Inquiries', path: '/admin/inquiries', icon: 'mail' },
     { name: 'Analytics', path: '/admin/analytics', icon: 'analytics' },
     { name: 'Settings', path: '/admin/settings', icon: 'settings' },
   ]
@@ -43,9 +59,11 @@ function AdminLayout() {
         </nav>
         
         <div className="mt-auto flex items-center gap-3 px-2 border-t border-metallic-gold/10 pt-6">
-          <div className="w-10 h-10 bg-metallic-gold flex items-center justify-center text-regal-navy font-bold rounded">AU</div>
+          <div className="w-10 h-10 bg-metallic-gold flex items-center justify-center text-regal-navy font-bold rounded">
+            {user.firstName[0]}{user.lastName[0]}
+          </div>
           <div>
-            <p className="font-label-md text-label-md text-white font-bold text-sm">Admin User</p>
+            <p className="font-label-md text-label-md text-white font-bold text-sm truncate max-w-[120px]">{user.firstName} {user.lastName}</p>
             <p className="text-[10px] text-white/50">Super Administrator</p>
           </div>
         </div>
@@ -68,8 +86,8 @@ function AdminLayout() {
             <span className="material-symbols-outlined">notifications</span>
             <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
           </button>
-          <button className="hover:text-regal-navy transition-all duration-200">
-            <span className="material-symbols-outlined">account_circle</span>
+          <button onClick={logout} title="Logout" className="hover:text-regal-navy transition-all duration-200">
+            <span className="material-symbols-outlined">logout</span>
           </button>
         </div>
       </header>

@@ -1,23 +1,72 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { api } from '../../lib/api'
 
 export const Route = createFileRoute('/admin/settings')({
   component: Settings,
 })
 
 function Settings() {
+  const queryClient = useQueryClient()
   const [activeTab, setActiveTab] = useState('general')
   const [showToast, setShowToast] = useState(false)
 
+  const [formData, setFormData] = useState({
+    storeName: '',
+    supportEmail: '',
+    contactPhone: '',
+    storeAddress: '',
+    taxRate: 0,
+    currency: 'NGN',
+    enablePromotions: false,
+    promoBannerText: ''
+  })
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-settings'],
+    queryFn: () => api.adminGetSettings()
+  })
+
+  useEffect(() => {
+    if (data) {
+      setFormData({
+        storeName: data.storeName || '',
+        supportEmail: data.supportEmail || '',
+        contactPhone: data.contactPhone || '',
+        storeAddress: data.storeAddress || '',
+        taxRate: data.taxRate || 0,
+        currency: data.currency || 'NGN',
+        enablePromotions: data.enablePromotions || false,
+        promoBannerText: data.promoBannerText || ''
+      })
+    }
+  }, [data])
+
+  const updateMutation = useMutation({
+    mutationFn: (newSettings: any) => api.adminUpdateSettings(newSettings),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-settings'] })
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 3000)
+    }
+  })
+
   const handleSave = () => {
-    setShowToast(true)
-    setTimeout(() => {
-      setShowToast(false)
-    }, 3000)
+    updateMutation.mutate(formData)
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value, type } = e.target as HTMLInputElement
+    const checked = (e.target as HTMLInputElement).checked
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : type === 'number' ? parseFloat(value) : value
+    }))
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto relative">
 
       <div className="mb-12">
         <h2 className="font-headline-lg text-headline-lg text-regal-navy mb-2 text-3xl font-bold">Portal Settings</h2>
@@ -58,62 +107,80 @@ function Settings() {
 
       {/* General Settings Panel */}
       {activeTab === 'general' && (
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+          {isLoading && <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 font-bold text-regal-navy">Loading...</div>}
           <div className="md:col-span-2 space-y-8">
             <div className="bg-white border border-gray-200 p-8 hover:border-metallic-gold/50 transition-colors">
               <h3 className="font-headline-md text-regal-navy mb-6 text-xl font-bold">Store Identity</h3>
               <div className="grid grid-cols-1 gap-6">
                 <div className="space-y-2">
                   <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Store Name</label>
-                  <input className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md outline-none" type="text" defaultValue="Roymall Scents"/>
+                  <input name="storeName" value={formData.storeName} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md outline-none" type="text" />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Support Email</label>
-                    <input className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md outline-none" type="email" defaultValue="concierge@roymall.com"/>
+                    <input name="supportEmail" value={formData.supportEmail} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md outline-none" type="email" />
                   </div>
                   <div className="space-y-2">
-                    <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Official Website</label>
-                    <input className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md outline-none" type="text" defaultValue="www.roymallscents.com"/>
+                    <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Contact Phone</label>
+                    <input name="contactPhone" value={formData.contactPhone} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md outline-none" type="text" />
                   </div>
                 </div>
               </div>
             </div>
             
             <div className="bg-white border border-gray-200 p-8 hover:border-metallic-gold/50 transition-colors">
-              <h3 className="font-headline-md text-regal-navy mb-6 text-xl font-bold">Physical Presence</h3>
+              <h3 className="font-headline-md text-regal-navy mb-6 text-xl font-bold">Physical Presence & Region</h3>
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Headquarters Address</label>
-                  <textarea className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md outline-none" rows={3} defaultValue="124 Luxury Lane, Essence District, Paris, France, 75001"></textarea>
+                  <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Store Address</label>
+                  <textarea name="storeAddress" value={formData.storeAddress} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md outline-none" rows={3}></textarea>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Timezone</label>
-                    <select className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md appearance-none outline-none">
-                      <option>(GMT+01:00) Central European Time</option>
-                      <option>(GMT+00:00) Western European Time</option>
-                      <option>(GMT-05:00) Eastern Time (US & Canada)</option>
-                    </select>
+                    <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Tax Rate (%)</label>
+                    <input name="taxRate" value={formData.taxRate} onChange={handleChange} type="number" step="0.1" className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md outline-none" />
                   </div>
                   <div className="space-y-2">
                     <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Base Currency</label>
-                    <select className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md appearance-none outline-none">
-                      <option>Euro (€)</option>
-                      <option>US Dollar ($)</option>
-                      <option>Nigerian Naira (₦)</option>
-                      <option>British Pound (£)</option>
+                    <select name="currency" value={formData.currency} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md appearance-none outline-none">
+                      <option value="EUR">Euro (€)</option>
+                      <option value="USD">US Dollar ($)</option>
+                      <option value="NGN">Nigerian Naira (₦)</option>
+                      <option value="GBP">British Pound (£)</option>
                     </select>
                   </div>
                 </div>
               </div>
             </div>
+
+            <div className="bg-white border border-gray-200 p-8 hover:border-metallic-gold/50 transition-colors">
+              <h3 className="font-headline-md text-regal-navy mb-6 text-xl font-bold">Promotions</h3>
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input name="enablePromotions" checked={formData.enablePromotions} onChange={handleChange} className="sr-only peer" type="checkbox"/>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-regal-navy"></div>
+                  </label>
+                  <span className="text-sm font-medium text-gray-500 uppercase tracking-widest">Enable Promotional Banner</span>
+                </div>
+                {formData.enablePromotions && (
+                  <div className="space-y-2">
+                    <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Banner Text</label>
+                    <input name="promoBannerText" value={formData.promoBannerText} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md outline-none" type="text" />
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div className="flex justify-end pt-4">
               <button 
                 onClick={handleSave}
-                className="bg-regal-navy text-metallic-gold px-10 py-4 font-label-md uppercase tracking-widest hover:bg-regal-navy/90 transition-all active:scale-95 shadow-lg"
+                disabled={updateMutation.isPending}
+                className="bg-regal-navy text-metallic-gold px-10 py-4 font-label-md uppercase tracking-widest hover:bg-regal-navy/90 transition-all active:scale-95 shadow-lg disabled:opacity-70 flex items-center gap-2"
               >
-                Save Changes
+                {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
           </div>

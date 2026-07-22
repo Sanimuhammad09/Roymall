@@ -12,11 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StorefrontRouteImport } from './routes/_storefront'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as StorefrontIndexRouteImport } from './routes/_storefront/index'
 import { Route as StorefrontAccountRouteImport } from './routes/_storefront/account'
 import { Route as StorefrontBestSellersRouteImport } from './routes/_storefront/best-sellers'
+import { Route as StorefrontBookAppointmentRouteImport } from './routes/_storefront/book-appointment'
 import { Route as StorefrontCartRouteImport } from './routes/_storefront/cart'
 import { Route as StorefrontContactRouteImport } from './routes/_storefront/contact'
 import { Route as StorefrontFaqRouteImport } from './routes/_storefront/faq'
@@ -26,9 +28,12 @@ import { Route as StorefrontNewArrivalsRouteImport } from './routes/_storefront/
 import { Route as StorefrontOurStoryRouteImport } from './routes/_storefront/our-story'
 import { Route as StorefrontShippingReturnsRouteImport } from './routes/_storefront/shipping-returns'
 import { Route as StorefrontShopRouteImport } from './routes/_storefront/shop'
+import { Route as StorefrontTermsOfServiceRouteImport } from './routes/_storefront/terms-of-service'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin/analytics'
+import { Route as AdminAppointmentsRouteImport } from './routes/admin/appointments'
 import { Route as AdminCustomersRouteImport } from './routes/admin/customers'
+import { Route as AdminInquiriesRouteImport } from './routes/admin/inquiries'
 import { Route as AdminInventoryRouteImport } from './routes/admin/inventory'
 import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
@@ -49,6 +54,11 @@ const AdminRoute = AdminRouteImport.update({
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SigninRoute = SigninRouteImport.update({
@@ -76,6 +86,12 @@ const StorefrontBestSellersRoute = StorefrontBestSellersRouteImport.update({
   path: '/best-sellers',
   getParentRoute: () => StorefrontRoute,
 } as any)
+const StorefrontBookAppointmentRoute =
+  StorefrontBookAppointmentRouteImport.update({
+    id: '/book-appointment',
+    path: '/book-appointment',
+    getParentRoute: () => StorefrontRoute,
+  } as any)
 const StorefrontCartRoute = StorefrontCartRouteImport.update({
   id: '/cart',
   path: '/cart',
@@ -123,6 +139,12 @@ const StorefrontShopRoute = StorefrontShopRouteImport.update({
   path: '/shop',
   getParentRoute: () => StorefrontRoute,
 } as any)
+const StorefrontTermsOfServiceRoute =
+  StorefrontTermsOfServiceRouteImport.update({
+    id: '/terms-of-service',
+    path: '/terms-of-service',
+    getParentRoute: () => StorefrontRoute,
+  } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -133,9 +155,19 @@ const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminAppointmentsRoute = AdminAppointmentsRouteImport.update({
+  id: '/appointments',
+  path: '/appointments',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminCustomersRoute = AdminCustomersRouteImport.update({
   id: '/customers',
   path: '/customers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminInquiriesRoute = AdminInquiriesRouteImport.update({
+  id: '/inquiries',
+  path: '/inquiries',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminInventoryRoute = AdminInventoryRouteImport.update({
@@ -178,10 +210,12 @@ export interface FileRoutesByFullPath {
   '/': typeof StorefrontIndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/checkout': typeof CheckoutRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/account': typeof StorefrontAccountRoute
   '/best-sellers': typeof StorefrontBestSellersRoute
+  '/book-appointment': typeof StorefrontBookAppointmentRoute
   '/cart': typeof StorefrontCartRoute
   '/contact': typeof StorefrontContactRoute
   '/faq': typeof StorefrontFaqRoute
@@ -191,8 +225,11 @@ export interface FileRoutesByFullPath {
   '/our-story': typeof StorefrontOurStoryRoute
   '/shipping-returns': typeof StorefrontShippingReturnsRoute
   '/shop': typeof StorefrontShopRoute
+  '/terms-of-service': typeof StorefrontTermsOfServiceRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/appointments': typeof AdminAppointmentsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -204,10 +241,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/account': typeof StorefrontAccountRoute
   '/best-sellers': typeof StorefrontBestSellersRoute
+  '/book-appointment': typeof StorefrontBookAppointmentRoute
   '/cart': typeof StorefrontCartRoute
   '/contact': typeof StorefrontContactRoute
   '/faq': typeof StorefrontFaqRoute
@@ -217,8 +256,11 @@ export interface FileRoutesByTo {
   '/our-story': typeof StorefrontOurStoryRoute
   '/shipping-returns': typeof StorefrontShippingReturnsRoute
   '/shop': typeof StorefrontShopRoute
+  '/terms-of-service': typeof StorefrontTermsOfServiceRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/appointments': typeof AdminAppointmentsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -234,10 +276,12 @@ export interface FileRoutesById {
   '/_storefront': typeof StorefrontRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
   '/checkout': typeof CheckoutRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
   '/_storefront/account': typeof StorefrontAccountRoute
   '/_storefront/best-sellers': typeof StorefrontBestSellersRoute
+  '/_storefront/book-appointment': typeof StorefrontBookAppointmentRoute
   '/_storefront/cart': typeof StorefrontCartRoute
   '/_storefront/contact': typeof StorefrontContactRoute
   '/_storefront/faq': typeof StorefrontFaqRoute
@@ -247,8 +291,11 @@ export interface FileRoutesById {
   '/_storefront/our-story': typeof StorefrontOurStoryRoute
   '/_storefront/shipping-returns': typeof StorefrontShippingReturnsRoute
   '/_storefront/shop': typeof StorefrontShopRoute
+  '/_storefront/terms-of-service': typeof StorefrontTermsOfServiceRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
+  '/admin/appointments': typeof AdminAppointmentsRoute
   '/admin/customers': typeof AdminCustomersRoute
+  '/admin/inquiries': typeof AdminInquiriesRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
@@ -265,10 +312,12 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/checkout'
+    | '/forgot-password'
     | '/signin'
     | '/signup'
     | '/account'
     | '/best-sellers'
+    | '/book-appointment'
     | '/cart'
     | '/contact'
     | '/faq'
@@ -278,8 +327,11 @@ export interface FileRouteTypes {
     | '/our-story'
     | '/shipping-returns'
     | '/shop'
+    | '/terms-of-service'
     | '/admin/analytics'
+    | '/admin/appointments'
     | '/admin/customers'
+    | '/admin/inquiries'
     | '/admin/inventory'
     | '/admin/orders'
     | '/admin/settings'
@@ -291,10 +343,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/checkout'
+    | '/forgot-password'
     | '/signin'
     | '/signup'
     | '/account'
     | '/best-sellers'
+    | '/book-appointment'
     | '/cart'
     | '/contact'
     | '/faq'
@@ -304,8 +358,11 @@ export interface FileRouteTypes {
     | '/our-story'
     | '/shipping-returns'
     | '/shop'
+    | '/terms-of-service'
     | '/admin/analytics'
+    | '/admin/appointments'
     | '/admin/customers'
+    | '/admin/inquiries'
     | '/admin/inventory'
     | '/admin/orders'
     | '/admin/settings'
@@ -320,10 +377,12 @@ export interface FileRouteTypes {
     | '/_storefront'
     | '/admin'
     | '/checkout'
+    | '/forgot-password'
     | '/signin'
     | '/signup'
     | '/_storefront/account'
     | '/_storefront/best-sellers'
+    | '/_storefront/book-appointment'
     | '/_storefront/cart'
     | '/_storefront/contact'
     | '/_storefront/faq'
@@ -333,8 +392,11 @@ export interface FileRouteTypes {
     | '/_storefront/our-story'
     | '/_storefront/shipping-returns'
     | '/_storefront/shop'
+    | '/_storefront/terms-of-service'
     | '/admin/analytics'
+    | '/admin/appointments'
     | '/admin/customers'
+    | '/admin/inquiries'
     | '/admin/inventory'
     | '/admin/orders'
     | '/admin/settings'
@@ -350,6 +412,7 @@ export interface RootRouteChildren {
   StorefrontRoute: typeof StorefrontRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
   CheckoutRoute: typeof CheckoutRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
 }
@@ -375,6 +438,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signin': {
@@ -410,6 +480,13 @@ declare module '@tanstack/react-router' {
       path: '/best-sellers'
       fullPath: '/best-sellers'
       preLoaderRoute: typeof StorefrontBestSellersRouteImport
+      parentRoute: typeof StorefrontRoute
+    }
+    '/_storefront/book-appointment': {
+      id: '/_storefront/book-appointment'
+      path: '/book-appointment'
+      fullPath: '/book-appointment'
+      preLoaderRoute: typeof StorefrontBookAppointmentRouteImport
       parentRoute: typeof StorefrontRoute
     }
     '/_storefront/cart': {
@@ -475,6 +552,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StorefrontShopRouteImport
       parentRoute: typeof StorefrontRoute
     }
+    '/_storefront/terms-of-service': {
+      id: '/_storefront/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof StorefrontTermsOfServiceRouteImport
+      parentRoute: typeof StorefrontRoute
+    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -489,11 +573,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAnalyticsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/appointments': {
+      id: '/admin/appointments'
+      path: '/appointments'
+      fullPath: '/admin/appointments'
+      preLoaderRoute: typeof AdminAppointmentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/customers': {
       id: '/admin/customers'
       path: '/customers'
       fullPath: '/admin/customers'
       preLoaderRoute: typeof AdminCustomersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/inquiries': {
+      id: '/admin/inquiries'
+      path: '/inquiries'
+      fullPath: '/admin/inquiries'
+      preLoaderRoute: typeof AdminInquiriesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/inventory': {
@@ -551,6 +649,7 @@ declare module '@tanstack/react-router' {
 interface StorefrontRouteChildren {
   StorefrontAccountRoute: typeof StorefrontAccountRoute
   StorefrontBestSellersRoute: typeof StorefrontBestSellersRoute
+  StorefrontBookAppointmentRoute: typeof StorefrontBookAppointmentRoute
   StorefrontCartRoute: typeof StorefrontCartRoute
   StorefrontContactRoute: typeof StorefrontContactRoute
   StorefrontFaqRoute: typeof StorefrontFaqRoute
@@ -560,6 +659,7 @@ interface StorefrontRouteChildren {
   StorefrontOurStoryRoute: typeof StorefrontOurStoryRoute
   StorefrontShippingReturnsRoute: typeof StorefrontShippingReturnsRoute
   StorefrontShopRoute: typeof StorefrontShopRoute
+  StorefrontTermsOfServiceRoute: typeof StorefrontTermsOfServiceRoute
   StorefrontIndexRoute: typeof StorefrontIndexRoute
   StorefrontProductIdRoute: typeof StorefrontProductIdRoute
 }
@@ -567,6 +667,7 @@ interface StorefrontRouteChildren {
 const StorefrontRouteChildren: StorefrontRouteChildren = {
   StorefrontAccountRoute: StorefrontAccountRoute,
   StorefrontBestSellersRoute: StorefrontBestSellersRoute,
+  StorefrontBookAppointmentRoute: StorefrontBookAppointmentRoute,
   StorefrontCartRoute: StorefrontCartRoute,
   StorefrontContactRoute: StorefrontContactRoute,
   StorefrontFaqRoute: StorefrontFaqRoute,
@@ -576,6 +677,7 @@ const StorefrontRouteChildren: StorefrontRouteChildren = {
   StorefrontOurStoryRoute: StorefrontOurStoryRoute,
   StorefrontShippingReturnsRoute: StorefrontShippingReturnsRoute,
   StorefrontShopRoute: StorefrontShopRoute,
+  StorefrontTermsOfServiceRoute: StorefrontTermsOfServiceRoute,
   StorefrontIndexRoute: StorefrontIndexRoute,
   StorefrontProductIdRoute: StorefrontProductIdRoute,
 }
@@ -586,7 +688,9 @@ const StorefrontRouteWithChildren = StorefrontRoute._addFileChildren(
 
 interface AdminRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
+  AdminAppointmentsRoute: typeof AdminAppointmentsRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
+  AdminInquiriesRoute: typeof AdminInquiriesRoute
   AdminInventoryRoute: typeof AdminInventoryRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
@@ -598,7 +702,9 @@ interface AdminRouteChildren {
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
+  AdminAppointmentsRoute: AdminAppointmentsRoute,
   AdminCustomersRoute: AdminCustomersRoute,
+  AdminInquiriesRoute: AdminInquiriesRoute,
   AdminInventoryRoute: AdminInventoryRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminSettingsRoute: AdminSettingsRoute,
@@ -614,6 +720,7 @@ const rootRouteChildren: RootRouteChildren = {
   StorefrontRoute: StorefrontRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
   CheckoutRoute: CheckoutRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
 }

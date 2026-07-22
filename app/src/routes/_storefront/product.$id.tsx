@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { useQuery } from '@tanstack/react-query'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import { useState } from 'react'
 
@@ -9,6 +9,8 @@ export const Route = createFileRoute('/_storefront/product/$id')({
 
 function Product() {
   const { id } = Route.useParams()
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', id],
     queryFn: () => api.getProduct(id)
@@ -16,12 +18,34 @@ function Product() {
 
   const [qty, setQty] = useState(1)
   const [activeAccordion, setActiveAccordion] = useState<string | null>('shipping')
+  const [addedToast, setAddedToast] = useState(false)
+
+  const addToCartMutation = useMutation({
+    mutationFn: ({ productId, quantity }: { productId: string; quantity: number }) =>
+      api.addToCart(productId, quantity),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] })
+      setAddedToast(true)
+      setTimeout(() => setAddedToast(false), 2500)
+    }
+  })
+
+  const buyNowMutation = useMutation({
+    mutationFn: ({ productId, quantity }: { productId: string; quantity: number }) =>
+      api.addToCart(productId, quantity),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] })
+      navigate({ to: '/checkout' })
+    }
+  })
 
   if (isLoading) {
     return <div className="pt-32 pb-section-gap px-container-margin max-w-7xl mx-auto text-center font-label-md">Loading product...</div>
   }
 
-  if (!product) {
+  const prod = product?.data || product
+
+  if (!prod || !prod.id) {
     return <div className="pt-32 pb-section-gap px-container-margin max-w-7xl mx-auto text-center font-label-md">Product not found. <Link to="/shop" className="text-metallic-gold underline">Return to Shop</Link></div>
   }
 
@@ -29,18 +53,33 @@ function Product() {
     setActiveAccordion(activeAccordion === id ? null : id)
   }
 
+  const primaryImage = prod.images?.find((img: any) => img.isPrimary)?.url || prod.images?.[0]?.url || prod.image
+
   return (
+    <>
     <main className="pt-32 pb-[120px] px-[64px] max-w-7xl mx-auto">
       {/* Product Detail Section */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-[32px]">
         {/* Product Gallery */}
         <div className="md:col-span-7 flex flex-col gap-6">
           <div className="aspect-square bg-white flex items-center justify-center overflow-hidden border border-muted-gold/10">
-            <img alt={product.name} className="w-full h-full object-contain hover:scale-105 transition-transform duration-700" src={product.image}/>
+            {primaryImage ? (
+              <img alt={prod.name} className="w-full h-full object-contain hover:scale-105 transition-transform duration-700" src={primaryImage}/>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-6xl">
+                <span className="material-symbols-outlined text-6xl">image</span>
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-4 gap-4">
             <div className="aspect-square bg-white border border-metallic-gold p-2">
-              <img alt="Main view" className="w-full h-full object-contain opacity-100" src={product.image}/>
+              {primaryImage ? (
+                <img alt="Main view" className="w-full h-full object-contain opacity-100" src={primaryImage}/>
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                  <span className="material-symbols-outlined">image</span>
+                </div>
+              )}
             </div>
             <div className="aspect-square bg-white border border-muted-gold/10 p-2 opacity-50 hover:opacity-100 transition-opacity cursor-pointer">
               <div className="w-full h-full bg-soft-cream flex items-center justify-center">
@@ -55,32 +94,32 @@ function Product() {
           <nav aria-label="Breadcrumb" className="flex text-label-md font-label-md text-muted-gold mb-4">
             <Link className="hover:text-regal-navy" to="/shop">Shop</Link>
             <span className="mx-2">/</span>
-            <span className="hover:text-regal-navy capitalize">{product.category} Fragrance</span>
+            <span className="hover:text-regal-navy capitalize">{prod.category?.name || 'Fragrance'}</span>
           </nav>
-          <h1 className="font-headline-lg text-headline-lg text-regal-navy mb-2">{product.name}</h1>
-          <p className="font-price-lg text-price-lg text-metallic-gold mb-8">₦{product.price.toLocaleString()}</p>
+          <h1 className="font-headline-lg text-headline-lg text-regal-navy mb-2">{prod.name}</h1>
+          <p className="font-price-lg text-price-lg text-metallic-gold mb-8">₦{(prod.price || 0).toLocaleString()}</p>
           
           <div className="space-y-6 mb-10">
             <div className="p-6 bg-white border-l-4 border-metallic-gold">
               <h3 className="font-label-md text-label-md uppercase tracking-widest text-regal-navy mb-4">The Olfactory Journey</h3>
               <div className="space-y-4">
-                {product.notes ? (
+                {prod.topNotes?.length || prod.heartNotes?.length || prod.baseNotes?.length ? (
                   <>
                     <div>
                       <span className="font-label-md text-label-md text-muted-gold block">TOP NOTES</span>
-                      <p className="font-body-md text-body-md text-regal-navy/80">{product.notes.top}</p>
+                      <p className="font-body-md text-body-md text-regal-navy/80">{prod.topNotes?.join(', ') || 'N/A'}</p>
                     </div>
                     <div>
                       <span className="font-label-md text-label-md text-muted-gold block">MIDDLE NOTES</span>
-                      <p className="font-body-md text-body-md text-regal-navy/80">{product.notes.heart}</p>
+                      <p className="font-body-md text-body-md text-regal-navy/80">{prod.heartNotes?.join(', ') || 'N/A'}</p>
                     </div>
                     <div>
                       <span className="font-label-md text-label-md text-muted-gold block">BASE NOTES</span>
-                      <p className="font-body-md text-body-md text-regal-navy/80">{product.notes.base}</p>
+                      <p className="font-body-md text-body-md text-regal-navy/80">{prod.baseNotes?.join(', ') || 'N/A'}</p>
                     </div>
                   </>
                 ) : (
-                  <p className="font-body-md text-body-md text-regal-navy/80">Experience the luxurious blend of {product.category.toLowerCase()} notes perfectly crafted for elegance.</p>
+                  <p className="font-body-md text-body-md text-regal-navy/80">Experience the luxurious blend of {prod.category?.name?.toLowerCase() || 'fragrance'} notes perfectly crafted for elegance.</p>
                 )}
               </div>
             </div>
@@ -98,13 +137,21 @@ function Product() {
                   <span className="material-symbols-outlined">add</span>
                 </button>
               </div>
-              <button className="flex-1 bg-regal-navy text-metallic-gold h-14 font-label-md uppercase tracking-widest hover:bg-regal-navy/90 transition-all active:scale-95">
-                Add to Bag
+              <button 
+                onClick={() => addToCartMutation.mutate({ productId: prod.id, quantity: qty })}
+                disabled={addToCartMutation.isPending}
+                className="flex-1 bg-regal-navy text-metallic-gold h-14 font-label-md uppercase tracking-widest hover:bg-regal-navy/90 transition-all active:scale-95 disabled:opacity-70"
+              >
+                {addToCartMutation.isPending ? 'Adding...' : 'Add to Bag'}
               </button>
             </div>
-            <Link to="/checkout" className="w-full border border-metallic-gold text-metallic-gold h-14 font-label-md uppercase tracking-widest hover:bg-metallic-gold hover:text-white transition-all flex items-center justify-center">
-              Buy Now
-            </Link>
+            <button 
+              onClick={() => buyNowMutation.mutate({ productId: prod.id, quantity: qty })}
+              disabled={buyNowMutation.isPending}
+              className="w-full border border-metallic-gold text-metallic-gold h-14 font-label-md uppercase tracking-widest hover:bg-metallic-gold hover:text-white transition-all flex items-center justify-center disabled:opacity-70"
+            >
+              {buyNowMutation.isPending ? 'Processing...' : 'Buy Now'}
+            </button>
           </div>
 
           {/* Info Accordions */}
@@ -127,7 +174,9 @@ function Product() {
               </button>
               <div className={`transition-all duration-300 ease-out overflow-hidden ${activeAccordion === 'details' ? 'max-h-40' : 'max-h-0'}`}>
                 <p className="font-body-md text-body-md text-regal-navy/70 pb-6">
-                  100ml Eau De Parfum. {product.name} is a sophisticated fragrance that balances fresh notes with deep, warm spices. Perfect for both daytime freshness and evening allure.
+                  100ml Eau De Parfum. {prod.name} is a sophisticated fragrance that balances fresh notes with deep, warm spices. Perfect for both daytime freshness and evening allure.
+                  <br/><br/>
+                  {prod.description}
                 </p>
               </div>
             </div>
@@ -193,5 +242,14 @@ function Product() {
         </div>
       </section>
     </main>
+
+    {/* Added to Cart Toast */}
+    {addedToast && (
+      <div className="fixed bottom-10 right-10 bg-regal-navy text-metallic-gold px-8 py-4 flex items-center gap-4 z-50 border border-metallic-gold shadow-2xl">
+        <span className="material-symbols-outlined text-green-400">check_circle</span>
+        <span className="font-label-md text-sm uppercase tracking-widest">Added to your bag</span>
+      </div>
+    )}
+    </>
   )
 }
