@@ -34,10 +34,11 @@ function StorefrontLayout() {
           </Link>
           <div className="hidden md:flex gap-8 items-center">
             <Link to="/shop" className={`nav-item relative text-label-md font-label-md transition-colors duration-300 ${location.pathname === '/shop' ? 'text-metallic-gold font-bold border-b-2 border-metallic-gold pb-1' : `${textColor} hover:text-metallic-gold`}`}>Shop</Link>
-            <Link to="/shop" className={`nav-item relative text-label-md font-label-md transition-colors duration-300 ${textColor} hover:text-metallic-gold`}>New Arrivals</Link>
+            <Link to="/new-arrivals" className={`nav-item relative text-label-md font-label-md transition-colors duration-300 ${location.pathname === '/new-arrivals' ? 'text-metallic-gold font-bold border-b-2 border-metallic-gold pb-1' : `${textColor} hover:text-metallic-gold`}`}>New Arrivals</Link>
             <Link to="/shop" className={`nav-item relative text-label-md font-label-md transition-colors duration-300 ${textColor} hover:text-metallic-gold`}>Men</Link>
             <Link to="/shop" className={`nav-item relative text-label-md font-label-md transition-colors duration-300 ${textColor} hover:text-metallic-gold`}>Women</Link>
-            <Link to="/shop" className={`nav-item relative text-label-md font-label-md transition-colors duration-300 ${textColor} hover:text-metallic-gold`}>Gift Sets</Link>
+            <Link to="/gifts" className={`nav-item relative text-label-md font-label-md transition-colors duration-300 ${location.pathname === '/gifts' ? 'text-metallic-gold font-bold border-b-2 border-metallic-gold pb-1' : `${textColor} hover:text-metallic-gold`}`}>Gift Sets</Link>
+            <Link to="/fragrance-guide" className={`nav-item relative text-label-md font-label-md transition-colors duration-300 ${location.pathname === '/fragrance-guide' ? 'text-metallic-gold font-bold border-b-2 border-metallic-gold pb-1' : `${textColor} hover:text-metallic-gold`}`}>Fragrance Guide</Link>
           </div>
         </div>
         <div className="flex items-center gap-6">
@@ -73,19 +74,19 @@ function StorefrontLayout() {
         <div>
           <h4 className="text-metallic-gold font-label-md text-label-md mb-8 uppercase">Explore</h4>
           <ul className="space-y-4">
-            <li><Link to="/" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Fragrance Guide</Link></li>
-            <li><Link to="/shop" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">New Arrivals</Link></li>
-            <li><Link to="/shop" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Best Sellers</Link></li>
-            <li><Link to="/shop" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Gifts &amp; Sets</Link></li>
+            <li><Link to="/fragrance-guide" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Fragrance Guide</Link></li>
+            <li><Link to="/new-arrivals" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">New Arrivals</Link></li>
+            <li><Link to="/best-sellers" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Best Sellers</Link></li>
+            <li><Link to="/gifts" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Gifts &amp; Sets</Link></li>
           </ul>
         </div>
         <div>
           <h4 className="text-metallic-gold font-label-md text-label-md mb-8 uppercase">Support</h4>
           <ul className="space-y-4">
-            <li><Link to="/" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Shipping &amp; Returns</Link></li>
+            <li><Link to="/shipping-returns" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Shipping &amp; Returns</Link></li>
             <li><Link to="/" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Privacy Policy</Link></li>
-            <li><Link to="/" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Contact Us</Link></li>
-            <li><Link to="/" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">FAQs</Link></li>
+            <li><Link to="/contact" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">Contact Us</Link></li>
+            <li><Link to="/faq" className="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md">FAQs</Link></li>
           </ul>
         </div>
         <div>
