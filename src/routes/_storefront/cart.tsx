@@ -221,7 +221,7 @@ function Cart() {
                 <img 
                   className="object-contain w-full h-full p-12 group-hover:scale-110 transition-transform duration-700" 
                   alt={product.name} 
-                  src={product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}
+                  src={product.image || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}
                 />
                 <button 
                   className="absolute bottom-4 left-4 right-4 bg-regal-navy text-soft-cream py-4 opacity-0 group-hover:opacity-100 transition-all duration-300 font-label-md text-label-md uppercase tracking-widest translate-y-4 group-hover:translate-y-0 hover:bg-metallic-gold hover:text-regal-navy"

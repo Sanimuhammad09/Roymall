@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import { useEffect } from 'react'
 
 export const Route = createFileRoute('/_storefront/order-success')({
@@ -8,7 +8,6 @@ export const Route = createFileRoute('/_storefront/order-success')({
 function OrderSuccess() {
   const search = Route.useSearch() as { orderNumber?: string }
   const orderNumber = search.orderNumber || 'PENDING'
-  const navigate = useNavigate()
 
   useEffect(() => {
     // Scroll to top

@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StorefrontRouteImport } from './routes/_storefront'
 import { Route as AdminRouteImport } from './routes/admin'
-import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as SigninRouteImport } from './routes/signin'
 import { Route as SignupRouteImport } from './routes/signup'
@@ -20,11 +19,13 @@ import { Route as StorefrontAccountRouteImport } from './routes/_storefront/acco
 import { Route as StorefrontBestSellersRouteImport } from './routes/_storefront/best-sellers'
 import { Route as StorefrontBookAppointmentRouteImport } from './routes/_storefront/book-appointment'
 import { Route as StorefrontCartRouteImport } from './routes/_storefront/cart'
+import { Route as StorefrontCheckoutRouteImport } from './routes/_storefront/checkout'
 import { Route as StorefrontContactRouteImport } from './routes/_storefront/contact'
 import { Route as StorefrontFaqRouteImport } from './routes/_storefront/faq'
 import { Route as StorefrontFragranceGuideRouteImport } from './routes/_storefront/fragrance-guide'
 import { Route as StorefrontGiftsRouteImport } from './routes/_storefront/gifts'
 import { Route as StorefrontNewArrivalsRouteImport } from './routes/_storefront/new-arrivals'
+import { Route as StorefrontOrderSuccessRouteImport } from './routes/_storefront/order-success'
 import { Route as StorefrontOurStoryRouteImport } from './routes/_storefront/our-story'
 import { Route as StorefrontShippingReturnsRouteImport } from './routes/_storefront/shipping-returns'
 import { Route as StorefrontShopRouteImport } from './routes/_storefront/shop'
@@ -49,11 +50,6 @@ const StorefrontRoute = StorefrontRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckoutRoute = CheckoutRouteImport.update({
-  id: '/checkout',
-  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
@@ -97,6 +93,11 @@ const StorefrontCartRoute = StorefrontCartRouteImport.update({
   path: '/cart',
   getParentRoute: () => StorefrontRoute,
 } as any)
+const StorefrontCheckoutRoute = StorefrontCheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => StorefrontRoute,
+} as any)
 const StorefrontContactRoute = StorefrontContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -121,6 +122,11 @@ const StorefrontGiftsRoute = StorefrontGiftsRouteImport.update({
 const StorefrontNewArrivalsRoute = StorefrontNewArrivalsRouteImport.update({
   id: '/new-arrivals',
   path: '/new-arrivals',
+  getParentRoute: () => StorefrontRoute,
+} as any)
+const StorefrontOrderSuccessRoute = StorefrontOrderSuccessRouteImport.update({
+  id: '/order-success',
+  path: '/order-success',
   getParentRoute: () => StorefrontRoute,
 } as any)
 const StorefrontOurStoryRoute = StorefrontOurStoryRouteImport.update({
@@ -209,7 +215,6 @@ const AdminOrdersNewRoute = AdminOrdersNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof StorefrontIndexRoute
   '/admin': typeof AdminRouteWithChildren
-  '/checkout': typeof CheckoutRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
@@ -217,11 +222,13 @@ export interface FileRoutesByFullPath {
   '/best-sellers': typeof StorefrontBestSellersRoute
   '/book-appointment': typeof StorefrontBookAppointmentRoute
   '/cart': typeof StorefrontCartRoute
+  '/checkout': typeof StorefrontCheckoutRoute
   '/contact': typeof StorefrontContactRoute
   '/faq': typeof StorefrontFaqRoute
   '/fragrance-guide': typeof StorefrontFragranceGuideRoute
   '/gifts': typeof StorefrontGiftsRoute
   '/new-arrivals': typeof StorefrontNewArrivalsRoute
+  '/order-success': typeof StorefrontOrderSuccessRoute
   '/our-story': typeof StorefrontOurStoryRoute
   '/shipping-returns': typeof StorefrontShippingReturnsRoute
   '/shop': typeof StorefrontShopRoute
@@ -240,7 +247,6 @@ export interface FileRoutesByFullPath {
   '/admin/orders/new': typeof AdminOrdersNewRoute
 }
 export interface FileRoutesByTo {
-  '/checkout': typeof CheckoutRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
@@ -248,11 +254,13 @@ export interface FileRoutesByTo {
   '/best-sellers': typeof StorefrontBestSellersRoute
   '/book-appointment': typeof StorefrontBookAppointmentRoute
   '/cart': typeof StorefrontCartRoute
+  '/checkout': typeof StorefrontCheckoutRoute
   '/contact': typeof StorefrontContactRoute
   '/faq': typeof StorefrontFaqRoute
   '/fragrance-guide': typeof StorefrontFragranceGuideRoute
   '/gifts': typeof StorefrontGiftsRoute
   '/new-arrivals': typeof StorefrontNewArrivalsRoute
+  '/order-success': typeof StorefrontOrderSuccessRoute
   '/our-story': typeof StorefrontOurStoryRoute
   '/shipping-returns': typeof StorefrontShippingReturnsRoute
   '/shop': typeof StorefrontShopRoute
@@ -275,7 +283,6 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_storefront': typeof StorefrontRouteWithChildren
   '/admin': typeof AdminRouteWithChildren
-  '/checkout': typeof CheckoutRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/signin': typeof SigninRoute
   '/signup': typeof SignupRoute
@@ -283,11 +290,13 @@ export interface FileRoutesById {
   '/_storefront/best-sellers': typeof StorefrontBestSellersRoute
   '/_storefront/book-appointment': typeof StorefrontBookAppointmentRoute
   '/_storefront/cart': typeof StorefrontCartRoute
+  '/_storefront/checkout': typeof StorefrontCheckoutRoute
   '/_storefront/contact': typeof StorefrontContactRoute
   '/_storefront/faq': typeof StorefrontFaqRoute
   '/_storefront/fragrance-guide': typeof StorefrontFragranceGuideRoute
   '/_storefront/gifts': typeof StorefrontGiftsRoute
   '/_storefront/new-arrivals': typeof StorefrontNewArrivalsRoute
+  '/_storefront/order-success': typeof StorefrontOrderSuccessRoute
   '/_storefront/our-story': typeof StorefrontOurStoryRoute
   '/_storefront/shipping-returns': typeof StorefrontShippingReturnsRoute
   '/_storefront/shop': typeof StorefrontShopRoute
@@ -311,7 +320,6 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
-    | '/checkout'
     | '/forgot-password'
     | '/signin'
     | '/signup'
@@ -319,11 +327,13 @@ export interface FileRouteTypes {
     | '/best-sellers'
     | '/book-appointment'
     | '/cart'
+    | '/checkout'
     | '/contact'
     | '/faq'
     | '/fragrance-guide'
     | '/gifts'
     | '/new-arrivals'
+    | '/order-success'
     | '/our-story'
     | '/shipping-returns'
     | '/shop'
@@ -342,7 +352,6 @@ export interface FileRouteTypes {
     | '/admin/orders/new'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/checkout'
     | '/forgot-password'
     | '/signin'
     | '/signup'
@@ -350,11 +359,13 @@ export interface FileRouteTypes {
     | '/best-sellers'
     | '/book-appointment'
     | '/cart'
+    | '/checkout'
     | '/contact'
     | '/faq'
     | '/fragrance-guide'
     | '/gifts'
     | '/new-arrivals'
+    | '/order-success'
     | '/our-story'
     | '/shipping-returns'
     | '/shop'
@@ -376,7 +387,6 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_storefront'
     | '/admin'
-    | '/checkout'
     | '/forgot-password'
     | '/signin'
     | '/signup'
@@ -384,11 +394,13 @@ export interface FileRouteTypes {
     | '/_storefront/best-sellers'
     | '/_storefront/book-appointment'
     | '/_storefront/cart'
+    | '/_storefront/checkout'
     | '/_storefront/contact'
     | '/_storefront/faq'
     | '/_storefront/fragrance-guide'
     | '/_storefront/gifts'
     | '/_storefront/new-arrivals'
+    | '/_storefront/order-success'
     | '/_storefront/our-story'
     | '/_storefront/shipping-returns'
     | '/_storefront/shop'
@@ -411,7 +423,6 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   StorefrontRoute: typeof StorefrontRouteWithChildren
   AdminRoute: typeof AdminRouteWithChildren
-  CheckoutRoute: typeof CheckoutRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
@@ -431,13 +442,6 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout': {
-      id: '/checkout'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/forgot-password': {
@@ -496,6 +500,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StorefrontCartRouteImport
       parentRoute: typeof StorefrontRoute
     }
+    '/_storefront/checkout': {
+      id: '/_storefront/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof StorefrontCheckoutRouteImport
+      parentRoute: typeof StorefrontRoute
+    }
     '/_storefront/contact': {
       id: '/_storefront/contact'
       path: '/contact'
@@ -529,6 +540,13 @@ declare module '@tanstack/react-router' {
       path: '/new-arrivals'
       fullPath: '/new-arrivals'
       preLoaderRoute: typeof StorefrontNewArrivalsRouteImport
+      parentRoute: typeof StorefrontRoute
+    }
+    '/_storefront/order-success': {
+      id: '/_storefront/order-success'
+      path: '/order-success'
+      fullPath: '/order-success'
+      preLoaderRoute: typeof StorefrontOrderSuccessRouteImport
       parentRoute: typeof StorefrontRoute
     }
     '/_storefront/our-story': {
@@ -651,11 +669,13 @@ interface StorefrontRouteChildren {
   StorefrontBestSellersRoute: typeof StorefrontBestSellersRoute
   StorefrontBookAppointmentRoute: typeof StorefrontBookAppointmentRoute
   StorefrontCartRoute: typeof StorefrontCartRoute
+  StorefrontCheckoutRoute: typeof StorefrontCheckoutRoute
   StorefrontContactRoute: typeof StorefrontContactRoute
   StorefrontFaqRoute: typeof StorefrontFaqRoute
   StorefrontFragranceGuideRoute: typeof StorefrontFragranceGuideRoute
   StorefrontGiftsRoute: typeof StorefrontGiftsRoute
   StorefrontNewArrivalsRoute: typeof StorefrontNewArrivalsRoute
+  StorefrontOrderSuccessRoute: typeof StorefrontOrderSuccessRoute
   StorefrontOurStoryRoute: typeof StorefrontOurStoryRoute
   StorefrontShippingReturnsRoute: typeof StorefrontShippingReturnsRoute
   StorefrontShopRoute: typeof StorefrontShopRoute
@@ -669,11 +689,13 @@ const StorefrontRouteChildren: StorefrontRouteChildren = {
   StorefrontBestSellersRoute: StorefrontBestSellersRoute,
   StorefrontBookAppointmentRoute: StorefrontBookAppointmentRoute,
   StorefrontCartRoute: StorefrontCartRoute,
+  StorefrontCheckoutRoute: StorefrontCheckoutRoute,
   StorefrontContactRoute: StorefrontContactRoute,
   StorefrontFaqRoute: StorefrontFaqRoute,
   StorefrontFragranceGuideRoute: StorefrontFragranceGuideRoute,
   StorefrontGiftsRoute: StorefrontGiftsRoute,
   StorefrontNewArrivalsRoute: StorefrontNewArrivalsRoute,
+  StorefrontOrderSuccessRoute: StorefrontOrderSuccessRoute,
   StorefrontOurStoryRoute: StorefrontOurStoryRoute,
   StorefrontShippingReturnsRoute: StorefrontShippingReturnsRoute,
   StorefrontShopRoute: StorefrontShopRoute,
@@ -719,7 +741,6 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   StorefrontRoute: StorefrontRouteWithChildren,
   AdminRoute: AdminRouteWithChildren,
-  CheckoutRoute: CheckoutRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
