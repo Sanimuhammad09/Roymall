@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Secure Checkout | Roymall Scents</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@400;600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f5f3f7",
+                    "surface-tint": "#495e8a",
+                    "on-primary": "#ffffff",
+                    "primary-container": "#001b44",
+                    "surface": "#faf8fd",
+                    "on-tertiary-fixed-variant": "#6d3920",
+                    "primary-fixed-dim": "#b1c6f9",
+                    "tertiary": "#080100",
+                    "metallic-gold": "#D4AF37",
+                    "regal-navy": "#001B44",
+                    "on-background": "#1b1b1f",
+                    "on-primary-fixed": "#001a42",
+                    "on-surface": "#1b1b1f",
+                    "on-error": "#ffffff",
+                    "on-secondary-container": "#745c00",
+                    "background": "#faf8fd",
+                    "error-container": "#ffdad6",
+                    "secondary-container": "#fed65b",
+                    "primary-fixed": "#d8e2ff",
+                    "outline-variant": "#c5c6d0",
+                    "tertiary-fixed": "#ffdbcd",
+                    "on-primary-fixed-variant": "#314671",
+                    "surface-variant": "#e3e2e6",
+                    "secondary": "#735c00",
+                    "primary": "#00020a",
+                    "error": "#ba1a1a",
+                    "on-primary-container": "#7084b3",
+                    "inverse-primary": "#b1c6f9",
+                    "secondary-fixed-dim": "#e9c349",
+                    "outline": "#75777f",
+                    "on-secondary-fixed-variant": "#574500",
+                    "surface-dim": "#dbd9dd",
+                    "surface-bright": "#faf8fd",
+                    "on-secondary-fixed": "#241a00",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#e9e7ec",
+                    "soft-cream": "#F9F8F3",
+                    "surface-container-highest": "#e3e2e6",
+                    "deep-onyx": "#121212",
+                    "on-tertiary-container": "#b67558",
+                    "surface-container": "#efedf1",
+                    "inverse-surface": "#303033",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#ffe088",
+                    "on-tertiary-fixed": "#360f00",
+                    "inverse-on-surface": "#f2f0f4",
+                    "on-surface-variant": "#44474f",
+                    "muted-gold": "#B0922E",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#381000",
+                    "surface-container-lowest": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "mobile-margin": "20px",
+                    "grid-gutter": "32px",
+                    "container-margin": "64px",
+                    "component-stack": "16px",
+                    "section-gap": "120px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "headline-md": ["Playfair Display"],
+                    "price-lg": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-active { color: #D4AF37; }
+        .step-inactive { color: #001B44; opacity: 0.4; }
+        input:focus { outline: none; border-color: #D4AF37 !important; ring: 0 !important; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #D4AF37; }
+    </style>
+</head>
+<body class="bg-soft-cream text-regal-navy font-body-md selection:bg-metallic-gold/30">
+<!-- Header (Suppressed Nav - Transactional Focus) -->
+<header class="fixed top-0 left-0 w-full z-50 bg-soft-cream/80 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-container-margin py-6 flex justify-between items-center">
+<a class="text-headline-md font-headline-md font-bold text-regal-navy" href="/">Roymall Scents</a>
+<div class="flex items-center space-x-2 text-label-md uppercase tracking-widest text-muted-gold">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+<span>Secure Checkout</span>
+</div>
+</div>
+</header>
+<main class="pt-32 pb-section-gap px-container-margin max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-grid-gutter items-start">
+<!-- Left Column: Checkout Steps -->
+<div class="lg:col-span-7 space-y-12">
+<!-- Progress Indicator -->
+<div class="flex items-center space-x-8 mb-8">
+<div class="flex items-center space-x-2 step-active">
+<span class="font-bold text-label-md">01</span>
+<span class="uppercase tracking-tighter text-label-md">Shipping</span>
+</div>
+<div class="h-[1px] w-12 bg-outline-variant"></div>
+<div class="flex items-center space-x-2 step-inactive">
+<span class="font-bold text-label-md">02</span>
+<span class="uppercase tracking-tighter text-label-md">Delivery</span>
+</div>
+<div class="h-[1px] w-12 bg-outline-variant"></div>
+<div class="flex items-center space-x-2 step-inactive">
+<span class="font-bold text-label-md">03</span>
+<span class="uppercase tracking-tighter text-label-md">Payment</span>
+</div>
+</div>
+<!-- Section 1: Shipping Information -->
+<section class="space-y-8 animate-in fade-in duration-700" id="shipping-section">
+<h2 class="font-headline-lg text-headline-lg text-regal-navy">Shipping Information</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-label-md uppercase text-muted-gold">First Name</label>
+<input class="w-full bg-transparent border-0 border-b border-regal-navy/20 py-3 px-0 focus:border-metallic-gold transition-colors font-body-md" placeholder="e.g. Julian" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-md uppercase text-muted-gold">Last Name</label>
+<input class="w-full bg-transparent border-0 border-b border-regal-navy/20 py-3 px-0 focus:border-metallic-gold transition-colors font-body-md" placeholder="e.g. Roymall" type="text"/>
+</div>
+<div class="md:col-span-2 space-y-2">
+<label class="text-label-md uppercase text-muted-gold">Street Address</label>
+<input class="w-full bg-transparent border-0 border-b border-regal-navy/20 py-3 px-0 focus:border-metallic-gold transition-colors font-body-md" placeholder="123 Fragrance Avenue, Suite 400" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-md uppercase text-muted-gold">City</label>
+<input class="w-full bg-transparent border-0 border-b border-regal-navy/20 py-3 px-0 focus:border-metallic-gold transition-colors font-body-md" placeholder="New York" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-md uppercase text-muted-gold">Postal Code</label>
+<input class="w-full bg-transparent border-0 border-b border-regal-navy/20 py-3 px-0 focus:border-metallic-gold transition-colors font-body-md" placeholder="10001" type="text"/>
+</div>
+<div class="md:col-span-2 space-y-2">
+<label class="text-label-md uppercase text-muted-gold">Phone Number</label>
+<input class="w-full bg-transparent border-0 border-b border-regal-navy/20 py-3 px-0 focus:border-metallic-gold transition-colors font-body-md" placeholder="+1 (555) 000-0000" type="tel"/>
+</div>
+</div>
+</section>
+<!-- Section 2: Delivery Method -->
+<section class="space-y-8 pt-8 border-t border-regal-navy/10" id="delivery-section">
+<h2 class="font-headline-lg text-headline-lg text-regal-navy">Delivery Method</h2>
+<div class="space-y-4">
+<div class="group relative flex items-center justify-between p-6 border border-metallic-gold bg-white/50 cursor-pointer">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-metallic-gold" data-weight="fill">local_shipping</span>
+<div>
+<p class="font-bold text-body-lg">Nationwide Delivery</p>
+<p class="text-label-md text-regal-navy/60">Estimated arrival: 3-5 business days</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-price-lg">$15.00</p>
+<div class="w-5 h-5 rounded-full border-2 border-metallic-gold flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-metallic-gold"></div>
+</div>
+</div>
+</div>
+<div class="group relative flex items-center justify-between p-6 border border-regal-navy/10 hover:border-metallic-gold transition-all cursor-pointer">
+<div class="flex items-center space-x-4">
+<span class="material-symbols-outlined text-regal-navy/40">flight</span>
+<div>
+<p class="font-bold text-body-lg opacity-40">Express International</p>
+<p class="text-label-md text-regal-navy/60">Estimated arrival: 1-2 business days</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-price-lg opacity-40">$45.00</p>
+<div class="w-5 h-5 rounded-full border-2 border-regal-navy/10"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Payment -->
+<section class="space-y-8 pt-8 border-t border-regal-navy/10" id="payment-section">
+<h2 class="font-headline-lg text-headline-lg text-regal-navy">Payment Details</h2>
+<div class="bg-regal-navy p-8 text-soft-cream space-y-8">
+<div class="flex justify-between items-center border-b border-soft-cream/10 pb-4">
+<span class="text-label-md uppercase tracking-widest">Credit Card</span>
+<div class="flex space-x-2">
+<div class="w-8 h-5 bg-white/20 rounded-sm"></div>
+<div class="w-8 h-5 bg-white/20 rounded-sm"></div>
+<div class="w-8 h-5 bg-white/20 rounded-sm"></div>
+</div>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<label class="text-label-md uppercase text-metallic-gold/80">Cardholder Name</label>
+<input class="w-full bg-transparent border-0 border-b border-soft-cream/30 py-2 px-0 focus:border-metallic-gold transition-colors text-soft-cream placeholder:text-soft-cream/30" placeholder="JULIAN ROYMALL" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-md uppercase text-metallic-gold/80">Card Number</label>
+<div class="relative">
+<input class="w-full bg-transparent border-0 border-b border-soft-cream/30 py-2 px-0 focus:border-metallic-gold transition-colors text-soft-cream placeholder:text-soft-cream/30 tracking-widest" placeholder="•••• •••• •••• ••••" type="text"/>
+<span class="absolute right-0 top-2 material-symbols-outlined text-soft-cream/40">credit_card</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div class="space-y-2">
+<label class="text-label-md uppercase text-metallic-gold/80">Expiry Date</label>
+<input class="w-full bg-transparent border-0 border-b border-soft-cream/30 py-2 px-0 focus:border-metallic-gold transition-colors text-soft-cream placeholder:text-soft-cream/30" placeholder="MM / YY" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-label-md uppercase text-metallic-gold/80">CVV</label>
+<input class="w-full bg-transparent border-0 border-b border-soft-cream/30 py-2 px-0 focus:border-metallic-gold transition-colors text-soft-cream placeholder:text-soft-cream/30" placeholder="•••" type="text"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div class="pt-8">
+<button class="w-full bg-regal-navy text-on-primary py-6 text-label-md font-bold uppercase tracking-widest hover:bg-primary-container transition-all flex items-center justify-center space-x-3 group">
+<span>Confirm &amp; Complete Purchase</span>
+<span class="material-symbols-outlined text-metallic-gold group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<p class="mt-4 text-center text-label-md text-regal-navy/40 flex items-center justify-center space-x-2">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span>Encrypted 256-bit SSL Security Connection</span>
+</p>
+</div>
+</div>
+<!-- Right Column: Order Summary -->
+<aside class="lg:col-span-5 sticky top-32 space-y-8">
+<div class="border border-regal-navy/10 p-10 bg-white">
+<h3 class="font-headline-md text-headline-md mb-8 pb-4 border-b border-regal-navy/10">Order Summary</h3>
+<!-- Items List -->
+<div class="space-y-6 mb-8 max-h-[400px] overflow-y-auto custom-scrollbar pr-4">
+<div class="flex space-x-4 items-center">
+<div class="w-20 h-24 bg-soft-cream flex-shrink-0 relative">
+<img class="w-full h-full object-cover" data-alt="A luxury perfume bottle with a heavy glass base and a metallic gold cap, standing elegantly on a minimalist white surface with soft dramatic shadows. The liquid inside is a pale amber color, suggesting a premium fragrance for an upscale brand like Roymall Scents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD56OOgVONoI-1klGiiD1yGeT0uWGy7CVBpx-RmjdU6M9nfnEe2O2epOeXnhy41JIN1x-CZGzr1A_StDnj40QmaT_w4Tv1mE4hKjNqT2roKhbMe2L6bW7ie0JqyCeRM_ZOKPn6lsWEvGXweT_gg1t6sulk7BppjYNp7oZe8OeBaInWmUtHmo-jEFlF1GYGfa0Tv1sRpbcKt7OmuLsLeIkjQqhXRI9_0nplYFGbgq3xz3L3KpySwYzrr"/>
+</div>
+<div class="flex-grow">
+<p class="font-bold text-body-md">Royal Oud Intense</p>
+<p class="text-label-md text-muted-gold">100ml / Extrait de Parfum</p>
+<p class="text-label-md mt-1">Qty: 1</p>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-price-lg">$285.00</p>
+</div>
+</div>
+<div class="flex space-x-4 items-center">
+<div class="w-20 h-24 bg-soft-cream flex-shrink-0 relative">
+<img class="w-full h-full object-cover" data-alt="A sophisticated scented candle in a matte navy ceramic vessel with a gold-embossed logo. The candle is unlit, showing a smooth creamy wax surface, placed in a luxury interior setting with warm, ambient lighting that emphasizes the rich textures and premium brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbbDRHAsM0_Nx3xPiWpeU7TsYQRcDtRdF9IRdQ7WtJhLIB2X5WDy1xR0gnd_s0A-U8Rx3_eYAD5g_96BPvAI_IrcqjITmIGZe6RkChHS9Ne_RVtiTYETozoFGon2YNfpCI7mO-hNUt3iaDeQ7arBZIgeJARgibn-EC6OFvkARRIBobBCwT7eltnbluFOs2vCffcwIastx5Qi2FCSAwqyIzUhdMgbCG7rpgJDwjWQ38LWNa_4sB4peW"/>
+</div>
+<div class="flex-grow">
+<p class="font-bold text-body-md">Midnight Jasmine Candle</p>
+<p class="text-label-md text-muted-gold">Limited Edition / 250g</p>
+<p class="text-label-md mt-1">Qty: 2</p>
+</div>
+<div class="text-right">
+<p class="font-headline-md text-price-lg">$110.00</p>
+</div>
+</div>
+</div>
+<!-- Discount Code -->
+<div class="flex space-x-2 mb-8 pt-6 border-t border-regal-navy/10">
+<input class="flex-grow bg-transparent border-0 border-b border-regal-navy/20 py-2 focus:border-metallic-gold font-body-md uppercase text-label-md" placeholder="Promo Code" type="text"/>
+<button class="text-label-md font-bold text-regal-navy hover:text-metallic-gold transition-colors uppercase border-b border-regal-navy">Apply</button>
+</div>
+<!-- Totals -->
+<div class="space-y-4 text-body-md">
+<div class="flex justify-between">
+<span class="text-regal-navy/60">Subtotal</span>
+<span>$395.00</span>
+</div>
+<div class="flex justify-between">
+<span class="text-regal-navy/60">Shipping (Nationwide)</span>
+<span>$15.00</span>
+</div>
+<div class="flex justify-between">
+<span class="text-regal-navy/60">Estimated Tax</span>
+<span>$32.80</span>
+</div>
+<div class="flex justify-between pt-6 border-t-2 border-regal-navy font-bold text-headline-md">
+<span>Total</span>
+<span class="text-metallic-gold">$442.80</span>
+</div>
+</div>
+</div>
+<!-- Trusted Badge -->
+<div class="bg-soft-cream p-6 border border-metallic-gold/20 flex items-center space-x-4">
+<span class="material-symbols-outlined text-metallic-gold text-4xl" data-weight="fill">verified</span>
+<div>
+<p class="font-bold text-label-md uppercase tracking-wider">Authenticity Guaranteed</p>
+<p class="text-label-md text-regal-navy/60">Every Roymall Scents fragrance is verified for authenticity and quality craftsmanship.</p>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Simple Footer for Transactional Context -->
+<footer class="w-full py-12 px-container-margin border-t border-regal-navy/10 bg-soft-cream">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<p class="text-label-md text-regal-navy/40">© 2024 Roymall Scents. All Rights Reserved.</p>
+<div class="flex space-x-8">
+<a class="text-label-md text-regal-navy/60 hover:text-metallic-gold transition-colors" href="#">Privacy Policy</a>
+<a class="text-label-md text-regal-navy/60 hover:text-metallic-gold transition-colors" href="#">Terms of Service</a>
+<a class="text-label-md text-regal-navy/60 hover:text-metallic-gold transition-colors" href="#">Contact Support</a>
+</div>
+<div class="flex space-x-4 items-center opacity-30 grayscale">
+<div class="w-10 h-6 bg-regal-navy rounded"></div>
+<div class="w-10 h-6 bg-regal-navy rounded"></div>
+<div class="w-10 h-6 bg-regal-navy rounded"></div>
+<div class="w-10 h-6 bg-regal-navy rounded"></div>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interaction for delivery method selection
+        document.querySelectorAll('#delivery-section > div > div').forEach(method => {
+            method.addEventListener('click', function() {
+                // Reset all
+                document.querySelectorAll('#delivery-section > div > div').forEach(m => {
+                    m.classList.remove('border-metallic-gold', 'bg-white/50');
+                    m.classList.add('border-regal-navy/10');
+                    m.querySelector('div.w-5.h-5 > div')?.remove();
+                    m.querySelector('div.w-5.h-5').classList.remove('border-metallic-gold');
+                    m.querySelectorAll('p, span').forEach(el => el.classList.add('opacity-40'));
+                });
+                
+                // Set active
+                this.classList.add('border-metallic-gold', 'bg-white/50');
+                this.classList.remove('border-regal-navy/10');
+                const dot = document.createElement('div');
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-metallic-gold';
+                const circle = this.querySelector('div.w-5.h-5');
+                circle.classList.add('border-metallic-gold');
+                circle.appendChild(dot);
+                this.querySelectorAll('p, span').forEach(el => el.classList.remove('opacity-40'));
+            });
+        });
+
+        // Simple form validation focus logic
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label')?.classList.add('text-metallic-gold');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label')?.classList.remove('text-metallic-gold');
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Roymall Scents | Luxury Fragrances</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "muted-gold": "#B0922E",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#fed65b",
+                    "background": "#faf8fd",
+                    "regal-navy": "#001B44",
+                    "deep-onyx": "#121212",
+                    "surface-container-low": "#f5f3f7",
+                    "tertiary-container": "#381000",
+                    "inverse-on-surface": "#f2f0f4",
+                    "surface-container-high": "#e9e7ec",
+                    "secondary-fixed": "#ffe088",
+                    "on-secondary-fixed-variant": "#574500",
+                    "on-tertiary-fixed-variant": "#6d3920",
+                    "tertiary-fixed": "#ffdbcd",
+                    "inverse-primary": "#b1c6f9",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#e9c349",
+                    "on-tertiary-container": "#b67558",
+                    "primary-fixed-dim": "#b1c6f9",
+                    "on-surface-variant": "#44474f",
+                    "outline-variant": "#c5c6d0",
+                    "on-secondary-fixed": "#241a00",
+                    "soft-cream": "#F9F8F3",
+                    "surface-tint": "#495e8a",
+                    "surface-container-highest": "#e3e2e6",
+                    "on-error": "#ffffff",
+                    "on-background": "#1b1b1f",
+                    "on-primary-fixed-variant": "#314671",
+                    "on-secondary-container": "#745c00",
+                    "surface": "#faf8fd",
+                    "primary": "#00020a",
+                    "primary-fixed": "#d8e2ff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#080100",
+                    "outline": "#75777f",
+                    "on-surface": "#1b1b1f",
+                    "surface-container": "#efedf1",
+                    "primary-container": "#001b44",
+                    "on-secondary": "#ffffff",
+                    "metallic-gold": "#D4AF37",
+                    "on-primary-container": "#7084b3",
+                    "surface-dim": "#dbd9dd",
+                    "inverse-surface": "#303033",
+                    "surface-variant": "#e3e2e6",
+                    "secondary": "#735c00",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#001a42",
+                    "on-tertiary-fixed": "#360f00",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-bright": "#faf8fd",
+                    "error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "section-gap": "120px",
+                    "grid-gutter": "32px",
+                    "mobile-margin": "20px",
+                    "component-stack": "16px",
+                    "container-margin": "64px"
+            },
+            "fontFamily": {
+                    "label-md": ["Manrope"],
+                    "price-lg": ["Playfair Display"],
+                    "body-lg": ["Manrope"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .hero-gradient {
+            background: linear-gradient(rgba(0, 27, 68, 0.6), rgba(0, 27, 68, 0.85));
+        }
+        .luxury-card {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .luxury-card:hover {
+            transform: translateY(-8px);
+        }
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #D4AF37;
+            transition: width 0.3s ease;
+        }
+        .nav-item:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-soft-cream font-body-md text-regal-navy">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-16 py-6 transition-all duration-500 bg-transparent" id="navbar">
+<div class="flex items-center gap-8">
+<div class="text-headline-md font-headline-md font-bold text-regal-navy">Roymall Scents</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="nav-item relative text-label-md font-label-md text-regal-navy hover:text-metallic-gold transition-colors duration-300" href="#">Shop</a>
+<a class="nav-item relative text-label-md font-label-md text-metallic-gold font-bold border-b-2 border-metallic-gold pb-1" href="#">New Arrivals</a>
+<a class="nav-item relative text-label-md font-label-md text-regal-navy hover:text-metallic-gold transition-colors duration-300" href="#">Men</a>
+<a class="nav-item relative text-label-md font-label-md text-regal-navy hover:text-metallic-gold transition-colors duration-300" href="#">Women</a>
+<a class="nav-item relative text-label-md font-label-md text-regal-navy hover:text-metallic-gold transition-colors duration-300" href="#">Gift Sets</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="material-symbols-outlined text-regal-navy hover:text-metallic-gold transition-colors duration-300">search</button>
+<button class="material-symbols-outlined text-regal-navy hover:text-metallic-gold transition-colors duration-300">person</button>
+<button class="material-symbols-outlined text-regal-navy hover:text-metallic-gold transition-colors duration-300">shopping_bag</button>
+</div>
+</nav>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="A high-fidelity cinematic close-up shot of a luxury glass perfume bottle on a dark reflective surface. The lighting is moody and dramatic with golden highlights tracing the bottle edges. The background is a soft, deep navy gradient with atmospheric dust particles sparkling in a narrow beam of light, conveying an aura of premium craftsmanship and elegance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBABy0nvbe4js1gBGreke2Y4Q-kM_Ej7LeFLXIThP0AytkgBGx01Mkp_TMGWSOAO6ddI8x3UZKplSQ8P4W47byXMYzwJ3MvDWCn2K-fowvTCWhgb3fySwr9LtZblU8VSAO0Q1uYJwIwPT_KsB_2TgqkpLI_k81Dt2rXYanMiqUKixTD2voIk9rbQ-zBYKqAiQ2MY8ciBKGOhjnMeKHd2R26s3FffcGjb2KEFXXpDa_7djQChTKGS4d"/>
+<div class="absolute inset-0 hero-gradient"></div>
+</div>
+<div class="relative z-10 text-center px-container-margin max-w-4xl animate-fade-in">
+<h1 class="text-soft-cream font-display-lg text-display-lg mb-6 tracking-tight">A Perfect Perfume for Every Mood</h1>
+<p class="text-metallic-gold font-body-lg text-body-lg mb-10 opacity-90 max-w-2xl mx-auto">Discover our exclusive collection of artisanal fragrances, crafted to evoke emotion and define your unique presence.</p>
+<div class="flex flex-col md:flex-row gap-6 justify-center">
+<button class="bg-metallic-gold text-regal-navy font-label-md text-label-md px-10 py-4 hover:bg-soft-cream transition-all duration-300 uppercase tracking-widest">Shop the Collection</button>
+<button class="border border-soft-cream text-soft-cream font-label-md text-label-md px-10 py-4 hover:bg-soft-cream hover:text-regal-navy transition-all duration-300 uppercase tracking-widest">Explore Stories</button>
+</div>
+</div>
+<div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+<span class="material-symbols-outlined text-soft-cream text-3xl">keyboard_double_arrow_down</span>
+</div>
+</section>
+<!-- New Arrivals Grid -->
+<section class="py-section-gap px-container-margin bg-soft-cream">
+<div class="flex justify-between items-end mb-16">
+<div>
+<h2 class="text-headline-lg font-headline-lg text-regal-navy mb-2">New Arrivals</h2>
+<p class="text-body-md font-body-md opacity-70">The latest expressions of olfactive art.</p>
+</div>
+<a class="text-label-md font-label-md text-metallic-gold hover:underline underline-offset-8 transition-all" href="#">View All Products</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-grid-gutter">
+<!-- Product 1 -->
+<div class="luxury-card group">
+<div class="relative bg-white aspect-[4/5] overflow-hidden mb-6 border border-muted-gold/10">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="A luxury perfume bottle named Ralph Lauren Ralph's Club elegantly positioned on a white marble plinth. The bottle is sleek black with silver accents, reflecting soft studio lighting. The overall aesthetic is minimalist, clean, and high-fashion, suitable for a premium fragrance catalog." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA28zhd3D_8VvgtUzyOPTLIGBmAPalhuuHS9yfgAqQcdJFFAYkvZBMy4QoURTLopelh1EmGmCJcExim2TkrgzQw7oGYGTyNCwQnSZHdXqMZmQt8skoqTl52NHcwzmpJVkSN_DQizLpjhPQzXwreDnyumXJn7HIBRvlVw3JnibmytvVF4AgJGaKK2MWw6EQ296hc_wlLztp18XkQdoGcWIXTFk3Le_cyZQVFvSPTGN_hMScltC4h76Jv"/>
+<div class="absolute top-4 right-4 bg-regal-navy text-metallic-gold text-[10px] font-bold px-3 py-1 uppercase tracking-tighter">New</div>
+<button class="absolute bottom-0 left-0 w-full bg-regal-navy text-soft-cream py-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 font-label-md text-label-md">Add to Bag</button>
+</div>
+<div class="text-center">
+<p class="text-label-md font-label-md text-muted-gold mb-1">RALPH LAUREN</p>
+<h3 class="text-headline-md font-headline-md text-regal-navy mb-2">Ralph's Club EDP</h3>
+<p class="text-price-lg font-price-lg text-regal-navy">₦220,000.00</p>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="luxury-card group">
+<div class="relative bg-white aspect-[4/5] overflow-hidden mb-6 border border-muted-gold/10">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Ahmed Al Maghribi Kaaf perfume bottle featuring intricate gold filigree patterns against a deep blue glass background. The bottle sits on a reflective black surface with soft warm backlighting creating a golden aura. The mood is rich, opulent, and Middle Eastern inspired." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6Ifs_ZfgqzdgMmBhgvQidJd3WMt3-qJg4hcQ6I76Tx8_8Ea75DRW_5K46KeqEhCXdi5VYzEqrEq6Ry2gnQUpxdw2Nq9e6ELP140J7B7GrxT5XIP9nqnfWCANxpn0lxj10fEz6k2WBaIrMTNa-6QevM9gmRr1MbbJgkYxmkjmg_wZLtdR2ApdZLDfRJYS4X-hDPMeZ1x0Pv9XS9JWdtTmPKZou7nF4QXJhrb37H7QGSk52Fv7BZjVA"/>
+<button class="absolute bottom-0 left-0 w-full bg-regal-navy text-soft-cream py-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 font-label-md text-label-md">Add to Bag</button>
+</div>
+<div class="text-center">
+<p class="text-label-md font-label-md text-muted-gold mb-1">AHMED AL MAGHRIBI</p>
+<h3 class="text-headline-md font-headline-md text-regal-navy mb-2">Kaaf EDP 100ml</h3>
+<p class="text-price-lg font-price-lg text-regal-navy">₦70,000.00</p>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="luxury-card group">
+<div class="relative bg-white aspect-[4/5] overflow-hidden mb-6 border border-muted-gold/10">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Dior Ambre Nuit Esprit perfume bottle in an elegant amber-colored glass flacon. The setting is a dimly lit, sophisticated wood-paneled library. The light catches the liquid inside the bottle, highlighting its rich golden-brown hue. High-end lifestyle photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLlqKn9VcKRG4hEoL1wOM0F6jj-T3DSP4HqDIFqTkPrrQi-2OWk7l2ulY0DYNaSrH8DozPX_PALl_-Rp8wlXHRpwAyqLvTiNToHxwywxO5PaIUAC6eeTc384JwwhppEoStkGlCXZ7v4hguj1rN2-OHtfYQEARQx1ERZdjBpK1AsdvAdTvENGGp-sU3vo9U2nWrIdqkAU8JqSIatAzQFk5U_VSxw6sNGV4ldbVgxgDlL_HtEnGeYEik"/>
+<button class="absolute bottom-0 left-0 w-full bg-regal-navy text-soft-cream py-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 font-label-md text-label-md">Add to Bag</button>
+</div>
+<div class="text-center">
+<p class="text-label-md font-label-md text-muted-gold mb-1">DIOR</p>
+<h3 class="text-headline-md font-headline-md text-regal-navy mb-2">Ambre Nuit Esprit</h3>
+<p class="text-price-lg font-price-lg text-regal-navy">₦950,000.00</p>
+</div>
+</div>
+<!-- Product 4 -->
+<div class="luxury-card group">
+<div class="relative bg-white aspect-[4/5] overflow-hidden mb-6 border border-muted-gold/10">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Versace L'Homme EDT bottle standing in a modern architectural setting with sharp shadows and bright daylight. The bottle design is classic with clear glass and gold accents. The atmosphere is bold, masculine, and sophisticated, reflecting luxury Italian design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVgSDnKXLAeBqedCTVIpf30YDRxAGv841mgQoToYuH2e1Q55r3GUBfk46XUIBCmMRB4oVhukHVw38GYLs5M_tL2O6hRpvwAWX4gEXnr2MZt7uuVyk9Z7vre-QOHrWmTF5gceaout1QIejpVBALN75t6WIGjVvyRPRRI3d9laVS8BcpP1MZpNS2GR7auPv3B8-8MWymeO-n34wPBWP3S-NfnzufJh07buqcRVAkO_71UoowK2erP9bL"/>
+<button class="absolute bottom-0 left-0 w-full bg-regal-navy text-soft-cream py-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 font-label-md text-label-md">Add to Bag</button>
+</div>
+<div class="text-center">
+<p class="text-label-md font-label-md text-muted-gold mb-1">VERSACE</p>
+<h3 class="text-headline-md font-headline-md text-regal-navy mb-2">L'Homme EDT</h3>
+<p class="text-price-lg font-price-lg text-regal-navy">₦20,000.00</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Curated Collections -->
+<section class="py-section-gap px-container-margin bg-regal-navy text-soft-cream overflow-hidden">
+<div class="text-center mb-16">
+<h2 class="text-headline-lg font-headline-lg mb-4 text-metallic-gold">Curated Collections</h2>
+<p class="text-body-lg font-body-lg opacity-80 max-w-xl mx-auto">Explore scents categorized by their unique essence and spirit.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Men -->
+<div class="relative h-[600px] group cursor-pointer overflow-hidden border border-metallic-gold/20">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" data-alt="A portrait of a sophisticated man in a dark tailored suit, spraying fragrance on his neck. The light is focused and dramatic, highlighting the fine mist of the spray. The background is dark and moody, emphasizing masculine elegance and premium lifestyle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7ZVCIUNtIuiwjF1NXTvDDS0BhbcW1_00uaaxFlx3XxBs0uFiIs3KRpPW4mbgtscK7gEn9Wl_8HbEmwJrpHi3IuRGZnF0NUDXy8ye4wRQIwt9rHnEPX5u0oFaHfTC4rqzZ49wmELv98USQ-gA861pjlWVaBtpydh3-ZZCl4Tc058tJjJzC1XO1lq2JsnZr1WggIWrI-rAJA_X9STycrGLlVNYCEhlvEGKR-pzuIaKDGNdgOcJ9EnlJ"/>
+<div class="absolute inset-0 bg-gradient-to-t from-regal-navy/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-12 left-12">
+<h3 class="text-headline-lg font-headline-lg mb-4">Pour Homme</h3>
+<button class="text-label-md font-label-md uppercase tracking-widest text-metallic-gold flex items-center gap-2 group-hover:gap-4 transition-all">
+                        Discover <span class="material-symbols-outlined">trending_flat</span>
+</button>
+</div>
+</div>
+<!-- Women -->
+<div class="relative h-[600px] group cursor-pointer overflow-hidden border border-metallic-gold/20">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" data-alt="A close-up shot of a woman with elegant jewelry, her face partially obscured by a delicate silk scarf blowing in the wind. The lighting is soft and ethereal, capturing a sense of mysterious and floral femininity. High-contrast fashion photography style with soft cream tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq-uh9TtbnzpB88cJEYwkQT1ivwS6qdr-lSzpm_eutB1UVqtFwZFSauk2I32dzumADMpz6nS9sLb8zZqtPoSADk4ytm7A48dd8W0QrGRCdc8xYY0bJjKBkHH5UNMGQu7TztNu-4tyLisACrguun668OHIw7cmzoHMfsQVjJWVUeANVVA6036RyqaP7nVXEMbAmd_oYyNdlroOtmxNSIFyeXvtQx8suI1_8UN8mrlqfJfjnYiFAxvt5"/>
+<div class="absolute inset-0 bg-gradient-to-t from-regal-navy/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-12 left-12">
+<h3 class="text-headline-lg font-headline-lg mb-4">Pour Femme</h3>
+<button class="text-label-md font-label-md uppercase tracking-widest text-metallic-gold flex items-center gap-2 group-hover:gap-4 transition-all">
+                        Discover <span class="material-symbols-outlined">trending_flat</span>
+</button>
+</div>
+</div>
+<!-- Unisex -->
+<div class="relative h-[600px] group cursor-pointer overflow-hidden border border-metallic-gold/20">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000" data-alt="Abstract imagery featuring swirling smoke and gold dust in a dark, minimalist space. The composition is balanced and artistic, representing the gender-neutral and versatile nature of unisex fragrances. The lighting is high-contrast, creating an avant-garde and premium feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5jZc3_1p-Vq00Xb8P5UKp8027sTYVcFKfc9nLMklX1oKYHDjiWe_b_A6kOSPPnVqRd0UjMi7KEp3hPrv9QN0vCyz_-ln6s6NsvgaiFudA-rKz5svEivg1xybU0KhatCnqK-Nq2Tl1wdvHqhRELSFqwc82mxHwMzfc0Umd6IWMi6iTFiSK6A2TiJUL8GG_oKAmA0MaYkeHPpH8uhP29en5VTT1pTba-5A0K-vzoR3J8zgeme7WVK8e"/>
+<div class="absolute inset-0 bg-gradient-to-t from-regal-navy/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-12 left-12">
+<h3 class="text-headline-lg font-headline-lg mb-4">L'Essence Unisexe</h3>
+<button class="text-label-md font-label-md uppercase tracking-widest text-metallic-gold flex items-center gap-2 group-hover:gap-4 transition-all">
+                        Discover <span class="material-symbols-outlined">trending_flat</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Our Story Section -->
+<section class="py-section-gap px-container-margin grid grid-cols-1 md:grid-cols-2 gap-grid-gutter items-center">
+<div class="relative aspect-square md:aspect-auto md:h-[700px] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A vintage-style perfumer's workshop with small glass vials, dried botanicals, and hand-written formulation notes on aged paper. The warm morning light streams through a window, illuminating floating dust and creating a nostalgic, artisanal atmosphere of craftsmanship and history." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBP82Yng3t15O4MD12fUjia2EvYr5OOfFZj0wvCWePsgBfnstjaKDYDfzTVDAZmeKe1RYeU8jJjoiJ0FK-1ba3eJdA9I0sooZLphCiCb7GPglyfuAsBy3ZAqdItCYTXx1zkeIqIStw0blc0ROfzj6Q7dV9GnE_hie3fnpm0sssmpFI0jPuYIMiZQ8ulo6PJtoLOCRpmbIbZd3mbiXp1Dy11UIz1k8uPn67Hip-u38hxDfgzQf_oPb9"/>
+<div class="absolute inset-0 border-[24px] border-soft-cream/30 m-8"></div>
+</div>
+<div class="md:pl-16">
+<span class="text-label-md font-label-md text-metallic-gold uppercase tracking-widest block mb-6">Our Heritage</span>
+<h2 class="text-headline-lg font-headline-lg text-regal-navy mb-8">Crafting Memories Through Olfactive Art</h2>
+<div class="space-y-6 text-body-lg font-body-lg text-regal-navy opacity-80 leading-relaxed">
+<p>Founded on the belief that a scent is the most intense form of memory, Roymall Scents has been at the forefront of luxury perfumery for over a decade. We source only the rarest ingredients from around the globe.</p>
+<p>From the fields of Grasse to the mountains of Oman, our master perfumers blend tradition with modern innovation to create scents that are more than just fragrances—they are identities.</p>
+</div>
+<button class="mt-12 border-b-2 border-regal-navy pb-2 font-label-md text-label-md uppercase tracking-widest hover:text-metallic-gold hover:border-metallic-gold transition-all duration-300">Read the Full Story</button>
+</div>
+</section>
+<!-- Newsletter Signup -->
+<section class="py-section-gap px-container-margin bg-soft-cream">
+<div class="max-w-4xl mx-auto border-2 border-metallic-gold p-8 md:p-20 text-center relative overflow-hidden">
+<div class="absolute top-0 left-0 w-24 h-24 border-t-4 border-l-4 border-regal-navy -m-2"></div>
+<div class="absolute bottom-0 right-0 w-24 h-24 border-b-4 border-r-4 border-regal-navy -m-2"></div>
+<h2 class="text-headline-lg font-headline-lg text-regal-navy mb-4">Join the Inner Circle</h2>
+<p class="text-body-md font-body-md text-regal-navy opacity-70 mb-10 max-w-md mx-auto">Subscribe to receive early access to new collections, fragrance tips, and exclusive event invitations.</p>
+<form class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+<input class="flex-grow bg-transparent border-b border-regal-navy focus:border-metallic-gold focus:ring-0 text-regal-navy placeholder:text-regal-navy/40 py-4 px-0 font-body-md" placeholder="Your Email Address" type="email"/>
+<button class="bg-regal-navy text-soft-cream px-12 py-4 font-label-md text-label-md uppercase tracking-widest hover:bg-metallic-gold hover:text-regal-navy transition-all duration-300" type="submit">Subscribe</button>
+</form>
+</div>
+</section>
+<!-- Footer -->
+<footer class="w-full py-section-gap px-container-margin grid grid-cols-1 md:grid-cols-4 gap-grid-gutter bg-regal-navy">
+<div>
+<div class="text-headline-md font-headline-md font-bold text-metallic-gold mb-8">Roymall Scents</div>
+<p class="text-soft-cream/80 text-body-md font-body-md mb-8">Elevating the everyday through the sensory power of high-end perfumery.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 border border-soft-cream/20 flex items-center justify-center hover:border-metallic-gold text-soft-cream transition-colors" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg>
+</a>
+<a class="w-10 h-10 border border-soft-cream/20 flex items-center justify-center hover:border-metallic-gold text-soft-cream transition-colors" href="#">
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+</div>
+</div>
+<div>
+<h4 class="text-metallic-gold font-label-md text-label-md mb-8 uppercase">Explore</h4>
+<ul class="space-y-4">
+<li><a class="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md" href="#">Fragrance Guide</a></li>
+<li><a class="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md" href="#">New Arrivals</a></li>
+<li><a class="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md" href="#">Best Sellers</a></li>
+<li><a class="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md" href="#">Gifts &amp; Sets</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-metallic-gold font-label-md text-label-md mb-8 uppercase">Support</h4>
+<ul class="space-y-4">
+<li><a class="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md" href="#">Shipping &amp; Returns</a></li>
+<li><a class="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md" href="#">Privacy Policy</a></li>
+<li><a class="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md" href="#">Contact Us</a></li>
+<li><a class="text-soft-cream/80 hover:text-metallic-gold transition-colors font-body-md" href="#">FAQs</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-metallic-gold font-label-md text-label-md mb-8 uppercase">Visit Us</h4>
+<p class="text-soft-cream/80 font-body-md mb-4">123 Fragrance Lane, Lagos,<br/>Nigeria</p>
+<p class="text-soft-cream/80 font-body-md">T: +234 812 006 9570</p>
+<p class="text-soft-cream/80 font-body-md">E: hello@roymallscents.com</p>
+</div>
+<div class="md:col-span-4 pt-12 mt-12 border-t border-soft-cream/10 flex flex-col md:flex-row justify-between items-center gap-6">
+<p class="text-soft-cream/50 font-label-md text-label-md">© 2024 Roymall Scents. All Rights Reserved.</p>
+<div class="flex gap-8">
+<img class="h-6 opacity-30" data-alt="Logos of secure payment providers including Visa, Mastercard, and PayPal in a monochrome, minimalist white style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBznJ4INhf9x0TdvK7ahPhvkEeigK8qR7Zrje-bnpPdjx-PshILYCVVFLWAZgLHFehAhSRzdphXNs1tzlrscxwDratsnGt7znStwZ7hmb7MxQXC7cK7An2WqUru1KXRxIIwQT-TgKx_84mywe836YRvFSQZPmNF5dEa1nI4Dcd4uIS7i8lmurDKGYkYBsW9tCR3G9FPYTJcZGbjgDK2r1B_k_oSxaw4mc3Qx5tQ7w60VaWsYUh46IBA"/>
+</div>
+</div>
+</footer>
+<script>
+        // Navbar interaction on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('bg-white/95', 'shadow-sm', 'backdrop-blur-md');
+                navbar.classList.remove('bg-transparent', 'py-6');
+                navbar.classList.add('py-4');
+            } else {
+                navbar.classList.remove('bg-white/95', 'shadow-sm', 'backdrop-blur-md', 'py-4');
+                navbar.classList.add('bg-transparent', 'py-6');
+            }
+        });
+
+        // Simple Fade-in Observer
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+            observer.observe(section);
+        });
+    </script>
+</body></html>

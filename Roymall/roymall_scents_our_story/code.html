@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>About Us | Roymall Scents</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "muted-gold": "#B0922E",
+                    "on-primary": "#ffffff",
+                    "secondary-container": "#fed65b",
+                    "background": "#faf8fd",
+                    "regal-navy": "#001B44",
+                    "deep-onyx": "#121212",
+                    "surface-container-low": "#f5f3f7",
+                    "tertiary-container": "#381000",
+                    "inverse-on-surface": "#f2f0f4",
+                    "surface-container-high": "#e9e7ec",
+                    "secondary-fixed": "#ffe088",
+                    "on-secondary-fixed-variant": "#574500",
+                    "on-tertiary-fixed-variant": "#6d3920",
+                    "tertiary-fixed": "#ffdbcd",
+                    "inverse-primary": "#b1c6f9",
+                    "on-error-container": "#93000a",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed-dim": "#e9c349",
+                    "on-tertiary-container": "#b67558",
+                    "primary-fixed-dim": "#b1c6f9",
+                    "on-surface-variant": "#44474f",
+                    "outline-variant": "#c5c6d0",
+                    "on-secondary-fixed": "#241a00",
+                    "soft-cream": "#F9F8F3",
+                    "surface-tint": "#495e8a",
+                    "surface-container-highest": "#e3e2e6",
+                    "on-error": "#ffffff",
+                    "on-background": "#1b1b1f",
+                    "on-primary-fixed-variant": "#314671",
+                    "on-secondary-container": "#745c00",
+                    "surface": "#faf8fd",
+                    "primary": "#00020a",
+                    "primary-fixed": "#d8e2ff",
+                    "on-tertiary": "#ffffff",
+                    "tertiary": "#080100",
+                    "outline": "#75777f",
+                    "on-surface": "#1b1b1f",
+                    "surface-container": "#efedf1",
+                    "primary-container": "#001b44",
+                    "on-secondary": "#ffffff",
+                    "metallic-gold": "#D4AF37",
+                    "on-primary-container": "#7084b3",
+                    "surface-dim": "#dbd9dd",
+                    "inverse-surface": "#303033",
+                    "surface-variant": "#e3e2e6",
+                    "secondary": "#735c00",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed": "#001a42",
+                    "on-tertiary-fixed": "#360f00",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "surface-bright": "#faf8fd",
+                    "error-container": "#ffdad6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "section-gap": "120px",
+                    "grid-gutter": "32px",
+                    "mobile-margin": "20px",
+                    "component-stack": "16px",
+                    "container-margin": "64px"
+            },
+            "fontFamily": {
+                    "label-md": ["Manrope"],
+                    "price-lg": ["Playfair Display"],
+                    "body-lg": ["Manrope"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "headline-lg": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .hero-reveal {
+            animation: reveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes reveal {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .luxury-border {
+            border-image: linear-gradient(to right, transparent, #D4AF37, transparent) 1;
+        }
+    </style>
+</head>
+<body class="bg-soft-cream font-body-md text-regal-navy overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-16 py-6 bg-transparent transition-all duration-500" id="navbar">
+<div class="text-headline-md font-headline-md font-bold text-regal-navy dark:text-metallic-gold">
+            Roymall Scents
+        </div>
+<div class="hidden md:flex gap-8">
+<a class="text-regal-navy dark:text-soft-cream font-label-md hover:text-metallic-gold transition-colors duration-300" href="#">Shop</a>
+<a class="text-regal-navy dark:text-soft-cream font-label-md hover:text-metallic-gold transition-colors duration-300" href="#">New Arrivals</a>
+<a class="text-regal-navy dark:text-soft-cream font-label-md hover:text-metallic-gold transition-colors duration-300" href="#">Men</a>
+<a class="text-regal-navy dark:text-soft-cream font-label-md hover:text-metallic-gold transition-colors duration-300" href="#">Women</a>
+<a class="text-regal-navy dark:text-soft-cream font-label-md hover:text-metallic-gold transition-colors duration-300" href="#">Gift Sets</a>
+<a class="text-metallic-gold font-bold border-b-2 border-metallic-gold pb-1 font-label-md" href="#">About Us</a>
+</div>
+<div class="flex gap-6 items-center">
+<span class="material-symbols-outlined cursor-pointer hover:text-metallic-gold">search</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-metallic-gold">person</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-metallic-gold">shopping_bag</span>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative h-screen flex items-center justify-center bg-regal-navy overflow-hidden">
+<div class="absolute inset-0 opacity-40">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLspyt2tsg-xUZ-sbwKQws7nQxO0NMmrUgUEIOBxaPSxL0RlJchnDzgENI4u5X56I0KpUtg6WJ6ZyUvMCEMghbtYhC2NylPV8ldN-MjRIrpFuOF_8eonAs1x_kVTUs5X-Ek8pW3H8CEZbhTQbrbr6lDdGhwXhuYmV1Fm-y6pAgQQVnDYWNR3iwOLXGZIbq_F4Rdwpez6bKVUwCH1dE4dXcMTbJdJ3RjaiYtb0bsZTPikNnxgmo8FmYb7raw"/>
+</div>
+<div class="relative z-10 text-center px-4 hero-reveal">
+<p class="text-metallic-gold font-label-md uppercase tracking-[0.3em] mb-4">The Legacy of Elegance</p>
+<h1 class="text-soft-cream font-display-lg text-display-lg mb-6 max-w-4xl mx-auto leading-tight">
+                    Your Confidence, <br/> Our Concern.
+                </h1>
+<div class="w-24 h-px bg-metallic-gold mx-auto"></div>
+</div>
+</section>
+<!-- Our Philosophy (Bento-style asymmetric layout) -->
+<section class="py-section-gap px-container-margin max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-grid-gutter items-center">
+<div class="md:col-span-5">
+<h2 class="font-headline-lg text-headline-lg text-regal-navy mb-8">Our Philosophy</h2>
+<p class="font-body-lg text-body-lg text-regal-navy/80 mb-6 leading-relaxed">
+                        At Roymall Scents, we believe that a fragrance is more than just a scent—it is an invisible signature, a silent communicator of identity and aspiration.
+                    </p>
+<p class="font-body-md text-body-md text-regal-navy/70 mb-8">
+                        Our journey began with a single mission: to curate a collection of world-class fragrances that empower individuals to step into every room with unwavering confidence. We source only from master perfumers who share our dedication to olfactory art.
+                    </p>
+<button class="bg-regal-navy text-on-primary font-label-md py-4 px-10 hover:bg-metallic-gold transition-colors duration-300">
+                        DISCOVER THE COLLECTION
+                    </button>
+</div>
+<div class="md:col-span-7 relative">
+<div class="relative aspect-[4/5] md:aspect-[16/10] overflow-hidden group">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 transform group-hover:scale-105" src="https://lh3.googleusercontent.com/aida/AP1WRLuBHzYMVEoCLq9RC_so7j2Z9g9JMa9gICftTto5mDd8tAbvNIAylfBkGvuFpZ6-igfRdW04jMfJu3C9ffINSPi2F4SYaABu8HHSgTY21XzCwu5OIK0sA3fA3bs9P-AuDcujrrkPnV1wIHasaKBgkOu9ILuUFGNU5rnryGALYBFl_hmFsca5DfLQkr-yn0WL6QXBj1JMerA1T0RWw6fciIvXr7nLPadyt7SmU6znBvG09VPG-4Gsqho8PpU"/>
+<div class="absolute inset-0 border-[20px] border-soft-cream/10 pointer-events-none"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Authenticity Guarantee (Floating Card Layout) -->
+<section class="bg-regal-navy py-section-gap overflow-hidden relative">
+<div class="max-w-7xl mx-auto px-container-margin relative z-10">
+<div class="flex flex-col md:flex-row gap-grid-gutter items-center">
+<div class="w-full md:w-1/2 order-2 md:order-1">
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-white/5 p-8 border border-muted-gold/20 backdrop-blur-sm">
+<span class="material-symbols-outlined text-metallic-gold text-4xl mb-4">verified</span>
+<h4 class="text-metallic-gold font-headline-md text-headline-md mb-2">100% Authentic</h4>
+<p class="text-soft-cream/70 text-label-md">Directly sourced from original luxury fragrance houses.</p>
+</div>
+<div class="bg-white/5 p-8 border border-muted-gold/20 backdrop-blur-sm mt-8">
+<span class="material-symbols-outlined text-metallic-gold text-4xl mb-4">workspace_premium</span>
+<h4 class="text-metallic-gold font-headline-md text-headline-md mb-2">Premium Quality</h4>
+<p class="text-soft-cream/70 text-label-md">Rigorous quality checks for every bottle.</p>
+</div>
+<div class="bg-white/5 p-8 border border-muted-gold/20 backdrop-blur-sm -mt-4">
+<span class="material-symbols-outlined text-metallic-gold text-4xl mb-4">lock</span>
+<h4 class="text-metallic-gold font-headline-md text-headline-md mb-2">Secure Origin</h4>
+<p class="text-soft-cream/70 text-label-md">Transparent batch tracking and verified provenance.</p>
+</div>
+<div class="bg-white/5 p-8 border border-muted-gold/20 backdrop-blur-sm mt-4">
+<span class="material-symbols-outlined text-metallic-gold text-4xl mb-4">eco</span>
+<h4 class="text-metallic-gold font-headline-md text-headline-md mb-2">Pure Essences</h4>
+<p class="text-soft-cream/70 text-label-md">Only the finest natural and synthetic raw materials.</p>
+</div>
+</div>
+</div>
+<div class="w-full md:w-1/2 order-1 md:order-2 mb-12 md:mb-0">
+<h2 class="font-headline-lg text-headline-lg text-soft-cream mb-6">The Roymall Guarantee</h2>
+<p class="font-body-lg text-body-lg text-soft-cream/80 mb-8 leading-relaxed">
+                            Excellence is not a luxury, but a standard. We stand by the integrity of every spray, ensuring that what reaches your doorstep is a masterpiece of craftsmanship.
+                        </p>
+<div class="flex items-center gap-4">
+<div class="w-12 h-px bg-metallic-gold"></div>
+<span class="text-metallic-gold font-label-md uppercase tracking-widest">Seal of Authenticity</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Background Decorative Element -->
+<div class="absolute -right-20 -bottom-20 w-96 h-96 border border-metallic-gold/10 rounded-full"></div>
+<div class="absolute -right-10 -bottom-10 w-96 h-96 border border-metallic-gold/10 rounded-full"></div>
+</section>
+<!-- Nationwide Delivery -->
+<section class="py-section-gap px-container-margin max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg text-regal-navy mb-4">Nationwide Delivery</h2>
+<div class="w-16 h-1 bg-metallic-gold mx-auto mb-6"></div>
+<p class="font-body-lg text-body-lg text-regal-navy/70 max-w-2xl mx-auto">
+                    Bringing the world's most exquisite scents to your doorstep, anywhere in the nation.
+                </p>
+</div>
+<div class="relative bg-soft-cream border border-muted-gold/10 p-1 md:p-4 group">
+<div class="relative overflow-hidden aspect-[21/9]">
+<!-- Inspiration image mapping to delivery theme -->
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist 3D render of luxury delivery boxes floating around a sleek laptop, similar to the provided user image, but styled with regal navy and metallic gold accents. The lighting is soft and high-end, evoking a premium logistical experience for a luxury fragrance brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAozzYTXwaiEggY1NFuc0KdzqV4TwCpxMv7il9-9B_YhGO-O4-dAl83WIMD3i-ErglZGV_zxtEqWJYX6_5fE228AEr1GMcYX-Ei4R9i-KBxTByonZAPw9Q7FeK0bjS2HaP9tUyIvNAYJY2MSpRkSLW7ifcHfOyVPHgjRfWRgkctQCml6KLZvqyUAnJuZQ7TvaTnHx9qrYdHVdX30t9iwISVvf58nafYp95dlHBIxiUnM6nhq2kwI_k-"/>
+<div class="absolute inset-0 bg-regal-navy/40 group-hover:bg-regal-navy/20 transition-all duration-500"></div>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-soft-cream/90 backdrop-blur-md p-10 max-w-md text-center transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+<span class="material-symbols-outlined text-regal-navy text-5xl mb-4">local_shipping</span>
+<h3 class="font-headline-md text-headline-md text-regal-navy mb-4">Swift &amp; Secure</h3>
+<p class="text-body-md text-regal-navy/70 mb-6">Every package is meticulously handled to preserve the fragile nature of luxury perfumery during its journey to you.</p>
+<a class="text-regal-navy font-label-md border-b border-regal-navy pb-1 hover:text-metallic-gold hover:border-metallic-gold transition-colors" href="#">TRACK YOUR ORDER</a>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-grid-gutter mt-16">
+<div class="text-center p-8 border-r border-muted-gold/10 last:border-0">
+<h5 class="font-headline-md text-regal-navy mb-2">Safe Transit</h5>
+<p class="text-label-md text-regal-navy/60">Reinforced luxury packaging to prevent leakage or breakage.</p>
+</div>
+<div class="text-center p-8 border-r border-muted-gold/10 last:border-0">
+<h5 class="font-headline-md text-regal-navy mb-2">Priority Shipping</h5>
+<p class="text-label-md text-regal-navy/60">Standard delivery within 2-4 business days nationwide.</p>
+</div>
+<div class="text-center p-8 border-r border-muted-gold/10 last:border-0">
+<h5 class="font-headline-md text-regal-navy mb-2">Gift Wrapping</h5>
+<p class="text-label-md text-regal-navy/60">Signature Roymall packaging available for all orders.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-gap px-container-margin grid grid-cols-1 md:grid-cols-4 gap-grid-gutter bg-regal-navy dark:bg-deep-onyx border-t border-muted-gold/20">
+<div class="col-span-1">
+<div class="text-headline-md font-headline-md font-bold text-metallic-gold mb-6">Roymall Scents</div>
+<p class="text-soft-cream/80 text-body-md mb-6 leading-relaxed">
+                Elevating the art of luxury perfumery. Discover scents that resonate with your soul and define your presence.
+            </p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-metallic-gold cursor-pointer">face_nod</span>
+<span class="material-symbols-outlined text-metallic-gold cursor-pointer">photo_camera</span>
+<span class="material-symbols-outlined text-metallic-gold cursor-pointer">movie</span>
+</div>
+</div>
+<div class="col-span-1">
+<h4 class="text-metallic-gold font-label-md uppercase mb-6 tracking-widest">Navigation</h4>
+<ul class="space-y-4">
+<li><a class="text-soft-cream/80 text-label-md hover:text-metallic-gold transition-colors duration-200" href="#">Shop</a></li>
+<li><a class="text-soft-cream/80 text-label-md hover:text-metallic-gold transition-colors duration-200" href="#">New Arrivals</a></li>
+<li><a class="text-soft-cream/80 text-label-md hover:text-metallic-gold transition-colors duration-200" href="#">Men's Fragrance</a></li>
+<li><a class="text-soft-cream/80 text-label-md hover:text-metallic-gold transition-colors duration-200" href="#">Women's Fragrance</a></li>
+</ul>
+</div>
+<div class="col-span-1">
+<h4 class="text-metallic-gold font-label-md uppercase mb-6 tracking-widest">Client Service</h4>
+<ul class="space-y-4">
+<li><a class="text-soft-cream/80 text-label-md hover:text-metallic-gold transition-colors duration-200" href="#">Fragrance Guide</a></li>
+<li><a class="text-soft-cream/80 text-label-md hover:text-metallic-gold transition-colors duration-200" href="#">Shipping &amp; Returns</a></li>
+<li><a class="text-soft-cream/80 text-label-md hover:text-metallic-gold transition-colors duration-200" href="#">Privacy Policy</a></li>
+<li><a class="text-soft-cream/80 text-label-md hover:text-metallic-gold transition-colors duration-200" href="#">Contact Us</a></li>
+</ul>
+</div>
+<div class="col-span-1">
+<h4 class="text-metallic-gold font-label-md uppercase mb-6 tracking-widest">Newsletter</h4>
+<p class="text-soft-cream/80 text-label-md mb-6">Join our inner circle for exclusive previews and fragrant inspirations.</p>
+<div class="flex border-b border-muted-gold/40 pb-2">
+<input class="bg-transparent border-none focus:ring-0 text-soft-cream w-full placeholder:text-soft-cream/30 text-label-md" placeholder="Email address" type="email"/>
+<button class="text-metallic-gold uppercase text-label-md font-bold ml-2">SUBSCRIBE</button>
+</div>
+</div>
+<div class="col-span-1 md:col-span-4 mt-16 pt-8 border-t border-muted-gold/10">
+<p class="text-soft-cream/50 text-label-md text-center">© 2024 Roymall Scents. All Rights Reserved.</p>
+</div>
+</footer>
+<script>
+        // Navbar transparency shift on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-soft-cream/95', 'backdrop-blur-md', 'shadow-sm');
+                nav.classList.remove('bg-transparent', 'py-6');
+                nav.classList.add('py-4');
+            } else {
+                nav.classList.remove('bg-soft-cream/95', 'backdrop-blur-md', 'shadow-sm', 'py-4');
+                nav.classList.add('bg-transparent', 'py-6');
+            }
+        });
+    </script>
+</body></html>

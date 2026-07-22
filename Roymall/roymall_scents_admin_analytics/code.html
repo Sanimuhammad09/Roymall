@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Luxe Essence | Analytics Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 300px;
+            width: 100%;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 10px;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#001b44",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-dim": "#dbd9dd",
+                        "outline-variant": "#c5c6d0",
+                        "on-surface": "#1b1b1f",
+                        "error": "#ba1a1a",
+                        "regal-navy": "#001B44",
+                        "outline": "#75777f",
+                        "inverse-on-surface": "#f2f0f4",
+                        "on-tertiary-container": "#b67558",
+                        "on-primary-container": "#7084b3",
+                        "on-tertiary": "#ffffff",
+                        "soft-cream": "#F9F8F3",
+                        "primary-fixed": "#d8e2ff",
+                        "tertiary-container": "#381000",
+                        "on-primary": "#ffffff",
+                        "secondary-fixed-dim": "#e9c349",
+                        "inverse-surface": "#303033",
+                        "surface-container-high": "#e9e7ec",
+                        "surface-variant": "#e3e2e6",
+                        "primary-fixed-dim": "#b1c6f9",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1b1b1f",
+                        "deep-onyx": "#121212",
+                        "secondary-container": "#fed65b",
+                        "on-secondary-container": "#745c00",
+                        "surface-bright": "#faf8fd",
+                        "on-tertiary-fixed-variant": "#6d3920",
+                        "on-secondary-fixed": "#241a00",
+                        "surface-container-low": "#f5f3f7",
+                        "muted-gold": "#B0922E",
+                        "metallic-gold": "#D4AF37",
+                        "background": "#faf8fd",
+                        "on-secondary-fixed-variant": "#574500",
+                        "surface": "#faf8fd",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#001a42",
+                        "tertiary-fixed": "#ffdbcd",
+                        "tertiary": "#080100",
+                        "secondary": "#735c00",
+                        "on-tertiary-fixed": "#360f00",
+                        "on-primary-fixed-variant": "#314671",
+                        "surface-container-highest": "#e3e2e6",
+                        "surface-container": "#efedf1",
+                        "on-surface-variant": "#44474f",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#495e8a",
+                        "inverse-primary": "#b1c6f9",
+                        "secondary-fixed": "#ffe088",
+                        "primary": "#00020a",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Manrope"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Manrope"],
+                        "label-md": ["Manrope"],
+                        "headline-lg": ["Playfair Display"],
+                        "price-lg": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "600"}],
+                        "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface selection:bg-metallic-gold selection:text-regal-navy">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-regal-navy dark:bg-deep-onyx border-r border-metallic-gold/20 flex flex-col py-8 px-4 z-50">
+<div class="mb-12 px-4">
+<h1 class="font-headline-md text-headline-md text-metallic-gold">Luxe Essence</h1>
+<p class="font-label-md text-label-md text-on-primary-container opacity-80 uppercase tracking-widest">Admin Portal</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-none text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-none text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-md text-label-md">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-none text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-none text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Customers</span>
+</a>
+<!-- Active State: Analytics -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-none text-on-secondary-container bg-secondary-container font-bold transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-none text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4 py-4 border-t border-metallic-gold/10 flex items-center gap-3">
+<div class="w-10 h-10 bg-metallic-gold/20 flex items-center justify-center rounded-full overflow-hidden border border-metallic-gold/40">
+<img class="w-full h-full object-cover" data-alt="Close up high-fashion portrait of a sophisticated administrator in a minimalist studio setting. The lighting is dramatic, high-contrast, focusing on elegant features. The aesthetic is clean and luxurious, utilizing a palette of deep navy and gold accents to match a premium brand identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTppfK_mEXwlf14btelzN9SSYAC3gv4lF8eKkOECpjCT6mvqMQtjlFCaiVIsehxqTFU2gTGPhyHRkqg7E0vDXGR61EjUMG574JU2mNlBwvlW7xsNzYzT1KGYG7DUkkJ1qb1G2NTFM1fZFV9MAPjqn5AeEk_V_Vd9A6Baa96l3byq3R1R3OoSrEv3nN0F3qajoEvrYePUUu0O5_MxqUK0IW7UzsCZBh8JcuHHXDxL9T2THVJmPxuTLw"/>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-primary leading-tight">Julian Vane</p>
+<p class="text-[10px] text-metallic-gold uppercase tracking-tighter">Head of Operations</p>
+</div>
+</div>
+</aside>
+<!-- Top Navigation -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface dark:bg-surface-dim border-b border-outline-variant flex justify-between items-center px-8 z-40">
+<div class="flex items-center gap-4">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-1.5 bg-surface-container border border-outline-variant text-body-md font-body-md focus:ring-1 focus:ring-metallic-gold focus:border-metallic-gold outline-none" placeholder="Search analytics..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-on-surface-variant hover:text-primary transition-all relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 pb-16 px-8 min-h-screen">
+<!-- Header & Breadcrumbs -->
+<div class="mb-10 flex justify-between items-end">
+<div>
+<p class="font-label-md text-label-md text-muted-gold uppercase tracking-[0.2em] mb-2">Performance Overview</p>
+<h2 class="font-headline-lg text-headline-lg text-regal-navy">Analytics Intelligence</h2>
+</div>
+<div class="flex gap-4">
+<button class="px-6 py-2 border border-metallic-gold text-metallic-gold font-label-md text-label-md hover:bg-metallic-gold hover:text-regal-navy transition-all duration-300">
+                    DOWNLOAD REPORT
+                </button>
+<button class="px-6 py-2 bg-regal-navy text-white font-label-md text-label-md hover:bg-primary-container transition-all duration-300">
+                    LAST 30 DAYS
+                </button>
+</div>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+<!-- Revenue Growth -->
+<div class="bg-white p-8 border border-outline-variant relative overflow-hidden group hover:border-metallic-gold/50 transition-all">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase mb-1">Revenue Growth</p>
+<h3 class="font-price-lg text-price-lg text-regal-navy">$428,590.00</h3>
+</div>
+<span class="material-symbols-outlined text-metallic-gold" data-icon="trending_up">trending_up</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-green-600">+12.4%</span>
+<span class="text-xs text-on-surface-variant">vs last month</span>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-metallic-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+</div>
+<!-- Average Order Value -->
+<div class="bg-white p-8 border border-outline-variant relative overflow-hidden group hover:border-metallic-gold/50 transition-all">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase mb-1">Avg. Order Value</p>
+<h3 class="font-price-lg text-price-lg text-regal-navy">$184.20</h3>
+</div>
+<span class="material-symbols-outlined text-metallic-gold" data-icon="payments">payments</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-green-600">+4.8%</span>
+<span class="text-xs text-on-surface-variant">vs last month</span>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-metallic-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+</div>
+<!-- Conversion Rate -->
+<div class="bg-white p-8 border border-outline-variant relative overflow-hidden group hover:border-metallic-gold/50 transition-all">
+<div class="flex justify-between items-start mb-6">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase mb-1">Conversion Rate</p>
+<h3 class="font-price-lg text-price-lg text-regal-navy">3.42%</h3>
+</div>
+<span class="material-symbols-outlined text-metallic-gold" data-icon="ads_click">ads_click</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-error">-0.2%</span>
+<span class="text-xs text-on-surface-variant">vs last month</span>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-1 bg-metallic-gold scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+</div>
+</div>
+<!-- Charts Bento Grid -->
+<div class="bento-grid">
+<!-- Sales Performance (Line Chart) -->
+<div class="col-span-12 lg:col-span-8 bg-white border border-outline-variant p-8 flex flex-col">
+<div class="flex justify-between items-center mb-8">
+<h4 class="font-headline-md text-headline-md text-regal-navy">Sales Performance</h4>
+<div class="flex gap-2">
+<span class="w-3 h-3 bg-regal-navy rounded-full self-center"></span>
+<span class="font-label-md text-[12px] text-on-surface-variant uppercase tracking-widest">Revenue 2024</span>
+</div>
+</div>
+<div class="chart-container">
+<canvas id="salesLineChart"></canvas>
+</div>
+</div>
+<!-- Top Categories (Donut) -->
+<div class="col-span-12 lg:col-span-4 bg-white border border-outline-variant p-8 flex flex-col">
+<h4 class="font-headline-md text-headline-md text-regal-navy mb-8">Top Categories</h4>
+<div class="chart-container flex-1">
+<canvas id="categoryDonutChart"></canvas>
+</div>
+<div class="mt-6 space-y-3">
+<div class="flex justify-between items-center text-sm border-b border-outline-variant/30 pb-2">
+<span class="font-body-md text-on-surface-variant">Oud &amp; Woods</span>
+<span class="font-bold text-regal-navy">42%</span>
+</div>
+<div class="flex justify-between items-center text-sm border-b border-outline-variant/30 pb-2">
+<span class="font-body-md text-on-surface-variant">Floral Collection</span>
+<span class="font-bold text-regal-navy">28%</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="font-body-md text-on-surface-variant">Citrus Blends</span>
+<span class="font-bold text-regal-navy">15%</span>
+</div>
+</div>
+</div>
+<!-- Customer Acquisition (Bar) -->
+<div class="col-span-12 lg:col-span-6 bg-white border border-outline-variant p-8">
+<h4 class="font-headline-md text-headline-md text-regal-navy mb-8">Customer Acquisition</h4>
+<div class="chart-container">
+<canvas id="acquisitionBarChart"></canvas>
+</div>
+</div>
+<!-- Promotional Banner (High-end pair) -->
+<div class="col-span-12 lg:col-span-6 flex flex-col md:flex-row overflow-hidden border border-outline-variant">
+<div class="flex-1 bg-regal-navy p-10 flex flex-col justify-center text-white">
+<p class="font-label-md text-label-md text-metallic-gold uppercase tracking-[0.3em] mb-4">Strategic Insight</p>
+<h5 class="font-headline-md text-headline-md mb-4 leading-tight italic">Luxury is in each detail.</h5>
+<p class="font-body-md text-body-md text-on-primary-container leading-relaxed mb-8">
+                        Your highest-performing segment is currently "Private Reserves". Consider a targeted campaign for loyalists.
+                    </p>
+<button class="w-fit border-b border-metallic-gold text-metallic-gold font-label-md text-label-md hover:text-white hover:border-white transition-all pb-1">
+                        VIEW SEGMENT DATA
+                    </button>
+</div>
+<div class="flex-1 min-h-[300px]" data-alt="A macro photography shot of a luxury perfume bottle with golden liquid, sitting on a dark marble surface. Soft sunlight catches the crystalline edges of the glass. The background is a blurred high-end boutique interior with navy blue velvet and gold accents. The atmosphere is quiet, expensive, and deeply sophisticated." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbQM-blfgPjlw9UqbwrxWG2muQKPLZl_lkUEpLoMq8253QUgRXXtTGLAiT4cB5Ts4qo36BstZmiWWyyUjXAmFOluqdIH2T3N1uODHuZLSo01oX01Ct09VUo_UW2uDWECbhD65r68RmsBqS98jsa_iq_KbSBFlKVQslympMkqPh09kO8V6jNYju3jsBVy04cszLRhyj7LpZHU4R7G1mVle3qZyuTGSO0STIb9iYfm-dKL8ql4I9Xptl')">
+</div>
+</div>
+</div>
+<!-- Activity Feed (Detailed List) -->
+<div class="mt-12 bg-white border border-outline-variant p-8">
+<div class="flex justify-between items-center mb-10">
+<h4 class="font-headline-md text-headline-md text-regal-navy">Live Transactions</h4>
+<a class="text-metallic-gold font-label-md text-label-md flex items-center gap-1 hover:gap-2 transition-all" href="#">
+                    VIEW ALL TRANSACTIONS <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="border-b border-outline-variant text-on-surface-variant uppercase text-[10px] tracking-widest font-label-md">
+<th class="pb-4">Transaction ID</th>
+<th class="pb-4">Customer</th>
+<th class="pb-4">Category</th>
+<th class="pb-4">Status</th>
+<th class="pb-4 text-right">Amount</th>
+</tr>
+</thead>
+<tbody class="text-body-md">
+<tr class="border-b border-outline-variant/30 hover:bg-soft-cream/50 transition-colors">
+<td class="py-6 font-bold text-regal-navy">#LX-9021</td>
+<td class="py-6 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-bold text-[10px]">ED</div>
+                                Elena D'Amico
+                            </td>
+<td class="py-6">Oud &amp; Woods</td>
+<td class="py-6">
+<span class="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider">Completed</span>
+</td>
+<td class="py-6 text-right font-bold">$245.00</td>
+</tr>
+<tr class="border-b border-outline-variant/30 hover:bg-soft-cream/50 transition-colors">
+<td class="py-6 font-bold text-regal-navy">#LX-9022</td>
+<td class="py-6 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-bold text-[10px]">MR</div>
+                                Marcus Sterling
+                            </td>
+<td class="py-6">Special Edition</td>
+<td class="py-6">
+<span class="px-3 py-1 bg-yellow-50 text-yellow-700 text-xs font-bold uppercase tracking-wider">Processing</span>
+</td>
+<td class="py-6 text-right font-bold">$512.40</td>
+</tr>
+<tr class="hover:bg-soft-cream/50 transition-colors">
+<td class="py-6 font-bold text-regal-navy">#LX-9023</td>
+<td class="py-6 flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center font-bold text-[10px]">SW</div>
+                                Sarah Wu
+                            </td>
+<td class="py-6">Floral Collection</td>
+<td class="py-6">
+<span class="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold uppercase tracking-wider">Completed</span>
+</td>
+<td class="py-6 text-right font-bold">$189.99</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<script>
+        // Global Chart Config
+        Chart.defaults.font.family = 'Manrope';
+        Chart.defaults.color = '#75777f';
+
+        // Line Chart: Sales Performance
+        const salesCtx = document.getElementById('salesLineChart').getContext('2d');
+        const salesGradient = salesCtx.createLinearGradient(0, 0, 0, 400);
+        salesGradient.addColorStop(0, 'rgba(0, 27, 68, 0.2)');
+        salesGradient.addColorStop(1, 'rgba(0, 27, 68, 0)');
+
+        new Chart(salesCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [12000, 19000, 15000, 25000, 22000, 30000, 45000, 42000, 38000, 52000, 60000, 75000],
+                    borderColor: '#001B44',
+                    borderWidth: 3,
+                    pointBackgroundColor: '#D4AF37',
+                    pointBorderColor: '#fff',
+                    pointRadius: 4,
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: salesGradient
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { borderDash: [5, 5] }, ticks: { callback: value => '$' + value / 1000 + 'k' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Donut Chart: Top Categories
+        new Chart(document.getElementById('categoryDonutChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Oud', 'Floral', 'Citrus', 'Musk'],
+                datasets: [{
+                    data: [42, 28, 15, 15],
+                    backgroundColor: ['#001B44', '#D4AF37', '#7084b3', '#E0E0E0'],
+                    borderWidth: 0,
+                    hoverOffset: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Bar Chart: Customer Acquisition
+        new Chart(document.getElementById('acquisitionBarChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Search', 'Social', 'Email', 'Referral', 'Direct'],
+                datasets: [{
+                    label: 'New Users',
+                    data: [2500, 4200, 1800, 1200, 900],
+                    backgroundColor: '#001B44',
+                    hoverBackgroundColor: '#D4AF37',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { display: false } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body></html>

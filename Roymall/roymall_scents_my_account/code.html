@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Customer Dashboard | Roymall Scents</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f5f3f7",
+                        "surface-tint": "#495e8a",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#001b44",
+                        "surface": "#faf8fd",
+                        "on-tertiary-fixed-variant": "#6d3920",
+                        "primary-fixed-dim": "#b1c6f9",
+                        "tertiary": "#080100",
+                        "metallic-gold": "#D4AF37",
+                        "regal-navy": "#001B44",
+                        "on-background": "#1b1b1f",
+                        "on-primary-fixed": "#001a42",
+                        "on-surface": "#1b1b1f",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#745c00",
+                        "background": "#faf8fd",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#fed65b",
+                        "primary-fixed": "#d8e2ff",
+                        "outline-variant": "#c5c6d0",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-fixed-variant": "#314671",
+                        "surface-variant": "#e3e2e6",
+                        "secondary": "#735c00",
+                        "primary": "#00020a",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#7084b3",
+                        "inverse-primary": "#b1c6f9",
+                        "secondary-fixed-dim": "#e9c349",
+                        "outline": "#75777f",
+                        "on-secondary-fixed-variant": "#574500",
+                        "surface-dim": "#dbd9dd",
+                        "surface-bright": "#faf8fd",
+                        "on-secondary-fixed": "#241a00",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e9e7ec",
+                        "soft-cream": "#F9F8F3",
+                        "surface-container-highest": "#e3e2e6",
+                        "deep-onyx": "#121212",
+                        "on-tertiary-container": "#b67558",
+                        "surface-container": "#efedf1",
+                        "inverse-surface": "#303033",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#ffe088",
+                        "on-tertiary-fixed": "#360f00",
+                        "inverse-on-surface": "#f2f0f4",
+                        "on-surface-variant": "#44474f",
+                        "muted-gold": "#B0922E",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#381000",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "mobile-margin": "20px",
+                        "grid-gutter": "32px",
+                        "container-margin": "64px",
+                        "component-stack": "16px",
+                        "section-gap": "120px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Manrope"],
+                        "headline-md": ["Playfair Display"],
+                        "price-lg": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "label-md": ["Manrope"],
+                        "body-lg": ["Manrope"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #F9F8F3;
+            color: #001B44;
+            font-family: 'Manrope', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .order-step-active {
+            color: #D4AF37;
+        }
+        .nav-item-active {
+            border-right: 3px solid #D4AF37;
+            background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.05));
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #F9F8F3;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+        }
+    </style>
+</head>
+<body class="antialiased">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-16 py-6 bg-transparent transition-all duration-500" id="top-nav">
+<div class="flex items-center space-x-12">
+<h1 class="text-headline-md font-headline-md font-bold text-regal-navy">Roymall Scents</h1>
+<div class="hidden md:flex space-x-8">
+<a class="text-label-md font-label-md text-regal-navy hover:text-metallic-gold transition-colors" href="#">Shop</a>
+<a class="text-label-md font-label-md text-regal-navy hover:text-metallic-gold transition-colors" href="#">New Arrivals</a>
+<a class="text-label-md font-label-md text-regal-navy hover:text-metallic-gold transition-colors" href="#">Men</a>
+<a class="text-label-md font-label-md text-regal-navy hover:text-metallic-gold transition-colors" href="#">Women</a>
+<a class="text-label-md font-label-md text-regal-navy hover:text-metallic-gold transition-colors" href="#">Gift Sets</a>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<span class="material-symbols-outlined cursor-pointer hover:text-metallic-gold transition-colors">search</span>
+<span class="material-symbols-outlined cursor-pointer text-metallic-gold">person</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-metallic-gold transition-colors">shopping_bag</span>
+</div>
+</nav>
+<main class="pt-32 pb-24 max-w-7xl mx-auto px-6 md:px-16">
+<div class="flex flex-col md:flex-row gap-12">
+<!-- Sidebar Navigation -->
+<aside class="w-full md:w-64 shrink-0">
+<div class="mb-12">
+<h2 class="text-headline-md font-headline-md mb-2">Welcome, Alexander</h2>
+<p class="text-label-md text-on-surface-variant">Member since October 2023</p>
+</div>
+<nav class="flex flex-col space-y-4">
+<a class="group flex items-center space-x-4 py-3 px-4 rounded-sm hover:bg-white/50 transition-all nav-item-active" href="#">
+<span class="material-symbols-outlined text-metallic-gold">receipt_long</span>
+<span class="text-label-md font-bold text-regal-navy">My Orders</span>
+</a>
+<a class="group flex items-center space-x-4 py-3 px-4 rounded-sm hover:bg-white/50 transition-all" href="#">
+<span class="material-symbols-outlined group-hover:text-metallic-gold transition-colors">favorite</span>
+<span class="text-label-md text-regal-navy group-hover:text-metallic-gold transition-colors">Wishlist</span>
+</a>
+<a class="group flex items-center space-x-4 py-3 px-4 rounded-sm hover:bg-white/50 transition-all" href="#">
+<span class="material-symbols-outlined group-hover:text-metallic-gold transition-colors">location_on</span>
+<span class="text-label-md text-regal-navy group-hover:text-metallic-gold transition-colors">Addresses</span>
+</a>
+<a class="group flex items-center space-x-4 py-3 px-4 rounded-sm hover:bg-white/50 transition-all" href="#">
+<span class="material-symbols-outlined group-hover:text-metallic-gold transition-colors">person_outline</span>
+<span class="text-label-md text-regal-navy group-hover:text-metallic-gold transition-colors">Account Details</span>
+</a>
+<div class="pt-8 border-t border-muted-gold/10">
+<a class="group flex items-center space-x-4 py-3 px-4 rounded-sm hover:bg-white/50 transition-all" href="#">
+<span class="material-symbols-outlined text-error">logout</span>
+<span class="text-label-md text-error">Sign Out</span>
+</a>
+</div>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<section class="flex-grow">
+<div class="flex justify-between items-end mb-10">
+<h3 class="text-headline-lg font-headline-lg text-regal-navy">Recent Orders</h3>
+<button class="text-label-md font-label-md border-b border-metallic-gold pb-1 hover:text-metallic-gold transition-all">View All History</button>
+</div>
+<!-- Order List (Bento-style items) -->
+<div class="space-y-8">
+<!-- Order Item 1: In Transit -->
+<div class="bg-white border border-muted-gold/10 p-8 group transition-all duration-500 hover:shadow-xl hover:shadow-regal-navy/5">
+<div class="flex flex-col md:flex-row justify-between mb-8 gap-6">
+<div class="flex gap-6">
+<div class="w-32 h-32 bg-soft-cream flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A high-end, studio-lit luxury perfume bottle with a heavy crystal glass body and gold metallic cap. The bottle is placed on a soft cream background with subtle, warm shadows, creating a sophisticated and expensive atmosphere. The label features elegant serif typography of Roymall Scents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd_AphXFJ6JPWCldDhn9DpoaPiHYLjmk_1iQZEEuTEhTqHdQVlje8ZsE5AxNucIcBsproMIeby25jUjy5xzTrUU5ZJWy2XBEghkyl1YzI5D355Vt8dNrdt68f_FTh5FS8CaR5-46-zXHLVsxf6La8NgBAuute4GYndMB1Z9g2hmObUcyeNSe_x4frjCeAWtf6k3o1ZPEr1rK119ngUYJoSTkS5SoYLwbFQ1_IJWGiwWCFs9lyXW4RQ"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="text-label-md text-metallic-gold mb-1">ORDER #RS-882941</span>
+<h4 class="text-headline-md font-headline-md mb-2">Oud Royale Extrait de Parfum</h4>
+<p class="text-body-md text-on-surface-variant italic">Ordered on Dec 12, 2024 • 100ml</p>
+</div>
+</div>
+<div class="flex flex-col items-end justify-center">
+<p class="text-price-lg font-price-lg text-regal-navy">$320.00</p>
+<span class="inline-flex items-center px-3 py-1 mt-2 text-xs font-bold uppercase tracking-widest bg-secondary-container text-on-secondary-container">
+                                    In Transit
+                                </span>
+</div>
+</div>
+<!-- Tracking Progress -->
+<div class="relative pt-8 px-4">
+<div class="absolute top-[3.25rem] left-8 right-8 h-[2px] bg-surface-container-high">
+<div class="h-full bg-metallic-gold w-[66%]"></div>
+</div>
+<div class="relative z-10 flex justify-between">
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-metallic-gold text-white flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<span class="text-label-md font-bold text-regal-navy">Confirmed</span>
+<span class="text-[11px] text-on-surface-variant">Dec 12, 10:30 AM</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-metallic-gold text-white flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</div>
+<span class="text-label-md font-bold text-regal-navy">Shipped</span>
+<span class="text-[11px] text-on-surface-variant">Dec 13, 04:15 PM</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-metallic-gold text-white flex items-center justify-center mb-3 outline outline-8 outline-soft-cream">
+<span class="material-symbols-outlined text-[20px]">local_shipping</span>
+</div>
+<span class="text-label-md font-bold text-regal-navy">In Transit</span>
+<span class="text-[11px] text-on-surface-variant italic">ETA: Tomorrow</span>
+</div>
+<div class="flex flex-col items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-outline flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<span class="text-label-md text-outline">Delivered</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Order Item 2: Delivered -->
+<div class="bg-white border border-muted-gold/10 p-8 group transition-all duration-500 hover:shadow-xl hover:shadow-regal-navy/5">
+<div class="flex flex-col md:flex-row justify-between mb-0 gap-6">
+<div class="flex gap-6">
+<div class="w-32 h-32 bg-soft-cream flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A luxurious collection of small sample fragrance vials arranged neatly in a minimalist matte black box. The setting is a clean, bright, high-fashion aesthetic with elegant natural light hitting the glass vials, creating beautiful caustics. The brand name Roymall Scents is embossed in gold on the box." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDK3ee6IzOCMBc87G0fOwk2PDoZ-KXV6IutgCSdQJet9LQlr1VdKqUzqG5YWqDYHxDgtsz_k_p__CaCXYcWhTfjCCzfbdGcq50_OGy5QsJWJlOlPPDjFplM5qTbe7D7XCpWriRgMDxNczTtVgMXqbwXJBDMfrrDEZgqkxcS6c9c7qs_cbhi-nBfeKWda_uOgCpzDHlcrFP07KlCMTUFViOcVk2ipW_mTj3DmlarHbsQiHN1N27yqiRS"/>
+</div>
+<div class="flex flex-col justify-center">
+<span class="text-label-md text-on-surface-variant mb-1">ORDER #RS-881022</span>
+<h4 class="text-headline-md font-headline-md mb-2">Signature Discovery Set</h4>
+<p class="text-body-md text-on-surface-variant italic">Delivered on Nov 15, 2024 • 5 x 2ml</p>
+</div>
+</div>
+<div class="flex flex-col items-end justify-center">
+<p class="text-price-lg font-price-lg text-regal-navy">$45.00</p>
+<div class="flex space-x-3 mt-4">
+<button class="px-6 py-2 bg-regal-navy text-white text-label-md font-bold uppercase tracking-widest hover:bg-metallic-gold transition-colors">Buy Again</button>
+<button class="px-6 py-2 border border-muted-gold text-metallic-gold text-label-md font-bold uppercase tracking-widest hover:bg-soft-cream transition-colors">Review</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Wishlist Preview Section (Bento Layout) -->
+<div class="mt-24">
+<h3 class="text-headline-lg font-headline-lg text-regal-navy mb-10">From Your Wishlist</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-grid-gutter">
+<div class="relative group h-96 overflow-hidden">
+<div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-700 z-10"></div>
+<img class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" data-alt="Close-up shot of a sophisticated man in a charcoal grey tailored suit, applying fragrance to his wrist. The lighting is moody and dramatic with deep shadows and golden highlights, reflecting a premium lifestyle brand aesthetic. The background is a blurred luxury apartment interior." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZPpXdgXK0-4X_dgHS7MnJYy6jkdOtZz3U7X7Hd9QNrWSI5f7uO6CWBQ9mOq48xOMYelZNecxA-hsN1da90y3N50arb01vqTBZXPiAvS-Qbn-wkwYaynq_p5LJHWJCCGGZLcYHBsjPqHMOYBuzKH-0aGou1VcoUvKglMDHR2TmcE8AyHWQVu0T-AjZsNWcQhnwKTPJmhTtTSSbrw44FNp0npPWF69GmsKmpIueVcJRQS21ZNNek_GD"/>
+<div class="absolute bottom-0 left-0 w-full p-8 z-20 text-white">
+<p class="text-label-md font-bold uppercase tracking-widest mb-2 opacity-80">Collection: Nocturnal</p>
+<h4 class="text-headline-md font-headline-md mb-4">Midnight Amber</h4>
+<button class="bg-white text-regal-navy px-8 py-3 text-label-md font-bold uppercase tracking-widest hover:bg-metallic-gold hover:text-white transition-all">Add to Bag</button>
+</div>
+</div>
+<div class="bg-regal-navy p-10 flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-metallic-gold text-6xl mb-6">workspace_premium</span>
+<h4 class="text-headline-md font-headline-md text-soft-cream mb-4">You have 1,250 Roymall Points</h4>
+<p class="text-body-md text-soft-cream/80 mb-8 max-w-xs">Redeem your loyalty points for exclusive limited-edition scents and complimentary shipping.</p>
+<a class="text-label-md font-bold text-metallic-gold border-b border-metallic-gold pb-1" href="#">Browse Rewards</a>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-gap px-container-margin grid grid-cols-1 md:grid-cols-4 gap-grid-gutter bg-regal-navy text-metallic-gold mt-24 border-t border-muted-gold/20">
+<div class="flex flex-col space-y-6">
+<h5 class="text-headline-md font-headline-md font-bold text-metallic-gold">Roymall Scents</h5>
+<p class="text-body-md text-soft-cream/70">Elevating the art of perfumery through exquisite craftsmanship and the world's finest ingredients.</p>
+</div>
+<div class="flex flex-col space-y-4">
+<p class="text-label-md font-bold uppercase tracking-widest text-white">Company</p>
+<a class="text-label-md text-soft-cream/80 hover:text-metallic-gold transition-colors" href="#">About Us</a>
+<a class="text-label-md text-soft-cream/80 hover:text-metallic-gold transition-colors" href="#">Fragrance Guide</a>
+<a class="text-label-md text-soft-cream/80 hover:text-metallic-gold transition-colors" href="#">Contact</a>
+</div>
+<div class="flex flex-col space-y-4">
+<p class="text-label-md font-bold uppercase tracking-widest text-white">Customer Care</p>
+<a class="text-label-md text-soft-cream/80 hover:text-metallic-gold transition-colors" href="#">Shipping &amp; Returns</a>
+<a class="text-label-md text-soft-cream/80 hover:text-metallic-gold transition-colors" href="#">Privacy Policy</a>
+<a class="text-label-md text-soft-cream/80 hover:text-metallic-gold transition-colors" href="#">Terms of Service</a>
+</div>
+<div class="flex flex-col space-y-6">
+<p class="text-label-md font-bold uppercase tracking-widest text-white">Newsletter</p>
+<div class="flex border-b border-muted-gold/40 py-2">
+<input class="bg-transparent border-none focus:ring-0 text-soft-cream text-label-md w-full placeholder:text-soft-cream/40" placeholder="Your email" type="email"/>
+<button class="material-symbols-outlined text-metallic-gold">arrow_forward</button>
+</div>
+<p class="text-xs text-soft-cream/40 mt-4">© 2024 Roymall Scents. All Rights Reserved.</p>
+</div>
+</footer>
+<script>
+        // Simple scroll interaction for navigation
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('top-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-white/90', 'backdrop-blur-md', 'shadow-sm', 'py-4');
+                nav.classList.remove('bg-transparent', 'py-6');
+            } else {
+                nav.classList.remove('bg-white/90', 'backdrop-blur-md', 'shadow-sm', 'py-4');
+                nav.classList.add('bg-transparent', 'py-6');
+            }
+        });
+
+        // Hover effect for side nav
+        const navLinks = document.querySelectorAll('aside nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                if(!link.classList.contains('nav-item-active')) {
+                    link.style.transform = 'translateX(5px)';
+                }
+            });
+            link.addEventListener('mouseleave', () => {
+                link.style.transform = 'translateX(0)';
+            });
+        });
+    </script>
+</body></html>

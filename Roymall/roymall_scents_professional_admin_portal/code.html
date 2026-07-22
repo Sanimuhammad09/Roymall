@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Luxe Essence Admin Portal</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#e9c349",
+                    "inverse-primary": "#b1c6f9",
+                    "on-primary-container": "#7084b3",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-secondary-fixed": "#241a00",
+                    "surface-dim": "#dbd9dd",
+                    "surface-bright": "#faf8fd",
+                    "on-secondary-fixed-variant": "#574500",
+                    "outline": "#75777f",
+                    "outline-variant": "#c5c6d0",
+                    "error": "#ba1a1a",
+                    "primary": "#00020a",
+                    "secondary": "#735c00",
+                    "surface-variant": "#e3e2e6",
+                    "on-primary-fixed-variant": "#314671",
+                    "tertiary-fixed": "#ffdbcd",
+                    "muted-gold": "#B0922E",
+                    "on-surface-variant": "#44474f",
+                    "on-tertiary-fixed": "#360f00",
+                    "inverse-on-surface": "#f2f0f4",
+                    "secondary-fixed": "#ffe088",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#303033",
+                    "tertiary-container": "#381000",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "soft-cream": "#F9F8F3",
+                    "surface-container-high": "#e9e7ec",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#efedf1",
+                    "on-tertiary-container": "#b67558",
+                    "deep-onyx": "#121212",
+                    "surface-container-highest": "#e3e2e6",
+                    "on-tertiary-fixed-variant": "#6d3920",
+                    "surface": "#faf8fd",
+                    "primary-container": "#001b44",
+                    "surface-container-low": "#f5f3f7",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#495e8a",
+                    "secondary-container": "#fed65b",
+                    "error-container": "#ffdad6",
+                    "background": "#faf8fd",
+                    "on-secondary-container": "#745c00",
+                    "primary-fixed": "#d8e2ff",
+                    "metallic-gold": "#D4AF37",
+                    "tertiary": "#080100",
+                    "primary-fixed-dim": "#b1c6f9",
+                    "on-surface": "#1b1b1f",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#001a42",
+                    "on-background": "#1b1b1f",
+                    "regal-navy": "#001B44"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "mobile-margin": "20px",
+                    "section-gap": "120px",
+                    "component-stack": "16px",
+                    "grid-gutter": "32px",
+                    "container-margin": "64px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Playfair Display"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "price-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sparkline-svg {
+            stroke: #D4AF37;
+            stroke-width: 2;
+            fill: none;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #faf8fd;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37;
+            border-radius: 10px;
+        }
+        .nav-item-active {
+            @apply bg-secondary-container text-on-secondary-container font-bold;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface selection:bg-metallic-gold selection:text-regal-navy">
+<!-- Side Navigation Bar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-regal-navy dark:bg-deep-onyx border-r border-metallic-gold/20 flex flex-col py-8 px-4 z-50">
+<div class="mb-12 px-2">
+<h1 class="font-headline-md text-headline-md text-metallic-gold tracking-tight">Luxe Essence</h1>
+<p class="font-label-md text-label-md text-on-primary/60 uppercase tracking-widest mt-1">Admin Portal</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="font-label-md text-label-md">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded bg-secondary-container text-on-secondary-container font-bold transition-all" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-label-md text-label-md">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md">Customers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded text-on-primary/70 hover:text-on-primary hover:bg-primary-container transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto flex items-center gap-3 px-2 border-t border-metallic-gold/10 pt-6">
+<div class="w-10 h-10 bg-metallic-gold flex items-center justify-center text-regal-navy font-bold rounded">AU</div>
+<div>
+<p class="font-label-md text-label-md text-on-primary">Admin User</p>
+<p class="text-[10px] text-on-primary/50">Super Administrator</p>
+</div>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface dark:bg-surface-dim border-b border-outline-variant flex justify-between items-center px-8 z-40">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-none focus:ring-1 focus:ring-metallic-gold font-body-md text-body-md placeholder-on-surface-variant/50" placeholder="Search inventory, SKU, or brands..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6 text-on-surface-variant">
+<button class="hover:text-primary transition-all duration-200 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="hover:text-primary transition-all duration-200">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 min-h-screen bg-surface-container-lowest/30">
+<!-- Section Header -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-regal-navy">Inventory Management</h2>
+<p class="text-on-surface-variant font-body-md">Manage your luxury scent collection and stock levels.</p>
+</div>
+<button class="bg-regal-navy text-on-primary px-6 py-3 font-label-md text-label-md flex items-center gap-2 hover:bg-primary transition-all">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                ADD NEW PRODUCT
+            </button>
+</div>
+<!-- Metrics Cards - Standardized Look -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<!-- Total Inventory Value -->
+<div class="bg-surface-container-lowest p-6 border border-outline-variant shadow-sm">
+<div class="flex justify-between items-center mb-2">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Inventory Value</p>
+<span class="material-symbols-outlined text-metallic-gold">payments</span>
+</div>
+<h3 class="font-price-lg text-price-lg text-primary">₦84,290,000</h3>
+<p class="text-[12px] text-secondary mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +2.4% from last month
+                </p>
+</div>
+<!-- Total SKU -->
+<div class="bg-surface-container-lowest p-6 border border-outline-variant shadow-sm">
+<div class="flex justify-between items-center mb-2">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Total SKU</p>
+<span class="material-symbols-outlined text-metallic-gold">inventory_2</span>
+</div>
+<h3 class="font-price-lg text-price-lg text-primary">1,240</h3>
+<p class="text-[12px] text-on-surface-variant mt-2">across 12 categories</p>
+</div>
+<!-- Out of Stock -->
+<div class="bg-surface-container-lowest p-6 border border-outline-variant shadow-sm">
+<div class="flex justify-between items-center mb-2">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Out of Stock</p>
+<span class="material-symbols-outlined text-error">warning</span>
+</div>
+<h3 class="font-price-lg text-price-lg text-error">14</h3>
+<p class="text-[12px] text-error mt-2">Urgent restock needed</p>
+</div>
+<!-- Pending Arrivals -->
+<div class="bg-surface-container-lowest p-6 border border-outline-variant shadow-sm">
+<div class="flex justify-between items-center mb-2">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">In Transit</p>
+<span class="material-symbols-outlined text-metallic-gold">local_shipping</span>
+</div>
+<h3 class="font-price-lg text-price-lg text-primary">42</h3>
+<p class="text-[12px] text-secondary mt-2">Expected by Friday</p>
+</div>
+</div>
+<!-- Product Management View -->
+<div class="bg-surface-container-lowest border border-outline-variant shadow-sm overflow-hidden">
+<div class="p-6 border-b border-outline-variant bg-surface-container-low/50 flex justify-between items-center">
+<div class="flex items-center gap-4">
+<div class="flex bg-surface border border-outline-variant rounded p-1">
+<button class="px-3 py-1 text-[12px] font-bold bg-regal-navy text-white rounded">ALL</button>
+<button class="px-3 py-1 text-[12px] font-bold text-on-surface-variant hover:text-primary">IN STOCK</button>
+<button class="px-3 py-1 text-[12px] font-bold text-on-surface-variant hover:text-primary">LOW STOCK</button>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 border border-outline-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">filter_list</span>
+</button>
+<button class="p-2 border border-outline-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">download</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low/30 border-b border-outline-variant">
+<tr>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Product</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Category</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Stock Level</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-right">Price</th>
+<th class="px-6 py-4 font-label-md text-label-md text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/30">
+<!-- Product 1 -->
+<tr class="hover:bg-soft-cream/40 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 border border-outline-variant bg-white overflow-hidden">
+<img alt="Midnight Oud" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH2qIwZ1ZEZuODI0wnnHdkbCMVeaq5R6OwcYh9fPIgGJsT3uuB9fMbCAAsf5o3E6GfLdl4iTxBaMARP3trGh_156_49b4zZt0QFQF_lOfl7nqhEE8WzIqJyAD2o1FUYSrJ3cQUhIp5VeDb9XQUdz0YL-Iai7kpZi4KFLra30sPSbn6PhFe2fvMVERaCWuevAjgxQf47dUslSBgs39MXZjaYRAUSeKTsiTqS-E74xRCxFda5waP_ZE2"/>
+</div>
+<div>
+<p class="font-bold text-regal-navy">Midnight Oud</p>
+<p class="text-[11px] text-on-surface-variant">SKU: LE-MOD-001</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-on-surface-variant">Eau de Parfum</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-sm font-bold text-on-secondary-container bg-secondary-container/30 px-2 py-0.5 rounded-full uppercase text-[10px]">In Stock</span>
+<span class="text-sm text-on-surface-variant ml-2">124 units</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-price-lg text-[18px]">₦185,000</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-on-surface-variant hover:text-metallic-gold hover:bg-regal-navy rounded transition-all">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error hover:bg-error-container/30 rounded transition-all">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Product 2 -->
+<tr class="hover:bg-soft-cream/40 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 border border-outline-variant bg-white overflow-hidden">
+<img alt="Rasasi Hawas Fire" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCg7lpyFICxEEL6nOXJiq3AVqW8qnv-0dyFZoiSSE4ZydUBnevwNriAPp5WiTei9R8dNnWyHTeACUVTX8A3hQICr_fgAQVlFwKvhYdILid5Xc-w-7ZIrSAzLrlfI0T9ev36yk2s1lz6JmMrXcSCJUfkvPNWKfY1uv5f9MnXmhq3Ymy04rRMUu-eCqQK5bnHVB0jpbnfXmvQypX3aijfAEnKjnDmU2ZX1_5h12NmK3e-GYW0TPM4x7Nl"/>
+</div>
+<div>
+<p class="font-bold text-regal-navy">Rasasi Hawas Fire</p>
+<p class="text-[11px] text-on-surface-variant">SKU: LE-RHF-042</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-on-surface-variant">Extrait de Parfum</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-sm font-bold text-on-error-container bg-error-container px-2 py-0.5 rounded-full uppercase text-[10px]">Low Stock</span>
+<span class="text-sm text-on-surface-variant ml-2">8 units</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-price-lg text-[18px]">₦142,500</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-on-surface-variant hover:text-metallic-gold hover:bg-regal-navy rounded transition-all">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error hover:bg-error-container/30 rounded transition-all">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Product 3 -->
+<tr class="hover:bg-soft-cream/40 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 border border-outline-variant bg-white overflow-hidden">
+<img alt="Ahmed Al Maghribi Kaaf" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBATov0ZtcmfWMaWhRG-N-6MSQOObRsU1HVXXOI9ewYTKKrN36KBeTwBMBiO708ga5Lj-JLAXuyfDZ5ycMcp_-M5MenAC_aazczssU2LD9RT8OCrX9_n--JHfTbhDQJ4EqAr7FypZYuxl3_-KwCcjdm6SvFH77HDPseatWmnCJMzM8KBwHj_-wyjrKg5k47KlUVhFOdVLiD_teMPa-J2spaxCGezKr_uyvhkx_JKrsJF3palftU47k_"/>
+</div>
+<div>
+<p class="font-bold text-regal-navy">Ahmed Al Maghribi Kaaf</p>
+<p class="text-[11px] text-on-surface-variant">SKU: LE-AMK-009</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-on-surface-variant">Eau de Parfum</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-sm font-bold text-on-secondary-container bg-secondary-container/30 px-2 py-0.5 rounded-full uppercase text-[10px]">In Stock</span>
+<span class="text-sm text-on-surface-variant ml-2">64 units</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-price-lg text-[18px]">₦98,000</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-on-surface-variant hover:text-metallic-gold hover:bg-regal-navy rounded transition-all">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error hover:bg-error-container/30 rounded transition-all">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Product 4 -->
+<tr class="hover:bg-soft-cream/40 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 border border-outline-variant bg-white overflow-hidden">
+<img alt="Imperial Silk" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrVt-4-ceNcSEfis-qEzfqi40DS55BWPi74m6-CxUkX0F5HBJ5RCRqutMK0_oermJI3t5OdhvUgoUsFiVeCAFl0TJxhJ3Qjt7UaCXga3TDspERI8_FR76AObCu4XTWIK_Q4NxiW_Ve_p2RmTDjus4lgT6dCVJqNLN3FRzfJ7wVIJOXLUY9S1tlvl3UMbnWRRh6ULgUn5lPynOeFNpV2mBmUrmpExyHN3qmSLuXsGmBYKJ0aBcf09G_"/>
+</div>
+<div>
+<p class="font-bold text-regal-navy">Imperial Silk</p>
+<p class="text-[11px] text-on-surface-variant">SKU: LE-ISK-112</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 font-body-md text-on-surface-variant">Special Edition</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-sm font-bold text-on-secondary-container bg-secondary-container/30 px-2 py-0.5 rounded-full uppercase text-[10px]">In Stock</span>
+<span class="text-sm text-on-surface-variant ml-2">32 units</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right font-price-lg text-[18px]">₦210,000</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-on-surface-variant hover:text-metallic-gold hover:bg-regal-navy rounded transition-all">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-error hover:bg-error-container/30 rounded transition-all">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<p class="text-sm text-on-surface-variant">Showing <span class="font-bold text-primary">1-4</span> of <span class="font-bold text-primary">124</span> products</p>
+<div class="flex gap-1">
+<button class="p-2 border border-outline-variant hover:bg-surface-variant disabled:opacity-30" disabled="">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="p-2 border border-outline-variant bg-regal-navy text-white text-[12px] font-bold w-9">1</button>
+<button class="p-2 border border-outline-variant hover:bg-surface-variant text-[12px] font-bold w-9">2</button>
+<button class="p-2 border border-outline-variant hover:bg-surface-variant text-[12px] font-bold w-9">3</button>
+<button class="p-2 border border-outline-variant hover:bg-surface-variant">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Secondary Info & Quick Actions -->
+<div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Low Stock Alerts -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant p-6">
+<h3 class="font-headline-md text-headline-md text-regal-navy mb-4">Stock Distribution</h3>
+<div class="h-4 w-full bg-surface-container flex mb-8">
+<div class="h-full bg-regal-navy" style="width: 65%" title="EDP"></div>
+<div class="h-full bg-metallic-gold" style="width: 20%" title="Extrait"></div>
+<div class="h-full bg-secondary-container" style="width: 10%" title="Oud Oils"></div>
+<div class="h-full bg-outline" style="width: 5%" title="Samples"></div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-regal-navy"></span>
+<span class="text-xs font-label-md text-on-surface-variant">EDP (65%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-metallic-gold"></span>
+<span class="text-xs font-label-md text-on-surface-variant">EXTRAIT (20%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-secondary-container"></span>
+<span class="text-xs font-label-md text-on-surface-variant">OILS (10%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 bg-outline"></span>
+<span class="text-xs font-label-md text-on-surface-variant">SAMPLES (5%)</span>
+</div>
+</div>
+</div>
+<!-- Quick Sync/Action -->
+<div class="bg-regal-navy p-6 border border-metallic-gold/30 text-on-primary">
+<h3 class="font-headline-md text-headline-md text-metallic-gold mb-4">Warehouse Sync</h3>
+<p class="text-sm text-on-primary/70 mb-6">Last global inventory sync was 4 hours ago. 12 items pending verification from Lagos Hub.</p>
+<div class="space-y-3">
+<button class="w-full py-3 bg-metallic-gold text-regal-navy font-bold uppercase tracking-widest text-[12px] hover:bg-secondary-fixed-dim transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+                        RUN FULL SYNC
+                    </button>
+<button class="w-full py-3 border border-metallic-gold/50 text-metallic-gold font-bold uppercase tracking-widest text-[12px] hover:bg-white/5 transition-colors">
+                        GENERATE STOCK REPORT
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interactions and subtle effects
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.98)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = 'scale(1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+
+        // Add a bit of interactivity to rows
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', (e) => {
+                if (!e.target.closest('button')) {
+                    // Logic for selecting a row or opening details could go here
+                }
+            });
+        });
+    </script>
+</body></html>

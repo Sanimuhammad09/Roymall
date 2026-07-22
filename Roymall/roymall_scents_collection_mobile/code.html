@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Our Fragrance Library | Roymall Scents</title>
+<!-- Google Fonts: Playfair Display for Serifs, Manrope for Sans -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&amp;family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#e9c349",
+                    "inverse-primary": "#b1c6f9",
+                    "on-primary-container": "#7084b3",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-secondary-fixed": "#241a00",
+                    "surface-dim": "#dbd9dd",
+                    "surface-bright": "#faf8fd",
+                    "on-secondary-fixed-variant": "#574500",
+                    "outline": "#75777f",
+                    "outline-variant": "#c5c6d0",
+                    "error": "#ba1a1a",
+                    "primary": "#00020a",
+                    "secondary": "#735c00",
+                    "surface-variant": "#e3e2e6",
+                    "on-primary-fixed-variant": "#314671",
+                    "tertiary-fixed": "#ffdbcd",
+                    "muted-gold": "#B0922E",
+                    "on-surface-variant": "#44474f",
+                    "on-tertiary-fixed": "#360f00",
+                    "inverse-on-surface": "#f2f0f4",
+                    "secondary-fixed": "#ffe088",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#303033",
+                    "tertiary-container": "#381000",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "soft-cream": "#F9F8F3",
+                    "surface-container-high": "#e9e7ec",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#efedf1",
+                    "on-tertiary-container": "#b67558",
+                    "deep-onyx": "#121212",
+                    "surface-container-highest": "#e3e2e6",
+                    "on-tertiary-fixed-variant": "#6d3920",
+                    "surface": "#faf8fd",
+                    "primary-container": "#001b44",
+                    "surface-container-low": "#f5f3f7",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#495e8a",
+                    "secondary-container": "#fed65b",
+                    "error-container": "#ffdad6",
+                    "background": "#faf8fd",
+                    "on-secondary-container": "#745c00",
+                    "primary-fixed": "#d8e2ff",
+                    "metallic-gold": "#D4AF37",
+                    "tertiary": "#080100",
+                    "primary-fixed-dim": "#b1c6f9",
+                    "on-surface": "#1b1b1f",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#001a42",
+                    "on-background": "#1b1b1f",
+                    "regal-navy": "#001B44"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "mobile-margin": "20px",
+                    "section-gap": "120px",
+                    "component-stack": "16px",
+                    "grid-gutter": "32px",
+                    "container-margin": "64px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Playfair Display"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "price-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .filter-drawer-open {
+            transform: translateY(0);
+        }
+        .filter-drawer-closed {
+            transform: translateY(100%);
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .product-card-img {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .product-card:active .product-card-img {
+            transform: scale(1.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md selection:bg-metallic-gold/30">
+<!-- Top Navigation Bar -->
+<header class="bg-background dark:bg-deep-onyx border-b border-outline-variant dark:border-outline sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-mobile-margin h-16">
+<button class="active:scale-95 transition-transform text-regal-navy dark:text-inverse-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-regal-navy dark:text-metallic-gold uppercase tracking-widest">
+                Roymall Scents
+            </div>
+<button class="active:scale-95 transition-transform text-regal-navy dark:text-inverse-primary">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<!-- Main Content Container -->
+<main class="pb-24">
+<!-- Hero Header -->
+<section class="px-mobile-margin pt-10 pb-6">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-regal-navy mb-2">Our Fragrance Library</h1>
+<p class="font-body-md text-on-surface-variant max-w-xs">Explore a curated collection of rare extraits and artisanal blends designed for the discerning nose.</p>
+</section>
+<!-- Filter Sticky Bar -->
+<section class="sticky top-16 bg-background/95 backdrop-blur-md z-30 py-4 px-mobile-margin border-b border-outline-variant/30">
+<div class="flex items-center justify-between">
+<button class="flex items-center gap-2 border border-metallic-gold px-4 py-2 text-regal-navy active:scale-95 transition-transform bg-soft-cream/50" onclick="toggleFilterDrawer(true)">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+<span class="font-label-md text-label-md uppercase">Filter &amp; Sort</span>
+</button>
+<div class="text-on-surface-variant font-label-md text-label-md">
+                    24 Items
+                </div>
+</div>
+</section>
+<!-- Product Grid -->
+<section class="px-mobile-margin pt-8">
+<div class="grid grid-cols-2 gap-x-4 gap-y-10">
+<!-- Product Card 1 -->
+<div class="product-card group cursor-pointer">
+<div class="relative aspect-[3/4] bg-soft-cream overflow-hidden mb-3">
+<img class="product-card-img w-full h-full object-cover" data-alt="A minimalist studio photography of a luxury perfume bottle with a heavy gold cap. The bottle is clear glass revealing a pale amber liquid. It sits on a polished cream marble surface with soft, high-key directional lighting creating elegant shadows. The background is a solid soft cream color, emphasizing a premium and sophisticated lifestyle aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGsYaJyluTP1BENFBLm4HQGy-GxgNrI-ppC0Rga8oI6MDbaZYVFgNwAn7DGuJ3nnweo0r3iGGKa2KpgRH_dvEt3XfQHIbqZKFtutZMOpAIhvOiS6eHDBlqQ6i67pptg6WexF7sYX7Xylk5YvZfV4x0Vh8pSyWU2WA7sGkBhTeF1YTQx4VBZEpDVXgtH2fh78ikKOa1RryqIDEA6y3vig_9W0r1_otK5I5KX7pDzxPHVQm0XLhNv4WA"/>
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-regal-navy/30 hover:text-error transition-colors">favorite</span>
+</div>
+</div>
+<div class="space-y-1">
+<p class="font-label-md text-label-md text-muted-gold uppercase">Royal Oud</p>
+<h3 class="font-headline-md text-headline-md text-regal-navy leading-tight truncate">Midnight Velvet</h3>
+<p class="font-price-lg text-price-lg text-primary">₦85,000</p>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="product-card group cursor-pointer">
+<div class="relative aspect-[3/4] bg-soft-cream overflow-hidden mb-3">
+<img class="product-card-img w-full h-full object-cover" data-alt="A sleek, dark navy glass perfume bottle with minimalist gold typography. The bottle is positioned centrally against a textured beige background. The lighting is dramatic and cinematic, highlighting the sharp edges of the glass and the metallic sheen of the gold cap. The overall mood is exclusive, masculine, and high-end." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUBAlzZYoyBwfxzyEGymbK3yivKnXQPVT8vjiXCaSpMUy0KR467_qCrMShJiSH3Y0bFU0B9t7n9ThjwBrBcYNLC7g7rBk3S4-0Qf8OO_VuPIGQK051oMxooF_ppucTYFTrpKyn8oqtnd4onHvUNUQmwQUH0u37LVn8IQ_-vthzJYCnaIOsR8eC59BfgCVv1GwmxEQWPwBLNdxJ8vZBo_SXB9Qt6uD3U8ax-Fb776q_kCZaLwRmWj89"/>
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-regal-navy/30">favorite</span>
+</div>
+</div>
+<div class="space-y-1">
+<p class="font-label-md text-label-md text-muted-gold uppercase">Lumière</p>
+<h3 class="font-headline-md text-headline-md text-regal-navy leading-tight truncate">Azure Coast</h3>
+<p class="font-price-lg text-price-lg text-primary">₦62,500</p>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="product-card group cursor-pointer">
+<div class="relative aspect-[3/4] bg-soft-cream overflow-hidden mb-3">
+<img class="product-card-img w-full h-full object-cover" data-alt="An elegant, round frosted glass fragrance bottle with a minimalist wooden cap. The bottle is nestled among soft white silk fabric that creates fluid, wave-like shadows. The lighting is diffused and ethereal, creating a serene and luxurious atmosphere. The color palette is composed of ivory, pale wood, and soft grey tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGFBkwv5n-rMuR-fTdWPxYFfUByR084oUJhhsAy8m7vbKVf_IA7cnkLxpFA5e7EnR_A5FiiKH4OWr3NLwTH3Olnya7Jb-0OZTttwFQfioATgJYn-DMfxNKv0DkcQq8G8-3tNhx3ztFCSPNx5JWpzvtyP_n2E_UkyAoNhG3ahX7CnvuSDviwyFt3Fc2ggrOnSBoicsUTLvqhgZUNnRl5jiDHT96wS9KYymSM2Y_gw1l3aQOBlca2muS"/>
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-regal-navy/30">favorite</span>
+</div>
+</div>
+<div class="space-y-1">
+<p class="font-label-md text-label-md text-muted-gold uppercase">Essence de Paris</p>
+<h3 class="font-headline-md text-headline-md text-regal-navy leading-tight truncate">Rose Mystique</h3>
+<p class="font-price-lg text-price-lg text-primary">₦110,000</p>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="product-card group cursor-pointer">
+<div class="relative aspect-[3/4] bg-soft-cream overflow-hidden mb-3">
+<img class="product-card-img w-full h-full object-cover" data-alt="A tall, slender rectangular perfume bottle with a minimalist black cap. The glass is tinted a light emerald green. The bottle is placed on a reflective black glass surface with a single spotlight illuminating it from above, creating a high-contrast, editorial look. The background is a dark, moody grey." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJUOmZsVydnOOk4m6PxYqRAeP9pmxTpJltdKeqIvi27PQTdOrelZrhUB4Nw-DFcwL4fYuCt17EU0ysd3bBh5HUlOi_bgc-a9l74_mrIwZ5h2XolT3E4yl8POg2J-9KZjZVFN2dUxc3liLvloq5kZm-8r0pOGMWk6tQ5Ev47MG0dgrSoV613Q-JcgCrKx9gNStlG4m-gvgUj9FZrewRThJY8bmDbBZurqN62TMAwYaHYPAKh6yv_N2W"/>
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-regal-navy/30">favorite</span>
+</div>
+</div>
+<div class="space-y-1">
+<p class="font-label-md text-label-md text-muted-gold uppercase">Noble Scents</p>
+<h3 class="font-headline-md text-headline-md text-regal-navy leading-tight truncate">Forest Ember</h3>
+<p class="font-price-lg text-price-lg text-primary">₦78,000</p>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="product-card group cursor-pointer">
+<div class="relative aspect-[3/4] bg-soft-cream overflow-hidden mb-3">
+<img class="product-card-img w-full h-full object-cover" data-alt="A heavy, square clear glass fragrance bottle with an ornate silver collar and cap. The liquid inside is a vibrant gold. The bottle stands on a slab of rough-cut limestone. The lighting is warm and golden-hour inspired, casting long, soft shadows. The style is classic luxury, evoking a sense of heritage and artisanal craft." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwkHYV1k9KVVTg3RKIL97x3IreEJqYtzHeEYbov4mlDOctTYAJjRhmlMbBGJkFRgm-VtHoYaYFEUFik_2TomThIePZDpaC33K17EGUx0p6dvammOMb43sJB0IIOqR3rfwLZIDBEp15rvgS3SigueUegWJjni6bQ8BeQSdeY-7SpzmDu22bPr_ROo4BtVdS3p5UMYbldP-u0dB6uSa6cWaIRds_Snueh7t9dB6WxjgoIBWM0XEfelIt"/>
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-regal-navy/30">favorite</span>
+</div>
+</div>
+<div class="space-y-1">
+<p class="font-label-md text-label-md text-muted-gold uppercase">Heritage Lux</p>
+<h3 class="font-headline-md text-headline-md text-regal-navy leading-tight truncate">Imperial Silk</h3>
+<p class="font-price-lg text-price-lg text-primary">₦145,000</p>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="product-card group cursor-pointer">
+<div class="relative aspect-[3/4] bg-soft-cream overflow-hidden mb-3">
+<img class="product-card-img w-full h-full object-cover" data-alt="A minimalist white ceramic perfume bottle with a spherical gold cap. It is positioned against a clean, abstract background of geometric shapes in soft terracotta and beige. The lighting is crisp and modern, emphasizing the clean lines and contemporary design of the product. The mood is artistic and avant-garde." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMAOy_I_Xvm0Z-jyciZusaWlndjhAV5RudcSUuW52YQVmCN3K62KqGyXdpiu96eamn4G5yixd91aAkShY7GqgMkE2cnFgcVXV_IL0tZMciVXzSvvhWrs5w8BEA9DZ7Kf0CnNgJhJikaRQn43GtDWmTrc48yJ4FnxKogGC1NnQM_Gn4OfCjdr-xF3sxLr2dJglIRq_vXg7tw7k4oal7kcHT4KZoXiSpR60WRddfEfio4g5AtyUJcxvp"/>
+<div class="absolute top-2 right-2">
+<span class="material-symbols-outlined text-regal-navy/30">favorite</span>
+</div>
+</div>
+<div class="space-y-1">
+<p class="font-label-md text-label-md text-muted-gold uppercase">Modernist</p>
+<h3 class="font-headline-md text-headline-md text-regal-navy leading-tight truncate">Terra Flora</h3>
+<p class="font-price-lg text-price-lg text-primary">₦55,000</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Filter Drawer (Mobile) -->
+<div class="fixed inset-0 bg-primary/40 backdrop-blur-sm z-[60] opacity-0 pointer-events-none transition-opacity duration-300" id="filter-overlay" onclick="toggleFilterDrawer(false)"></div>
+<div class="fixed bottom-0 left-0 right-0 bg-surface z-[70] h-[751px] rounded-t-xl transition-transform duration-500 ease-out filter-drawer-closed flex flex-col" id="filter-drawer">
+<!-- Drawer Header -->
+<div class="px-mobile-margin py-5 border-b border-outline-variant flex justify-between items-center bg-soft-cream rounded-t-xl">
+<h2 class="font-headline-md text-headline-md text-regal-navy">Filters</h2>
+<button class="p-1" onclick="toggleFilterDrawer(false)">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Drawer Content -->
+<div class="flex-1 overflow-y-auto no-scrollbar px-mobile-margin py-6 space-y-8">
+<!-- Sort Section -->
+<div>
+<h4 class="font-label-md text-label-md text-muted-gold uppercase mb-4">Sort By</h4>
+<div class="space-y-3">
+<label class="flex items-center justify-between cursor-pointer">
+<span class="font-body-md text-on-surface">Newest Arrivals</span>
+<input checked="" class="text-regal-navy focus:ring-metallic-gold" name="sort" type="radio"/>
+</label>
+<label class="flex items-center justify-between cursor-pointer">
+<span class="font-body-md text-on-surface">Price: Low to High</span>
+<input class="text-regal-navy focus:ring-metallic-gold" name="sort" type="radio"/>
+</label>
+<label class="flex items-center justify-between cursor-pointer">
+<span class="font-body-md text-on-surface">Price: High to Low</span>
+<input class="text-regal-navy focus:ring-metallic-gold" name="sort" type="radio"/>
+</label>
+</div>
+</div>
+<!-- Category Section -->
+<div>
+<h4 class="font-label-md text-label-md text-muted-gold uppercase mb-4">Fragrance Family</h4>
+<div class="grid grid-cols-2 gap-3">
+<button class="border border-outline-variant py-2 px-3 font-body-md text-left active:bg-regal-navy active:text-white transition-colors">Oud &amp; Wood</button>
+<button class="border border-outline-variant py-2 px-3 font-body-md text-left active:bg-regal-navy active:text-white transition-colors">Floral</button>
+<button class="border border-outline-variant py-2 px-3 font-body-md text-left active:bg-regal-navy active:text-white transition-colors">Citrus &amp; Fresh</button>
+<button class="border border-outline-variant py-2 px-3 font-body-md text-left active:bg-regal-navy active:text-white transition-colors">Oriental</button>
+<button class="border border-outline-variant py-2 px-3 font-body-md text-left active:bg-regal-navy active:text-white transition-colors">Musk</button>
+<button class="border border-outline-variant py-2 px-3 font-body-md text-left active:bg-regal-navy active:text-white transition-colors">Leather</button>
+</div>
+</div>
+<!-- Price Range -->
+<div>
+<h4 class="font-label-md text-label-md text-muted-gold uppercase mb-4">Price Range (₦)</h4>
+<div class="flex items-center gap-4">
+<input class="w-full border-b border-outline-variant focus:border-metallic-gold outline-none py-2 bg-transparent" placeholder="Min" type="number"/>
+<span class="text-outline">—</span>
+<input class="w-full border-b border-outline-variant focus:border-metallic-gold outline-none py-2 bg-transparent" placeholder="Max" type="number"/>
+</div>
+</div>
+</div>
+<!-- Drawer Footer -->
+<div class="p-mobile-margin border-t border-outline-variant bg-white grid grid-cols-2 gap-4">
+<button class="border border-regal-navy py-4 uppercase font-label-md text-label-md text-regal-navy" onclick="toggleFilterDrawer(false)">Reset</button>
+<button class="bg-regal-navy py-4 uppercase font-label-md text-label-md text-metallic-gold" onclick="toggleFilterDrawer(false)">Apply</button>
+</div>
+</div>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center py-3 bg-regal-navy">
+<button class="flex flex-col items-center justify-center text-on-primary/60 dark:text-on-surface-variant active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="font-label-md text-[10px] uppercase mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-secondary-fixed-dim font-bold active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">rebase_edit</span>
+<span class="font-label-md text-[10px] uppercase mt-1">Shop</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-primary/60 dark:text-on-surface-variant active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined text-[24px]">shopping_bag</span>
+<span class="font-label-md text-[10px] uppercase mt-1">Bag</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-primary/60 dark:text-on-surface-variant active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="font-label-md text-[10px] uppercase mt-1">Account</span>
+</button>
+</nav>
+<script>
+        function toggleFilterDrawer(isOpen) {
+            const drawer = document.getElementById('filter-drawer');
+            const overlay = document.getElementById('filter-overlay');
+            
+            if (isOpen) {
+                drawer.classList.remove('filter-drawer-closed');
+                drawer.classList.add('filter-drawer-open');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+                overlay.classList.add('opacity-100', 'pointer-events-auto');
+                document.body.style.overflow = 'hidden';
+            } else {
+                drawer.classList.remove('filter-drawer-open');
+                drawer.classList.add('filter-drawer-closed');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                overlay.classList.remove('opacity-100', 'pointer-events-auto');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Add subtle parallax/scroll effect for images
+        window.addEventListener('scroll', () => {
+            const images = document.querySelectorAll('.product-card-img');
+            images.forEach(img => {
+                const rect = img.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    const shift = (rect.top - window.innerHeight / 2) * 0.05;
+                    img.style.transform = `translateY(${shift}px)`;
+                }
+            });
+        });
+    </script>
+</body></html>

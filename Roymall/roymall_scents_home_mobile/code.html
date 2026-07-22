@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Roymall Scents | Luxury Perfumery</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#e9c349",
+                    "inverse-primary": "#b1c6f9",
+                    "on-primary-container": "#7084b3",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-secondary-fixed": "#241a00",
+                    "surface-dim": "#dbd9dd",
+                    "surface-bright": "#faf8fd",
+                    "on-secondary-fixed-variant": "#574500",
+                    "outline": "#75777f",
+                    "outline-variant": "#c5c6d0",
+                    "error": "#ba1a1a",
+                    "primary": "#00020a",
+                    "secondary": "#735c00",
+                    "surface-variant": "#e3e2e6",
+                    "on-primary-fixed-variant": "#314671",
+                    "tertiary-fixed": "#ffdbcd",
+                    "muted-gold": "#B0922E",
+                    "on-surface-variant": "#44474f",
+                    "on-tertiary-fixed": "#360f00",
+                    "inverse-on-surface": "#f2f0f4",
+                    "secondary-fixed": "#ffe088",
+                    "on-error-container": "#93000a",
+                    "inverse-surface": "#303033",
+                    "tertiary-container": "#381000",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "soft-cream": "#F9F8F3",
+                    "surface-container-high": "#e9e7ec",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#efedf1",
+                    "on-tertiary-container": "#b67558",
+                    "deep-onyx": "#121212",
+                    "surface-container-highest": "#e3e2e6",
+                    "on-tertiary-fixed-variant": "#6d3920",
+                    "surface": "#faf8fd",
+                    "primary-container": "#001b44",
+                    "surface-container-low": "#f5f3f7",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#495e8a",
+                    "secondary-container": "#fed65b",
+                    "error-container": "#ffdad6",
+                    "background": "#faf8fd",
+                    "on-secondary-container": "#745c00",
+                    "primary-fixed": "#d8e2ff",
+                    "metallic-gold": "#D4AF37",
+                    "tertiary": "#080100",
+                    "primary-fixed-dim": "#b1c6f9",
+                    "on-surface": "#1b1b1f",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed": "#001a42",
+                    "on-background": "#1b1b1f",
+                    "regal-navy": "#001B44"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "mobile-margin": "20px",
+                    "section-gap": "120px",
+                    "component-stack": "16px",
+                    "grid-gutter": "32px",
+                    "container-margin": "64px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Playfair Display"],
+                    "label-md": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "display-lg": ["Playfair Display"],
+                    "body-md": ["Manrope"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "price-lg": ["Playfair Display"],
+                    "headline-md": ["Playfair Display"]
+            },
+            "fontSize": {
+                    "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .hero-gradient {
+            background: linear-gradient(to bottom, rgba(0, 27, 68, 0.4) 0%, rgba(0, 27, 68, 0.8) 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background selection:bg-metallic-gold selection:text-regal-navy">
+<!-- TopAppBar Component -->
+<header class="bg-background dark:bg-deep-onyx border-b border-outline-variant dark:border-outline docked full-width top-0 sticky z-[60]">
+<div class="flex justify-between items-center w-full px-mobile-margin h-16">
+<button class="text-primary dark:text-inverse-primary hover:opacity-70 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-regal-navy dark:text-metallic-gold uppercase tracking-widest">Roymall Scents</h1>
+<button class="text-primary dark:text-inverse-primary hover:opacity-70 transition-opacity active:scale-95 transition-transform">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<main class="pb-24">
+<!-- Hero Section -->
+<section class="relative h-[751px] w-full flex items-center justify-center overflow-hidden">
+<div class="absolute inset-0 z-0" data-alt="A cinematic, high-fashion close-up of a luxurious perfume bottle sitting on a polished marble surface. Soft, golden hour light creates dramatic reflections and long shadows, emphasizing the intricate glass craftsmanship. The atmosphere is sophisticated and premium, using a palette of deep navy, regal gold, and creamy ivory. The mood is one of exclusivity and timeless elegance." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCSuh0mzlGbvg-qvGlX6eBbACibkyftTZ6fQ8WH-AlWYXNVPa2iBniMvteQjBbpegSBp2kPk_Sh5FXcePnCfcocDnHU3rGZEg6hMh23tm3aSsvOn_KYREELJ4jfoVvQoyjLY_br6U1ttcn5QgwCBBnxMbKLS4eZW_Otv_DDBsjwVPUhDq2Kf7jRM-SWmodgyET3OkYQ4Gu716BU-S66CrZ5P5GhxIiYCfGlz0Ga_FjxjqhQcDSsUO-Z')"></div>
+<div class="absolute inset-0 hero-gradient z-10"></div>
+<div class="relative z-20 px-mobile-margin text-center">
+<span class="font-label-md text-label-md text-metallic-gold mb-4 block tracking-[0.3em]">ESTABLISHED LUXURY</span>
+<h2 class="font-display-lg text-[44px] leading-tight text-white mb-8">A Perfect Perfume for Every Mood</h2>
+<button class="bg-regal-navy text-metallic-gold border border-metallic-gold px-10 py-4 font-label-md text-label-md hover:bg-metallic-gold hover:text-regal-navy transition-all duration-300">
+                    DISCOVER THE COLLECTION
+                </button>
+</div>
+</section>
+<!-- New Arrivals Section (Horizontal Scroll) -->
+<section class="py-16 bg-soft-cream">
+<div class="px-mobile-margin mb-8 flex justify-between items-end">
+<div>
+<h3 class="font-headline-md text-headline-md text-regal-navy">New Arrivals</h3>
+<div class="h-0.5 w-12 bg-metallic-gold mt-2"></div>
+</div>
+<a class="font-label-md text-label-md text-muted-gold border-b border-muted-gold/30" href="#">VIEW ALL</a>
+</div>
+<div class="flex overflow-x-auto hide-scrollbar gap-6 px-mobile-margin">
+<!-- Product Card 1 -->
+<div class="flex-shrink-0 w-64 group">
+<div class="aspect-[3/4] bg-white mb-4 relative overflow-hidden">
+<div class="absolute top-3 left-3 bg-regal-navy text-metallic-gold px-2 py-1 font-label-md text-[10px]">NEW</div>
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A minimalist studio shot of a sleek, rectangular perfume bottle with a gold cap against a soft cream background. Professional lighting highlights the texture of the embossed leather label. The aesthetic is clean, high-contrast, and editorial, embodying a modern luxury fragrance brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-SKnvJNKFPWF7mzIYNF_0ZJzzw6yHjM1WSjQrigM5cKJfLCdx_w5QE75pwlgH_ejRzBR5-B5VXLOU4B78A4FfBl6YjdVPmhxGbhg6bfSPpyy6UU-2HTVnVIBA6cquMA8cgrKy_QPEWvTqvkEIH_qvaiaEpI7reC6RSvYZO6IeiR-aOLb0QIQggn2wRggvqJQM_4f2k--GhnZK5X3Kulso7UR4XYhBIDYGDCyWwKgFMuoEK3P3svP8"/>
+<div class="absolute inset-0 bg-regal-navy/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+<button class="bg-white text-regal-navy px-4 py-2 font-label-md text-[12px] active:scale-95 transition-transform">QUICK ADD</button>
+</div>
+</div>
+<p class="font-label-md text-label-md text-muted-gold uppercase mb-1">Eau de Parfum</p>
+<h4 class="font-headline-md text-[18px] text-regal-navy leading-snug">Midnight Amber</h4>
+<p class="font-price-lg text-price-lg text-regal-navy mt-2">$185.00</p>
+</div>
+<!-- Product Card 2 -->
+<div class="flex-shrink-0 w-64 group">
+<div class="aspect-[3/4] bg-white mb-4 relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="An artistic photograph of a round, frosted glass perfume bottle placed on a bed of fresh sandalwood shavings and jasmine petals. The lighting is soft and ethereal, emphasizing the organic origins of the scent. The color palette is composed of warm earth tones, soft whites, and gold accents, projecting a refined and natural luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEe77mw1GBuLADvzkhkRcd2ByqjP4UKKFmm3bb0CBGZHYhHPMpffZpu9XZWk6CzVJxs8DM76RMAxiyn9vlk9FP2qgeVmp5EJMtwIjSbylKH3HfuE8UNPrWyoiGmWzSRcljwXjy-NU5zaW0fQZXZ0g01nSChoGvvc03292z4r6tz_Mb0EjroGHgSMhEZKNBAhVgVTuF7dGAUKwJO3nY7DULZZ3IJmoR7Wlg-Ne-Fpey0rn2aYG8k8QA"/>
+<div class="absolute inset-0 bg-regal-navy/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+<button class="bg-white text-regal-navy px-4 py-2 font-label-md text-[12px] active:scale-95 transition-transform">QUICK ADD</button>
+</div>
+</div>
+<p class="font-label-md text-label-md text-muted-gold uppercase mb-1">Signature Blend</p>
+<h4 class="font-headline-md text-[18px] text-regal-navy leading-snug">Santal Royal</h4>
+<p class="font-price-lg text-price-lg text-regal-navy mt-2">$210.00</p>
+</div>
+<!-- Product Card 3 -->
+<div class="flex-shrink-0 w-64 group">
+<div class="aspect-[3/4] bg-white mb-4 relative overflow-hidden">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="A high-end product shot of a dark blue glass perfume bottle with silver engraving, resting on a velvet navy cushion. The lighting is sharp and dramatic, highlighting the crystalline clarity of the glass. The aesthetic is extremely opulent and masculine, evoking a sense of powerful sophistication and nocturnal allure." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnj_T0hOMmgzEAg4g45Hh5ZVV9PHM3uVAlfRpP1a7mMSUY4HN-VvHvjmGKDFHOUo4wpf_uQ6iMEI1YGSg0u_Tsn3iyeOA4JjIBb0vZlvcqz-ac8IXZ85Wa4QNFv5YpraisZM-oY7kDO_fZR5s0orn_KduegbTvpqjHJ3w1m3tLOtdLUHF6HwCE0qZ0rQ68Q3S2fsNkLVVtHWHFFE5IeJkbNvXdBygg5xFIf8G8JFV9GV8KfSksfbis"/>
+<div class="absolute inset-0 bg-regal-navy/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+<button class="bg-white text-regal-navy px-4 py-2 font-label-md text-[12px] active:scale-95 transition-transform">QUICK ADD</button>
+</div>
+</div>
+<p class="font-label-md text-label-md text-muted-gold uppercase mb-1">Limited Edition</p>
+<h4 class="font-headline-md text-[18px] text-regal-navy leading-snug">Imperial Oud</h4>
+<p class="font-price-lg text-price-lg text-regal-navy mt-2">$295.00</p>
+</div>
+</div>
+</section>
+<!-- Curated Collections Blocks -->
+<section class="py-16">
+<div class="px-mobile-margin mb-8">
+<h3 class="font-headline-md text-headline-md text-regal-navy">Curated Collections</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Discover your signature scent through our expertly crafted categories.</p>
+</div>
+<div class="space-y-4 px-mobile-margin">
+<!-- Collection 1 -->
+<div class="relative h-64 overflow-hidden group">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" data-alt="A sophisticated lifestyle image of a man in a tailored navy suit adjusting his cufflinks, with a bottle of cologne on a wooden dresser in the foreground. The lighting is moody and professional, using deep shadows and warm highlights to create a sense of power and quiet confidence. The aesthetic is unmistakably luxury-editorial." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCCG2PpYQfOgmsaw37tvBzP-oMZ7rLDcURtWtXxHdtEtlwxRr70C72AY-3mDGeI_p01dxv9DiYlxuUvhMqsFxbD4J1v0K2WUrpTKxGRpbyps_O8oPHbI3aTpQgXARKNcYVvYh_1r7EbYDmoivaMDGwq9BUV_VtlMtvjKejpPNPFuePYHP2ReiX0YZih2gZFavs8q25sE5mZ0ze83TptFUHswf2StkbB5RuK4niq12gG2yQd1OT5tolj')"></div>
+<div class="absolute inset-0 bg-regal-navy/40"></div>
+<div class="absolute inset-0 flex flex-col justify-center items-center text-center p-6 border border-metallic-gold/20 m-3">
+<h4 class="font-headline-lg-mobile text-white mb-2 uppercase tracking-widest">Pour Homme</h4>
+<p class="font-label-md text-metallic-gold mb-4">BOLD &amp; REFINED</p>
+<button class="border-b-2 border-white text-white font-label-md pb-1 active:scale-90 transition-transform">EXPLORE NOW</button>
+</div>
+</div>
+<!-- Collection 2 -->
+<div class="relative h-64 overflow-hidden group">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" data-alt="A graceful close-up of a woman's hands holding a delicate, flower-shaped perfume bottle. The background is a soft-focus garden of white roses and peonies. The lighting is bright and ethereal, creating a soft glow that emphasizes femininity and elegance. The palette is a dreamy mix of pastels, cream, and gold." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDiR41IeGYCKmB5TldMgqURwYj9_5jloXghX55cVWigJciAoPzB7QVQqwmttQrtqkKNi22l5SKGa9syYrXe1nDBgo5Om45nIUc5q4dyztIBD5t1yf7_5nMRNTj5eiUsYmyJoXS7UZUYSDqohuA1HgBSoFzuF_qaNaQN0TXrP9XjWq0cDzGLsdydGWYy7x1--CsI0t-Iu9usR9cdtW8mzV2J0LBkAL34BtAHJIn_5AJbdsHE1HlxwWvT')"></div>
+<div class="absolute inset-0 bg-regal-navy/40"></div>
+<div class="absolute inset-0 flex flex-col justify-center items-center text-center p-6 border border-metallic-gold/20 m-3">
+<h4 class="font-headline-lg-mobile text-white mb-2 uppercase tracking-widest">Pour Femme</h4>
+<p class="font-label-md text-metallic-gold mb-4">ELEGANT &amp; SENSUAL</p>
+<button class="border-b-2 border-white text-white font-label-md pb-1 active:scale-90 transition-transform">EXPLORE NOW</button>
+</div>
+</div>
+<!-- Collection 3 -->
+<div class="relative h-64 overflow-hidden group">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" data-alt="An abstract, minimalist composition featuring two identical perfume bottles resting on a split surface of stone and silk. The lighting is neutral and balanced, highlighting the universal appeal of the design. The aesthetic is contemporary, gender-neutral, and high-end, utilizing a palette of greys, navy, and gold." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAQffgDpFScA7ExmrYK4mFzLJerzcRQQ7r0hvUusKGBFuPh_KtGXvQDoUOGMbomXja5p9HXdRegYVnNB9R58zi3pKuPlNmqFdFsxqpp9411zOUPOSOO82BWr33ocA44YaLLlKlefwrMN9LgwEb95Bx8TJQnJRHxd-s6lKAYGqqf5G48PhzsdyYKh6cX0GGPUw2oZWNmclkS13q-xlEVhLv8k0QIABoowymW_aTKBdsAi8-MigA2pVZA')"></div>
+<div class="absolute inset-0 bg-regal-navy/40"></div>
+<div class="absolute inset-0 flex flex-col justify-center items-center text-center p-6 border border-metallic-gold/20 m-3">
+<h4 class="font-headline-lg-mobile text-white mb-2 uppercase tracking-widest">L'Essence Unisexe</h4>
+<p class="font-label-md text-metallic-gold mb-4">MODERN &amp; HARMONIOUS</p>
+<button class="border-b-2 border-white text-white font-label-md pb-1 active:scale-90 transition-transform">EXPLORE NOW</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter Section -->
+<section class="bg-regal-navy py-20 px-mobile-margin text-center">
+<h3 class="font-headline-md text-headline-md text-white mb-4">Join the Inner Circle</h3>
+<p class="font-body-md text-white/70 mb-8 max-w-xs mx-auto">Receive exclusive invitations to private launches and early access to our rarest fragrances.</p>
+<form class="space-y-4" onsubmit="event.preventDefault();">
+<input class="w-full bg-transparent border-0 border-b border-metallic-gold/50 text-white font-label-md py-3 px-0 focus:ring-0 focus:border-metallic-gold placeholder:text-white/30 text-center uppercase tracking-widest" placeholder="YOUR EMAIL ADDRESS" type="email"/>
+<button class="w-full bg-metallic-gold text-regal-navy font-label-md py-4 uppercase tracking-[0.2em] active:scale-[0.98] transition-transform" type="submit">
+                    SUBSCRIBE
+                </button>
+</form>
+<p class="font-label-md text-[10px] text-white/40 mt-6 tracking-wide">BY SUBSCRIBING YOU AGREE TO OUR PRIVACY POLICY</p>
+</section>
+</main>
+<!-- BottomNavBar Component -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center py-3 bg-regal-navy border-t border-metallic-gold/20">
+<!-- Home Active -->
+<a class="flex flex-col items-center justify-center text-secondary-fixed-dim font-bold active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-[10px] mt-1">Home</span>
+</a>
+<!-- Shop -->
+<a class="flex flex-col items-center justify-center text-on-primary/60 hover:text-secondary-fixed transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">rebase_edit</span>
+<span class="font-label-md text-[10px] mt-1">Shop</span>
+</a>
+<!-- Bag -->
+<a class="flex flex-col items-center justify-center text-on-primary/60 hover:text-secondary-fixed transition-colors active:scale-90 transition-transform duration-200 relative" href="#">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="font-label-md text-[10px] mt-1">Bag</span>
+<span class="absolute top-0 right-0 -mt-1 -mr-1 bg-metallic-gold text-regal-navy text-[8px] rounded-full w-4 h-4 flex items-center justify-center font-bold">2</span>
+</a>
+<!-- Account -->
+<a class="flex flex-col items-center justify-center text-on-primary/60 hover:text-secondary-fixed transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-[10px] mt-1">Account</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for scroll reveals
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-1000', 'ease-out');
+            if (!section.classList.contains('relative')) { // Skip hero for immediate impact
+                section.classList.add('opacity-0', 'translate-y-10');
+                observer.observe(section);
+            }
+        });
+    </script>
+</body></html>

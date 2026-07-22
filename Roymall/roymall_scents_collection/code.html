@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Roymall Scents | Exquisite Fragrance Collection</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&amp;family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "muted-gold": "#B0922E",
+                        "on-primary": "#ffffff",
+                        "secondary-container": "#fed65b",
+                        "background": "#faf8fd",
+                        "regal-navy": "#001B44",
+                        "deep-onyx": "#121212",
+                        "surface-container-low": "#f5f3f7",
+                        "tertiary-container": "#381000",
+                        "inverse-on-surface": "#f2f0f4",
+                        "surface-container-high": "#e9e7ec",
+                        "secondary-fixed": "#ffe088",
+                        "on-secondary-fixed-variant": "#574500",
+                        "on-tertiary-fixed-variant": "#6d3920",
+                        "tertiary-fixed": "#ffdbcd",
+                        "inverse-primary": "#b1c6f9",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#e9c349",
+                        "on-tertiary-container": "#b67558",
+                        "primary-fixed-dim": "#b1c6f9",
+                        "on-surface-variant": "#44474f",
+                        "outline-variant": "#c5c6d0",
+                        "on-secondary-fixed": "#241a00",
+                        "soft-cream": "#F9F8F3",
+                        "surface-tint": "#495e8a",
+                        "surface-container-highest": "#e3e2e6",
+                        "on-error": "#ffffff",
+                        "on-background": "#1b1b1f",
+                        "on-primary-fixed-variant": "#314671",
+                        "on-secondary-container": "#745c00",
+                        "surface": "#faf8fd",
+                        "primary": "#00020a",
+                        "primary-fixed": "#d8e2ff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#080100",
+                        "outline": "#75777f",
+                        "on-surface": "#1b1b1f",
+                        "surface-container": "#efedf1",
+                        "primary-container": "#001b44",
+                        "on-secondary": "#ffffff",
+                        "metallic-gold": "#D4AF37",
+                        "on-primary-container": "#7084b3",
+                        "surface-dim": "#dbd9dd",
+                        "inverse-surface": "#303033",
+                        "surface-variant": "#e3e2e6",
+                        "secondary": "#735c00",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed": "#001a42",
+                        "on-tertiary-fixed": "#360f00",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "surface-bright": "#faf8fd",
+                        "error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "120px",
+                        "grid-gutter": "32px",
+                        "mobile-margin": "20px",
+                        "component-stack": "16px",
+                        "container-margin": "64px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Manrope"],
+                        "price-lg": ["Playfair Display"],
+                        "body-lg": ["Manrope"],
+                        "display-lg": ["Playfair Display"],
+                        "body-md": ["Manrope"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "price-lg": ["22px", {"lineHeight": "28px", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["40px", {"lineHeight": "48px", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { background-color: #faf8fd; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .filter-checkbox:checked {
+            background-color: #001B44;
+            border-color: #D4AF37;
+        }
+        .product-card-overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .product-card:hover .product-card-overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-soft-cream/90 backdrop-blur-md flex justify-between items-center px-container-margin py-6 border-b border-muted-gold/10">
+<div class="flex-1 flex items-center gap-8">
+<h1 class="text-headline-md font-headline-md font-bold text-regal-navy">Roymall Scents</h1>
+<nav class="hidden md:flex gap-6">
+<a class="text-metallic-gold font-bold border-b-2 border-metallic-gold pb-1 font-label-md text-label-md" href="#">Shop</a>
+<a class="text-regal-navy hover:text-metallic-gold transition-colors duration-300 font-label-md text-label-md" href="#">New Arrivals</a>
+<a class="text-regal-navy hover:text-metallic-gold transition-colors duration-300 font-label-md text-label-md" href="#">Men</a>
+<a class="text-regal-navy hover:text-metallic-gold transition-colors duration-300 font-label-md text-label-md" href="#">Women</a>
+<a class="text-regal-navy hover:text-metallic-gold transition-colors duration-300 font-label-md text-label-md" href="#">Gift Sets</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-regal-navy hover:text-metallic-gold transition-all">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="text-regal-navy hover:text-metallic-gold transition-all">
+<span class="material-symbols-outlined">person</span>
+</button>
+<button class="text-regal-navy hover:text-metallic-gold transition-all relative">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="absolute -top-1 -right-1 bg-metallic-gold text-on-primary text-[10px] w-4 h-4 flex items-center justify-center rounded-full">3</span>
+</button>
+</div>
+</header>
+<main class="pt-32 pb-section-gap px-container-margin max-w-[1440px] mx-auto">
+<!-- Page Header -->
+<div class="mb-12">
+<h2 class="text-display-lg font-display-lg text-regal-navy mb-4">Our Fragrance Library</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">Discover an olfactory journey curated with the world's most prestigious essences. From the depths of oriental spices to the freshness of Mediterranean blooms.</p>
+</div>
+<div class="flex flex-col md:flex-row gap-grid-gutter">
+<!-- Sidebar Filters -->
+<aside class="w-full md:w-64 flex-shrink-0">
+<div class="sticky top-32 space-y-10">
+<!-- Categories -->
+<div>
+<h3 class="text-label-md font-label-md text-regal-navy uppercase tracking-widest mb-6 pb-2 border-b border-muted-gold/20">Categories</h3>
+<ul class="space-y-3">
+<li class="flex items-center gap-3">
+<input class="w-4 h-4 border-muted-gold text-regal-navy focus:ring-regal-navy filter-checkbox" id="cat-edp" type="checkbox"/>
+<label class="text-body-md font-body-md text-on-surface-variant cursor-pointer hover:text-regal-navy" for="cat-edp">Eau de Parfum</label>
+</li>
+<li class="flex items-center gap-3">
+<input class="w-4 h-4 border-muted-gold text-regal-navy focus:ring-regal-navy filter-checkbox" id="cat-edt" type="checkbox"/>
+<label class="text-body-md font-body-md text-on-surface-variant cursor-pointer hover:text-regal-navy" for="cat-edt">Eau de Toilette</label>
+</li>
+<li class="flex items-center gap-3">
+<input class="w-4 h-4 border-muted-gold text-regal-navy focus:ring-regal-navy filter-checkbox" id="cat-ext" type="checkbox"/>
+<label class="text-body-md font-body-md text-on-surface-variant cursor-pointer hover:text-regal-navy" for="cat-ext">Extrait de Parfum</label>
+</li>
+</ul>
+</div>
+<!-- Brands -->
+<div>
+<h3 class="text-label-md font-label-md text-regal-navy uppercase tracking-widest mb-6 pb-2 border-b border-muted-gold/20">Premier Brands</h3>
+<div class="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 border-muted-gold text-regal-navy focus:ring-regal-navy filter-checkbox" type="checkbox"/>
+<span class="text-body-md font-body-md text-on-surface-variant group-hover:text-regal-navy transition-colors">Rasasi</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 border-muted-gold text-regal-navy focus:ring-regal-navy filter-checkbox" type="checkbox"/>
+<span class="text-body-md font-body-md text-on-surface-variant group-hover:text-regal-navy transition-colors">Armaf</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 border-muted-gold text-regal-navy focus:ring-regal-navy filter-checkbox" type="checkbox"/>
+<span class="text-body-md font-body-md text-on-surface-variant group-hover:text-regal-navy transition-colors">Afnan</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 border-muted-gold text-regal-navy focus:ring-regal-navy filter-checkbox" type="checkbox"/>
+<span class="text-body-md font-body-md text-on-surface-variant group-hover:text-regal-navy transition-colors">Dior</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="w-4 h-4 border-muted-gold text-regal-navy focus:ring-regal-navy filter-checkbox" type="checkbox"/>
+<span class="text-body-md font-body-md text-on-surface-variant group-hover:text-regal-navy transition-colors">Gucci</span>
+</label>
+</div>
+</div>
+<!-- Price Range -->
+<div>
+<h3 class="text-label-md font-label-md text-regal-navy uppercase tracking-widest mb-6 pb-2 border-b border-muted-gold/20">Price Range</h3>
+<div class="space-y-4">
+<input class="w-full h-1 bg-surface-container-high rounded-lg appearance-none cursor-pointer accent-metallic-gold" max="1000000" min="0" type="range"/>
+<div class="flex justify-between text-label-md font-label-md text-on-surface-variant">
+<span>₦0</span>
+<span>₦1,000,000+</span>
+</div>
+</div>
+</div>
+<!-- Scent Profile -->
+<div>
+<h3 class="text-label-md font-label-md text-regal-navy uppercase tracking-widest mb-6 pb-2 border-b border-muted-gold/20">Scent Profile</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1 border border-muted-gold/30 text-xs font-label-md uppercase tracking-wider text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all">Woody</button>
+<button class="px-3 py-1 border border-muted-gold/30 text-xs font-label-md uppercase tracking-wider text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all">Oud</button>
+<button class="px-3 py-1 border border-muted-gold/30 text-xs font-label-md uppercase tracking-wider text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all">Floral</button>
+<button class="px-3 py-1 border border-muted-gold/30 text-xs font-label-md uppercase tracking-wider text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all">Citrus</button>
+</div>
+</div>
+</div>
+</aside>
+<!-- Product Grid -->
+<div class="flex-1">
+<!-- Sorting & View Options -->
+<div class="flex justify-between items-center mb-10 pb-6 border-b border-muted-gold/10">
+<p class="text-body-md font-body-md text-on-surface-variant">Showing <span class="font-bold text-regal-navy">24</span> exclusive fragrances</p>
+<div class="flex items-center gap-4">
+<span class="text-label-md font-label-md text-on-surface-variant uppercase tracking-wider">Sort By:</span>
+<select class="bg-transparent border-none text-regal-navy font-bold focus:ring-0 cursor-pointer">
+<option>Newest First</option>
+<option>Price: Low to High</option>
+<option>Price: High to Low</option>
+<option>Popularity</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-grid-gutter">
+<!-- Product Card 1 -->
+<div class="product-card group cursor-pointer">
+<div class="relative bg-soft-cream aspect-square overflow-hidden mb-6 flex items-center justify-center p-8">
+<img class="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="A professional studio product shot of Rasasi Hawas Fire perfume bottle. The bottle is presented in a luxurious, high-fashion aesthetic with soft cinematic lighting that highlights its crystalline glass and vibrant fluid. Set against a clean, soft cream background that aligns with a minimalist premium UI design. The mood is sophisticated and exclusive, emphasizing the artisanal craftsmanship of high-end perfumery." src="https://lh3.googleusercontent.com/aida/AP1WRLuL6C5bMrSUu-xJLu_nYyTPsIAwrUp_DK5vrfcHYQxrqSdQjd8ncrY-H7kPoY_aJufRrsItNQlPi3EOSNgyF1v10vlI_iaz2pE1Wc39WjqkP6vAEhLMM2mFQFfj_pfo-b_1CYBQ-Hy4xT7BDwGrcSposMnrIhK5t-Txr7ezyz00r9nYX992JllhuFYXdVwvKUQqcIZvtBRVlV5SXuB91cCACmgAV7KcwiAKsxHO_FLQTn_K3FQD8rL3CvM"/>
+<!-- Hover Overlay -->
+<div class="product-card-overlay absolute inset-0 bg-regal-navy/10 flex items-center justify-center gap-3">
+<button class="bg-regal-navy text-on-primary px-6 py-3 text-label-md font-label-md uppercase tracking-widest hover:bg-metallic-gold transition-colors duration-300">Quick View</button>
+<button class="bg-metallic-gold text-on-primary p-3 hover:bg-regal-navy transition-colors duration-300">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</div>
+<div class="text-center">
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest mb-1">Rasasi</p>
+<h4 class="text-headline-md font-headline-md text-regal-navy mb-2">Hawas Fire EDP</h4>
+<p class="text-price-lg font-price-lg text-metallic-gold">₦80,000.00</p>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="product-card group cursor-pointer">
+<div class="relative bg-soft-cream aspect-square overflow-hidden mb-6 flex items-center justify-center p-8">
+<img class="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="A luxurious product photograph of Armaf Odyssey Mandarin Sky perfume. The elegant bottle is illuminated by warm, golden-hour light that accentuates its sleek contours and metallic details. Positioned on a minimalist surface against a pristine cream backdrop, the image reflects a high-end editorial style. The atmosphere is one of refined luxury and sensory indulgence, perfectly suited for an upscale fragrance boutique." src="https://lh3.googleusercontent.com/aida/AP1WRLsEFXUSvmTmN_jfVlcaH_dDNEKLxVDnY1DYGsZs9LNjyqCGzF4Xd3SgmKuAeZzzoREl22PXaRc2duITml9Sdt8E-Tf5gX1p0aLZUYW79RgiMlZ1rpuxvYQ0unLVNRi7oXajLQzoq2p7pUJZe0QslsGmrZOPVM33WlKp9hrvVVUUI0m7vhkXkJfKo3jQaj3MXppMOoL8ZI-fgeaaz9V5BN_QRsG70Dvmf0r6sy4fI56nRvp9HLlHZlJuarA"/>
+<div class="product-card-overlay absolute inset-0 bg-regal-navy/10 flex items-center justify-center gap-3">
+<button class="bg-regal-navy text-on-primary px-6 py-3 text-label-md font-label-md uppercase tracking-widest hover:bg-metallic-gold transition-colors duration-300">Quick View</button>
+<button class="bg-metallic-gold text-on-primary p-3 hover:bg-regal-navy transition-colors duration-300">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</div>
+<div class="text-center">
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest mb-1">Armaf</p>
+<h4 class="text-headline-md font-headline-md text-regal-navy mb-2">Odyssey Mandarin Sky</h4>
+<p class="text-price-lg font-price-lg text-metallic-gold">₦48,000.00</p>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="product-card group cursor-pointer">
+<div class="relative bg-soft-cream aspect-square overflow-hidden mb-6 flex items-center justify-center p-8">
+<img class="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="An exquisite high-resolution shot of Afnan Turathi Blue EDP for Men. The bottle features complex textures and deep blue tones, captured with sharp focus and high contrast. The lighting is crisp and intentional, creating a gallery-like presentation. Surrounded by ample negative space on a soft cream background, the visual reinforces an aura of masculine elegance and premium quality within a minimalist design framework." src="https://lh3.googleusercontent.com/aida/AP1WRLsubiDaqh9ECfSF0-W6otvBTVVPBkreaj2wDt0TXRzLAJCOPGAAiAZ4iOMKP5VePpymk6lgOpaMsZ4qHuC1FKWl_I5-3TtfgJHgBf7WLDfqI05WaIqGTNs7PFq0guB6-26fOJCbaRFGsUMNGluJqu1UoBl61cCDXKP4t8h_7SSbg68X1IaTdb2pVGOcVBh14qU3qKyo1p8fHwLyAbzyjVQtOJGYeG50uIvfZJlOvIgoWbwFEsDyH9qt1A"/>
+<div class="product-card-overlay absolute inset-0 bg-regal-navy/10 flex items-center justify-center gap-3">
+<button class="bg-regal-navy text-on-primary px-6 py-3 text-label-md font-label-md uppercase tracking-widest hover:bg-metallic-gold transition-colors duration-300">Quick View</button>
+<button class="bg-metallic-gold text-on-primary p-3 hover:bg-regal-navy transition-colors duration-300">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</div>
+<div class="text-center">
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest mb-1">Afnan</p>
+<h4 class="text-headline-md font-headline-md text-regal-navy mb-2">Turathi Blue EDP</h4>
+<p class="text-price-lg font-price-lg text-metallic-gold">₦58,000.00</p>
+</div>
+</div>
+<!-- Repeat Products for Grid Feel -->
+<!-- Product Card 4 -->
+<div class="product-card group cursor-pointer">
+<div class="relative bg-soft-cream aspect-square overflow-hidden mb-6 flex items-center justify-center p-8">
+<div class="absolute top-4 left-4 bg-regal-navy text-soft-cream text-[10px] font-label-md px-3 py-1 uppercase tracking-widest z-10">Best Seller</div>
+<img class="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="A professional studio product shot of Rasasi Hawas Fire perfume bottle. The bottle is presented in a luxurious, high-fashion aesthetic with soft cinematic lighting that highlights its crystalline glass and vibrant fluid. Set against a clean, soft cream background that aligns with a minimalist premium UI design. The mood is sophisticated and exclusive, emphasizing the artisanal craftsmanship of high-end perfumery." src="https://lh3.googleusercontent.com/aida/AP1WRLuL6C5bMrSUu-xJLu_nYyTPsIAwrUp_DK5vrfcHYQxrqSdQjd8ncrY-H7kPoY_aJufRrsItNQlPi3EOSNgyF1v10vlI_iaz2pE1Wc39WjqkP6vAEhLMM2mFQFfj_pfo-b_1CYBQ-Hy4xT7BDwGrcSposMnrIhK5t-Txr7ezyz00r9nYX992JllhuFYXdVwvKUQqcIZvtBRVlV5SXuB91cCACmgAV7KcwiAKsxHO_FLQTn_K3FQD8rL3CvM"/>
+<div class="product-card-overlay absolute inset-0 bg-regal-navy/10 flex items-center justify-center gap-3">
+<button class="bg-regal-navy text-on-primary px-6 py-3 text-label-md font-label-md uppercase tracking-widest hover:bg-metallic-gold transition-colors duration-300">Quick View</button>
+<button class="bg-metallic-gold text-on-primary p-3 hover:bg-regal-navy transition-colors duration-300">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</div>
+<div class="text-center">
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest mb-1">Rasasi</p>
+<h4 class="text-headline-md font-headline-md text-regal-navy mb-2">Hawas Original</h4>
+<p class="text-price-lg font-price-lg text-metallic-gold">₦75,000.00</p>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="product-card group cursor-pointer">
+<div class="relative bg-soft-cream aspect-square overflow-hidden mb-6 flex items-center justify-center p-8">
+<img class="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="A luxurious product photograph of Armaf Odyssey Mandarin Sky perfume. The elegant bottle is illuminated by warm, golden-hour light that accentuates its sleek contours and metallic details. Positioned on a minimalist surface against a pristine cream backdrop, the image reflects a high-end editorial style. The atmosphere is one of refined luxury and sensory indulgence, perfectly suited for an upscale fragrance boutique." src="https://lh3.googleusercontent.com/aida/AP1WRLsEFXUSvmTmN_jfVlcaH_dDNEKLxVDnY1DYGsZs9LNjyqCGzF4Xd3SgmKuAeZzzoREl22PXaRc2duITml9Sdt8E-Tf5gX1p0aLZUYW79RgiMlZ1rpuxvYQ0unLVNRi7oXajLQzoq2p7pUJZe0QslsGmrZOPVM33WlKp9hrvVVUUI0m7vhkXkJfKo3jQaj3MXppMOoL8ZI-fgeaaz9V5BN_QRsG70Dvmf0r6sy4fI56nRvp9HLlHZlJuarA"/>
+<div class="product-card-overlay absolute inset-0 bg-regal-navy/10 flex items-center justify-center gap-3">
+<button class="bg-regal-navy text-on-primary px-6 py-3 text-label-md font-label-md uppercase tracking-widest hover:bg-metallic-gold transition-colors duration-300">Quick View</button>
+<button class="bg-metallic-gold text-on-primary p-3 hover:bg-regal-navy transition-colors duration-300">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</div>
+<div class="text-center">
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest mb-1">Armaf</p>
+<h4 class="text-headline-md font-headline-md text-regal-navy mb-2">Club De Nuit Intense</h4>
+<p class="text-price-lg font-price-lg text-metallic-gold">₦62,000.00</p>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="product-card group cursor-pointer">
+<div class="relative bg-soft-cream aspect-square overflow-hidden mb-6 flex items-center justify-center p-8">
+<img class="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" data-alt="An exquisite high-resolution shot of Afnan Turathi Blue EDP for Men. The bottle features complex textures and deep blue tones, captured with sharp focus and high contrast. The lighting is crisp and intentional, creating a gallery-like presentation. Surrounded by ample negative space on a soft cream background, the visual reinforces an aura of masculine elegance and premium quality within a minimalist design framework." src="https://lh3.googleusercontent.com/aida/AP1WRLsubiDaqh9ECfSF0-W6otvBTVVPBkreaj2wDt0TXRzLAJCOPGAAiAZ4iOMKP5VePpymk6lgOpaMsZ4qHuC1FKWl_I5-3TtfgJHgBf7WLDfqI05WaIqGTNs7PFq0guB6-26fOJCbaRFGsUMNGluJqu1UoBl61cCDXKP4t8h_7SSbg68X1IaTdb2pVGOcVBh14qU3qKyo1p8fHwLyAbzyjVQtOJGYeG50uIvfZJlOvIgoWbwFEsDyH9qt1A"/>
+<div class="product-card-overlay absolute inset-0 bg-regal-navy/10 flex items-center justify-center gap-3">
+<button class="bg-regal-navy text-on-primary px-6 py-3 text-label-md font-label-md uppercase tracking-widest hover:bg-metallic-gold transition-colors duration-300">Quick View</button>
+<button class="bg-metallic-gold text-on-primary p-3 hover:bg-regal-navy transition-colors duration-300">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</div>
+<div class="text-center">
+<p class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest mb-1">Afnan</p>
+<h4 class="text-headline-md font-headline-md text-regal-navy mb-2">9PM EDP</h4>
+<p class="text-price-lg font-price-lg text-metallic-gold">₦45,000.00</p>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="mt-16 flex justify-center items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center bg-regal-navy text-on-primary font-label-md">1</button>
+<button class="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all font-label-md">2</button>
+<button class="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all font-label-md">3</button>
+<span class="text-muted-gold">...</span>
+<button class="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all font-label-md">12</button>
+<button class="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-gap px-container-margin grid grid-cols-1 md:grid-cols-4 gap-grid-gutter bg-regal-navy border-t border-muted-gold/20">
+<div class="flex flex-col gap-6">
+<h4 class="text-headline-md font-headline-md font-bold text-metallic-gold">Roymall Scents</h4>
+<p class="text-soft-cream/80 text-body-md font-body-md">Curating the finest olfactory experiences since 2024. Elegance in every drop.</p>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="text-label-md font-label-md text-metallic-gold uppercase tracking-widest">Store</h5>
+<nav class="flex flex-col gap-2">
+<a class="text-soft-cream/80 hover:text-metallic-gold transition-colors duration-200 text-label-md font-label-md" href="#">About Us</a>
+<a class="text-soft-cream/80 hover:text-metallic-gold transition-colors duration-200 text-label-md font-label-md" href="#">Fragrance Guide</a>
+<a class="text-soft-cream/80 hover:text-metallic-gold transition-colors duration-200 text-label-md font-label-md" href="#">Collections</a>
+<a class="text-soft-cream/80 hover:text-metallic-gold transition-colors duration-200 text-label-md font-label-md" href="#">Best Sellers</a>
+</nav>
+</div>
+<div class="flex flex-col gap-4">
+<h5 class="text-label-md font-label-md text-metallic-gold uppercase tracking-widest">Support</h5>
+<nav class="flex flex-col gap-2">
+<a class="text-soft-cream/80 hover:text-metallic-gold transition-colors duration-200 text-label-md font-label-md" href="#">Shipping &amp; Returns</a>
+<a class="text-soft-cream/80 hover:text-metallic-gold transition-colors duration-200 text-label-md font-label-md" href="#">Privacy Policy</a>
+<a class="text-soft-cream/80 hover:text-metallic-gold transition-colors duration-200 text-label-md font-label-md" href="#">Contact</a>
+<a class="text-soft-cream/80 hover:text-metallic-gold transition-colors duration-200 text-label-md font-label-md" href="#">FAQ</a>
+</nav>
+</div>
+<div class="flex flex-col gap-6">
+<h5 class="text-label-md font-label-md text-metallic-gold uppercase tracking-widest">Newsletter</h5>
+<div class="flex flex-col gap-3">
+<input class="bg-transparent border-b border-muted-gold/50 text-soft-cream placeholder:text-soft-cream/40 py-2 focus:outline-none focus:border-metallic-gold font-label-md text-xs tracking-widest" placeholder="YOUR EMAIL ADDRESS" type="email"/>
+<button class="w-full py-3 bg-metallic-gold text-regal-navy font-label-md text-xs uppercase tracking-[0.2em] font-bold hover:bg-soft-cream transition-colors duration-300">Subscribe</button>
+</div>
+<p class="text-soft-cream/40 text-[10px] uppercase tracking-widest mt-4">© 2024 Roymall Scents. All Rights Reserved.</p>
+</div>
+</footer>
+<!-- Micro-interaction Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productCards = document.querySelectorAll('.product-card');
+            
+            productCards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    const img = card.querySelector('img');
+                    img.style.transform = 'scale(1.08)';
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    const img = card.querySelector('img');
+                    img.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body></html>
