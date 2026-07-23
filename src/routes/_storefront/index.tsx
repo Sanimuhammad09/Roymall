@@ -25,7 +25,11 @@ function Home() {
 
   const { data: metricsData } = useQuery({
     queryKey: ['metrics'],
-    queryFn: api.getMetrics
+    queryFn: () => api.getMetrics().then(res => {
+      console.log('Metrics API Response:', res);
+      return res.data;
+    }),
+    staleTime: 60 * 1000 // 1 min
   })
 
   const bestSellers: Product[] = Array.isArray(bestSellersData) ? bestSellersData : (bestSellersData?.data || [])
