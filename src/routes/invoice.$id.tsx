@@ -39,9 +39,9 @@ function Invoice() {
         <div>
           <img src="/logo.jpg" alt="Roymall Scents" className="h-16 object-contain mb-4" />
           <p className="text-sm text-gray-500">Roymall Scents Ltd.</p>
-          <p className="text-sm text-gray-500">123 Fragrance Avenue</p>
-          <p className="text-sm text-gray-500">Lagos, Nigeria</p>
-          <p className="text-sm text-gray-500">contact@roymallscents.com</p>
+          <p className="text-sm text-gray-500">Gwarimpa</p>
+          <p className="text-sm text-gray-500">Abuja, Nigeria</p>
+          <p className="text-sm text-gray-500">roymallscents@gmail.com</p>
         </div>
         <div className="text-right">
           <h1 className="font-headline-lg text-4xl text-regal-navy font-bold uppercase tracking-widest mb-2">INVOICE</h1>

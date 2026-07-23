@@ -165,9 +165,9 @@ function StorefrontLayout() {
         </div>
         <div>
           <h4 className="text-metallic-gold font-label-md text-label-md mb-8 uppercase">Visit Us</h4>
-          <p className="text-soft-cream/80 font-body-md mb-4">123 Fragrance Lane, Lagos,<br/>Nigeria</p>
-          <p className="text-soft-cream/80 font-body-md">T: +234 812 006 9570</p>
-          <p className="text-soft-cream/80 font-body-md">E: hello@roymallscents.com</p>
+          <p className="text-soft-cream/80 font-body-md mb-4">Gwarimpa,<br/>Abuja</p>
+          <p className="text-soft-cream/80 font-body-md">T: +2348136563976</p>
+          <p className="text-soft-cream/80 font-body-md">E: roymallscents@gmail.com</p>
         </div>
         <div className="md:col-span-4 pt-12 mt-12 border-t border-soft-cream/10 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-soft-cream/50 font-label-md text-label-md">© {new Date().getFullYear()} Roymall Scents. All Rights Reserved.</p>

@@ -290,7 +290,7 @@ function ShippingReturns() {
             <p className="font-body-md text-body-md text-on-surface-variant">Our concierge team is available Mon-Fri, 9am - 6pm.</p>
           </div>
           <div className="mt-8 md:mt-0 flex gap-6">
-            <a className="font-label-md text-label-md text-regal-navy underline hover:text-metallic-gold transition-colors" href="mailto:support@roymallscents.com">Email Support</a>
+            <a className="font-label-md text-label-md text-regal-navy underline hover:text-metallic-gold transition-colors" href="mailto:roymallscents@gmail.com">Email Support</a>
             <a className="font-label-md text-label-md text-regal-navy underline hover:text-metallic-gold transition-colors" href="tel:+234000000000">Call Concierge</a>
           </div>
         </div>

@@ -107,9 +107,9 @@ function Contact() {
         {/* Left: Contact Details (4 columns) */}
         <div className="lg:col-span-4 space-y-12">
           <div className="space-y-4">
-            <h2 className="font-headline-md text-headline-md text-regal-navy">The Lagos Atelier</h2>
+            <h2 className="font-headline-md text-headline-md text-regal-navy">The Abuja Atelier</h2>
             <p className="font-body-md text-body-md text-on-surface-variant">
-              Our flagship boutique and private consultation suite situated in the heart of Victoria Island.
+              Our flagship boutique and private consultation suite situated in the heart of Gwarimpa.
             </p>
           </div>
           <div className="space-y-8">
@@ -117,21 +117,21 @@ function Contact() {
               <span className="material-symbols-outlined text-metallic-gold mt-1">location_on</span>
               <div>
                 <p className="font-label-md text-label-md text-regal-navy uppercase tracking-widest mb-1">Visit Us</p>
-                <p className="font-body-md text-body-md text-on-surface-variant">15 Luxury Plaza, Adetokunbo Ademola St,<br/>Victoria Island, Lagos, Nigeria</p>
+                <p className="font-body-md text-body-md text-on-surface-variant">Gwarimpa, Abuja</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <span className="material-symbols-outlined text-metallic-gold mt-1">call</span>
               <div>
-                <p className="font-label-md text-label-md text-regal-navy uppercase tracking-widest mb-1">Lagos Atelier</p>
-                <a className="font-body-md text-body-md text-on-surface-variant hover:text-metallic-gold transition-colors" href="tel:+234800ROYMALL">+234 (0) 800 ROYMALL</a>
+                <p className="font-label-md text-label-md text-regal-navy uppercase tracking-widest mb-1">Abuja Atelier</p>
+                <a className="font-body-md text-body-md text-on-surface-variant hover:text-metallic-gold transition-colors" href="tel:+2348136563976">+2348136563976</a>
               </div>
             </div>
             <div className="flex items-start gap-4">
               <span className="material-symbols-outlined text-metallic-gold mt-1">mail</span>
               <div>
                 <p className="font-label-md text-label-md text-regal-navy uppercase tracking-widest mb-1">Email Inquiries</p>
-                <a className="font-body-md text-body-md text-on-surface-variant hover:text-metallic-gold transition-colors" href="mailto:concierge@roymallscents.com">concierge@roymallscents.com</a>
+                <a className="font-body-md text-body-md text-on-surface-variant hover:text-metallic-gold transition-colors" href="mailto:roymallscents@gmail.com">roymallscents@gmail.com</a>
               </div>
             </div>
             <div className="flex items-start gap-4">
@@ -147,7 +147,7 @@ function Contact() {
             <div className="aspect-[4/5] bg-soft-cream relative overflow-hidden group">
               <img 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                alt="Lagos Atelier"
+                alt="Abuja Atelier"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4xzca6QLJmLArTtYLfTxqP5YP4PRZ2nbCSoAXklJdauX_9XimCF7T0eyc3aPeXt4hOoquKm6OaYgxBWDwyNN1I-k_u3tAr9zD4MeNJN9BuCj5JK_jXhubyVJNyOPYtHUGhNsLCclzSTAcaxtQW-WpRbmG2i0-MEBfpJ6b9VCYmEfYsdL7rDS97VvPTH7DRVKHWMehRjDRynWQb5CDQe8zOBWMuxCXn5G7Uro_tt7nVuREsF3bJyQt"
               />
               <div className="absolute inset-0 bg-regal-navy/10 group-hover:bg-transparent transition-colors duration-500"></div>
@@ -228,7 +228,7 @@ function Contact() {
           <div className="absolute inset-0 bg-soft-cream grayscale group-hover:grayscale-0 transition-all duration-700">
             <img 
               className="w-full h-full object-cover" 
-              alt="Victoria Island, Lagos"
+              alt="Gwarimpa, Abuja"
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVOQVd1_oF0RjSejvVQ5RmMwcshBx1qG-_klWA_vqWJWVUSZi7yvtTBZ9k4OVrT1jF6EpgHx5XC3QI7FVpf7sfBzn7llVoq0lgLisx93dgHAQPD3RIHgJ0E3TV0V2-gQHy2BxvCW7Xqu-Pv-pZuZEd0SyAvbJTFWvOt_1gsAYYcVYI_oGqhiiTbeGGqzSpJ3tZSVcYZqsP1-DWIHaMGdLd0G2RTtIDIwlixuuT1eDg1B5OcyD5Il3d"
             />
           </div>
@@ -248,7 +248,7 @@ function Contact() {
         <div className="bg-regal-navy flex flex-col justify-center items-center text-center p-20 order-2 md:order-1">
           <span className="font-label-md text-label-md text-metallic-gold uppercase tracking-[0.3em] mb-6">The Royal Club</span>
           <h2 className="font-headline-lg text-headline-lg text-soft-cream mb-8 leading-tight">Private Scent Consultations</h2>
-          <p className="font-body-lg text-body-lg text-soft-cream/70 mb-10 max-w-md">Reserve a private hour at our Lagos Atelier to discover your signature fragrance with our lead perfumer.</p>
+          <p className="font-body-lg text-body-lg text-soft-cream/70 mb-10 max-w-md">Reserve a private hour at our Abuja Atelier to discover your signature fragrance with our lead perfumer.</p>
           <Link to="/book-appointment" className="border border-metallic-gold px-10 py-4 text-metallic-gold font-label-md text-label-md uppercase tracking-widest hover:bg-metallic-gold hover:text-regal-navy transition-all duration-300">
             Book Appointment
           </Link>
