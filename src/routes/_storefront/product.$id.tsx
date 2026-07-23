@@ -19,6 +19,45 @@ function Product() {
   const [qty, setQty] = useState(1)
   const [activeAccordion, setActiveAccordion] = useState<string | null>('shipping')
   const [addedToast, setAddedToast] = useState(false)
+  const [reviewRating, setReviewRating] = useState(5)
+  const [reviewComment, setReviewComment] = useState('')
+
+  const { data: profile } = useQuery({
+    queryKey: ['profile'],
+    queryFn: () => api.getMe(),
+    retry: false
+  })
+
+  const { data: reviewsData } = useQuery({
+    queryKey: ['reviews', id],
+    queryFn: () => api.getProductReviews(id)
+  })
+
+  const reviews = reviewsData?.data || reviewsData || []
+  const isInWishlist = profile?.data?.wishlist?.items?.some((i: any) => i.productId === id) || false
+
+  const addToWishlistMutation = useMutation({
+    mutationFn: () => api.addToWishlist(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['profile'] })
+  })
+
+  const removeFromWishlistMutation = useMutation({
+    mutationFn: () => {
+      const item = profile?.data?.wishlist?.items?.find((i: any) => i.productId === id)
+      if (item) return api.removeFromWishlist(item.id)
+      return Promise.resolve()
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['profile'] })
+  })
+
+  const submitReviewMutation = useMutation({
+    mutationFn: () => api.submitReview(id, { rating: reviewRating, comment: reviewComment }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviews', id] })
+      setReviewComment('')
+      setReviewRating(5)
+    }
+  })
 
   const addToCartMutation = useMutation({
     mutationFn: ({ productId, quantity }: { productId: string; quantity: number }) =>
@@ -144,6 +183,14 @@ function Product() {
               >
                 {addToCartMutation.isPending ? 'Adding...' : 'Add to Bag'}
               </button>
+              <button
+                onClick={() => isInWishlist ? removeFromWishlistMutation.mutate() : addToWishlistMutation.mutate()}
+                disabled={addToWishlistMutation.isPending || removeFromWishlistMutation.isPending}
+                className={`h-14 w-14 border border-metallic-gold text-metallic-gold flex items-center justify-center hover:bg-metallic-gold hover:text-white transition-colors disabled:opacity-50 ${isInWishlist ? 'bg-metallic-gold text-white' : 'bg-transparent'}`}
+                title={isInWishlist ? 'Remove from Wishlist' : 'Add to Wishlist'}
+              >
+                <span className={`material-symbols-outlined ${isInWishlist ? 'fill-current' : ''}`}>favorite</span>
+              </button>
             </div>
             <button 
               onClick={() => buyNowMutation.mutate({ productId: prod.id, quantity: qty })}
@@ -183,6 +230,74 @@ function Product() {
           </div>
         </div>
       </div>
+
+      {/* Reviews Section */}
+      <section className="mt-[120px]">
+        <div className="flex justify-between items-end mb-12">
+          <div>
+            <h2 className="font-headline-md text-headline-md text-regal-navy mb-2">Customer Reviews</h2>
+            <div className="h-1 w-20 bg-metallic-gold"></div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[64px]">
+          <div>
+            <h3 className="font-headline-sm text-regal-navy mb-6">Write a Review</h3>
+            {profile?.data ? (
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-label-md uppercase text-sm text-on-surface-variant">Rating:</span>
+                  <div className="flex">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button key={star} onClick={() => setReviewRating(star)} className={`material-symbols-outlined text-2xl ${star <= reviewRating ? 'text-metallic-gold fill-current' : 'text-gray-300'}`}>
+                        star
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <textarea
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  placeholder="Share your thoughts about this fragrance..."
+                  className="w-full h-32 p-4 border border-muted-gold/30 font-body-md focus:border-regal-navy focus:outline-none bg-transparent"
+                ></textarea>
+                <button 
+                  onClick={() => submitReviewMutation.mutate()}
+                  disabled={submitReviewMutation.isPending || !reviewComment.trim()}
+                  className="bg-regal-navy text-metallic-gold py-4 font-label-md uppercase tracking-widest hover:bg-regal-navy/90 transition-all disabled:opacity-50"
+                >
+                  {submitReviewMutation.isPending ? 'Submitting...' : 'Submit Review'}
+                </button>
+              </div>
+            ) : (
+              <p className="font-body-md text-regal-navy/70 border border-muted-gold/20 p-6">Please <Link to="/signin" className="text-metallic-gold underline">log in</Link> to leave a review.</p>
+            )}
+          </div>
+
+          <div>
+            <h3 className="font-headline-sm text-regal-navy mb-6">Recent Reviews</h3>
+            <div className="flex flex-col gap-6 max-h-[500px] overflow-y-auto pr-4">
+              {reviews.length > 0 ? reviews.map((review: any) => (
+                <div key={review.id} className="border-b border-muted-gold/20 pb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-label-md uppercase tracking-widest text-regal-navy text-sm">
+                      {review.user?.firstName} {review.user?.lastName?.charAt(0)}.
+                    </span>
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <span key={i} className={`material-symbols-outlined text-sm ${i < review.rating ? 'text-metallic-gold fill-current' : 'text-gray-300'}`}>star</span>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="font-body-md text-regal-navy/80">{review.comment}</p>
+                </div>
+              )) : (
+                <p className="font-body-md text-regal-navy/50 italic">No reviews yet. Be the first to review this fragrance!</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Cross-sell Section */}
       <section className="mt-[120px]">

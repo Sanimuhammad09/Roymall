@@ -365,5 +365,16 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify(settingsData),
     })
-  }
+  },
+
+  submitReview: async (productId: string, data: { rating: number; comment?: string }) => {
+    return fetchApi('/reviews', {
+      method: 'POST',
+      body: JSON.stringify({ ...data, productId }),
+    })
+  },
+
+  getProductReviews: async (productId: string) => {
+    return fetchApi(`/reviews/product/${productId}`)
+  },
 }
