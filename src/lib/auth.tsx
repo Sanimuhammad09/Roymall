@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import { api } from './api'
-import { useRouter } from '@tanstack/react-router'
 
 interface User {
   id: string
@@ -22,7 +21,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -52,7 +50,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     localStorage.removeItem('token')
     setUser(null)
-    router.navigate({ to: '/signin' })
+    window.location.href = '/signin'
   }
 
   return (

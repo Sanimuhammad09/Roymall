@@ -114,7 +114,7 @@ function NewArrivals() {
                 </div>
                 <div className="flex justify-between items-start">
                   <div>
-                    <p className="font-label-md text-[12px] text-metallic-gold uppercase tracking-widest mb-1">{product.category}</p>
+                    <p className="font-label-md text-[12px] text-metallic-gold uppercase tracking-widest mb-1">{typeof product.category === 'object' ? product.category.name : product.category}</p>
                     <h3 className="font-headline-md text-headline-md text-regal-navy mb-2">{product.name}</h3>
                   </div>
                   <span className="font-price-lg text-price-lg text-regal-navy">₦{product.price.toLocaleString()}</span>

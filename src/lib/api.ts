@@ -48,7 +48,7 @@ export interface Product {
   price: number
   image?: string
   images?: { id: string; url: string; isPrimary: boolean; order: number }[]
-  category: string
+  category: string | { name: string; slug: string; [key: string]: any }
   notes?: { top: string; heart: string; base: string }
   olfactoryFamily?: string
   stock: number
