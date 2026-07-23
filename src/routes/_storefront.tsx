@@ -1,5 +1,7 @@
 import { createFileRoute, Outlet, Link, useLocation } from '@tanstack/react-router'
 import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '../lib/api'
 
 export const Route = createFileRoute('/_storefront')({
   component: StorefrontLayout,
@@ -8,6 +10,13 @@ export const Route = createFileRoute('/_storefront')({
 function StorefrontLayout() {
   const [isScrolled, setIsScrolled] = useState(false)
   const location = useLocation()
+
+  const { data: cartData } = useQuery({
+    queryKey: ['cart'],
+    queryFn: api.getCart
+  })
+
+  const cartItemsCount = cartData?.items?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,9 +52,29 @@ function StorefrontLayout() {
         </div>
         <div className="flex items-center gap-6">
           <button className={`material-symbols-outlined transition-colors duration-300 ${textColor} hover:text-metallic-gold`}>search</button>
-          <Link to="/signin" className={`material-symbols-outlined transition-colors duration-300 ${textColor} hover:text-metallic-gold`}>person</Link>
-          <Link to="/cart" className={`material-symbols-outlined transition-colors duration-300 relative ${textColor} hover:text-metallic-gold`}>
+          
+          <button 
+            onClick={() => {
+              const token = localStorage.getItem('token')
+              const role = localStorage.getItem('role')
+              if (token) {
+                window.location.href = role === 'ADMIN' ? '/admin' : '/account'
+              } else {
+                window.location.href = '/signin'
+              }
+            }}
+            className={`material-symbols-outlined transition-colors duration-300 ${textColor} hover:text-metallic-gold cursor-pointer`}
+          >
+            person
+          </button>
+
+          <Link to="/cart" className={`material-symbols-outlined transition-colors duration-300 relative ${textColor} hover:text-metallic-gold flex items-center justify-center`}>
             shopping_bag
+            {cartItemsCount > 0 && (
+              <span className="absolute -top-1 -right-2 bg-metallic-gold text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full font-sans">
+                {cartItemsCount > 99 ? '99+' : cartItemsCount}
+              </span>
+            )}
           </Link>
         </div>
       </nav>

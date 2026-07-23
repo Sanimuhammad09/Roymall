@@ -22,6 +22,11 @@ function Home() {
     queryFn: () => api.getProducts({ isNewArrival: true })
   })
 
+  const { data: metricsData } = useQuery({
+    queryKey: ['metrics'],
+    queryFn: api.getMetrics
+  })
+
   const bestSellers: Product[] = Array.isArray(bestSellersData) ? bestSellersData : (bestSellersData?.data || [])
   const newArrivals: Product[] = Array.isArray(newArrivalsData) ? newArrivalsData : (newArrivalsData?.data || [])
 
@@ -89,7 +94,7 @@ function Home() {
       `}</style>
 
       {/* Hero Section */}
-      <header className="relative w-full h-[85vh] flex items-center overflow-hidden bg-regal-navy">
+      <header className="relative w-full min-h-[85vh] flex items-center overflow-hidden bg-regal-navy pt-32 pb-20 md:pt-0 md:pb-0">
         <div className="absolute inset-0 z-0 opacity-60">
           <div 
             data-parallax="hero"
@@ -98,10 +103,10 @@ function Home() {
           ></div>
         </div>
         <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-16 w-full grid grid-cols-12 gap-8 items-center">
-          <div className="col-span-12 md:col-span-7 flex flex-col gap-6 animate-fade-in">
+          <div className="col-span-12 md:col-span-8 lg:col-span-7 flex flex-col gap-6 animate-fade-in mt-10 md:mt-0">
             <span className="font-label-md text-label-md text-metallic-gold uppercase tracking-[0.2em]">Exclusively Crafted</span>
-            <h1 className="font-display-lg text-display-lg text-white leading-tight font-bold text-5xl md:text-7xl">Define Your <br/><span className="text-stroke-gold">Signature Aura</span></h1>
-            <p className="font-body-lg text-body-lg text-soft-cream/80 max-w-xl">A curated collection of artisanal fragrances designed for the sophisticated individual. Experience olfactory excellence crafted with the world's finest essences.</p>
+            <h1 className="font-display-lg text-display-lg text-white leading-tight font-bold text-4xl sm:text-5xl md:text-7xl">Define Your <br/><span className="text-stroke-gold">Signature Aura</span></h1>
+            <p className="font-body-lg text-body-lg text-soft-cream/80 max-w-xl text-sm md:text-base">A curated collection of artisanal fragrances designed for the sophisticated individual. Experience olfactory excellence crafted with the world's finest essences.</p>
             <div className="flex flex-col sm:flex-row gap-4 mt-4">
               <Link to="/shop" className="bg-metallic-gold text-regal-navy font-label-md text-label-md px-10 py-4 uppercase tracking-wider font-bold transition-transform hover:scale-105 text-center">Explore Collection</Link>
               <a href="/contact" className="border border-metallic-gold text-metallic-gold font-label-md text-label-md px-10 py-4 uppercase tracking-wider font-bold transition-all hover:bg-metallic-gold hover:text-regal-navy text-center">Book Consultation</a>
@@ -126,15 +131,21 @@ function Home() {
             </div>
             <div className="flex flex-wrap justify-center lg:justify-end gap-10 md:gap-16">
               <div className="flex flex-col items-center">
-                <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">10k+</span>
+                <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
+                  {metricsData?.scentsDelivered ? `${Math.floor(metricsData.scentsDelivered / 1000)}k+` : '10k+'}
+                </span>
                 <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Scents Delivered</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">250+</span>
+                <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
+                  {metricsData?.globalStockists ? `${metricsData.globalStockists}+` : '250+'}
+                </span>
                 <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Global Stockists</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">4.9</span>
+                <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
+                  {metricsData?.customerRating || '4.9'}
+                </span>
                 <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Customer Rating</span>
               </div>
             </div>

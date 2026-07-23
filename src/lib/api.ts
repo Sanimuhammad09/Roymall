@@ -112,6 +112,10 @@ export const api = {
       body: JSON.stringify(categoryData)
     })
   },
+  // --- Metrics ---
+  getMetrics: async () => {
+    return fetchApi('/metrics')
+  },
 
   // --- Auth ---
   login: async (credentials: any) => {
@@ -130,6 +134,39 @@ export const api = {
   
   getMe: async () => {
     return fetchApi('/users/me')
+  },
+  updateMe: async (data: any) => {
+    return fetchApi('/users/me', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    })
+  },
+  addAddress: async (data: any) => {
+    return fetchApi('/users/me/addresses', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  },
+  updateAddress: async ({ id, data }: { id: string; data: any }) => {
+    return fetchApi(`/users/me/addresses/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    })
+  },
+  deleteAddress: async (id: string) => {
+    return fetchApi(`/users/me/addresses/${id}`, {
+      method: 'DELETE',
+    })
+  },
+  addToWishlist: async (productId: string) => {
+    return fetchApi(`/users/me/wishlist/${productId}`, {
+      method: 'POST',
+    })
+  },
+  removeFromWishlist: async (productId: string) => {
+    return fetchApi(`/users/me/wishlist/${productId}`, {
+      method: 'DELETE',
+    })
   },
 
   // --- Cart ---
@@ -160,6 +197,9 @@ export const api = {
   },
 
   // --- Orders & Checkout ---
+  getMyOrders: async () => {
+    return fetchApi('/orders/me')
+  },
   createOrder: async (orderData: {
     items: { productId: string; quantity: number; price: number }[];
     shippingAddress: any;
@@ -218,7 +258,7 @@ export const api = {
   },
   adminUploadImages: async (id: string, formData: FormData) => {
     const token = getToken()
-    const response = await fetch(`https://roymall-backend-production.up.railway.app/api/products/${id}/images`, {
+    const response = await fetch(`${API_BASE_URL}/products/${id}/images`, {
       method: 'POST',
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),

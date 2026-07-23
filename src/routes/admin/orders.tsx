@@ -152,7 +152,7 @@ function Orders() {
                     </span>
                   </td>
                   <td className="px-6 py-5 font-price-lg text-price-lg text-regal-navy font-bold">
-                    ${(order.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits:2})}
+                    ₦{(order.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits:2})}
                   </td>
                   <td className="px-6 py-5 text-center">
                     <button className="text-metallic-gold hover:text-regal-navy transition-colors">
@@ -242,7 +242,15 @@ function Orders() {
                   {/* Shipping Info */}
                   <div className="bg-gray-50 p-4 border border-gray-200">
                     <h4 className="font-bold text-sm uppercase tracking-wider text-regal-navy mb-3">Shipping Details</h4>
-                    <p className="text-sm mb-1"><span className="text-gray-500">Address:</span> {orderDetail.shippingAddress}</p>
+                    <p className="text-sm mb-1">
+                      <span className="text-gray-500">Address:</span> 
+                      {typeof orderDetail.shippingAddress === 'object' 
+                        ? `${orderDetail.shippingAddress?.street}, ${orderDetail.shippingAddress?.city}, ${orderDetail.shippingAddress?.state}, ${orderDetail.shippingAddress?.country}`
+                        : orderDetail.shippingAddress}
+                    </p>
+                    {typeof orderDetail.shippingAddress === 'object' && orderDetail.shippingAddress?.phone && (
+                      <p className="text-sm mb-1"><span className="text-gray-500">Phone:</span> {orderDetail.shippingAddress.phone}</p>
+                    )}
                   </div>
 
                   {/* Items */}
@@ -260,7 +268,7 @@ function Orders() {
                               <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
                             </div>
                           </div>
-                          <p className="font-bold text-sm text-regal-navy">${(item.price * item.quantity).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                          <p className="font-bold text-sm text-regal-navy">₦{(item.priceAtPurchase || item.price || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
                         </li>
                       ))}
                     </ul>
@@ -268,7 +276,7 @@ function Orders() {
 
                   <div className="flex justify-between border-t border-gray-200 pt-4">
                     <p className="font-bold text-gray-500 uppercase tracking-widest text-sm">Total Amount</p>
-                    <p className="font-price-lg font-bold text-xl text-regal-navy">${(orderDetail.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                    <p className="font-price-lg font-bold text-xl text-regal-navy">₦{(orderDetail.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
                   </div>
                 </div>
               ) : (

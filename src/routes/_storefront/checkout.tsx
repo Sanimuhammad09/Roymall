@@ -20,6 +20,7 @@ function Checkout() {
     state: '',
     country: 'Nigeria',
     zipCode: '',
+    saveAddress: true,
   })
 
   // Fetch cart to get items and subtotal
@@ -62,6 +63,19 @@ function Checkout() {
     if (cartItems.length === 0) {
       alert("Your cart is empty.")
       return
+    }
+    
+    // Save address to profile if checked and authenticated
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (token && formData.saveAddress) {
+      api.addAddress({
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        zipCode: formData.zipCode,
+        country: formData.country,
+        isDefault: false
+      }).catch(err => console.error("Could not save address", err))
     }
 
     const orderData = {
@@ -169,6 +183,18 @@ function Checkout() {
                     <option value="Canada">Canada</option>
                   </select>
                 </div>
+              </div>
+
+              <div className="flex items-center gap-3 mt-6">
+                <input 
+                  type="checkbox" 
+                  name="saveAddress" 
+                  checked={formData.saveAddress} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, saveAddress: e.target.checked }))} 
+                  className="w-4 h-4 text-regal-navy focus:ring-0 rounded-none border-gray-300"
+                  id="save-address"
+                />
+                <label className="font-body-md text-body-md text-on-surface-variant text-sm cursor-pointer" htmlFor="save-address">Save this address to my profile for future orders</label>
               </div>
             </section>
             

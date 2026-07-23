@@ -42,6 +42,7 @@ import { Route as StorefrontProductIdRouteImport } from './routes/_storefront/pr
 import { Route as AdminCustomersNewRouteImport } from './routes/admin/customers_.new'
 import { Route as AdminInventoryNewRouteImport } from './routes/admin/inventory_.new'
 import { Route as AdminOrdersNewRouteImport } from './routes/admin/orders_.new'
+import { Route as AdminInventoryEditIdRouteImport } from './routes/admin/inventory.edit.$id'
 
 const StorefrontRoute = StorefrontRouteImport.update({
   id: '/_storefront',
@@ -211,6 +212,11 @@ const AdminOrdersNewRoute = AdminOrdersNewRouteImport.update({
   path: '/orders/new',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminInventoryEditIdRoute = AdminInventoryEditIdRouteImport.update({
+  id: '/edit/$id',
+  path: '/edit/$id',
+  getParentRoute: () => AdminInventoryRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof StorefrontIndexRoute
@@ -237,7 +243,7 @@ export interface FileRoutesByFullPath {
   '/admin/appointments': typeof AdminAppointmentsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
-  '/admin/inventory': typeof AdminInventoryRoute
+  '/admin/inventory': typeof AdminInventoryRouteWithChildren
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/': typeof AdminIndexRoute
@@ -245,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/admin/customers/new': typeof AdminCustomersNewRoute
   '/admin/inventory/new': typeof AdminInventoryNewRoute
   '/admin/orders/new': typeof AdminOrdersNewRoute
+  '/admin/inventory/edit/$id': typeof AdminInventoryEditIdRoute
 }
 export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
@@ -269,7 +276,7 @@ export interface FileRoutesByTo {
   '/admin/appointments': typeof AdminAppointmentsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
-  '/admin/inventory': typeof AdminInventoryRoute
+  '/admin/inventory': typeof AdminInventoryRouteWithChildren
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/': typeof StorefrontIndexRoute
@@ -278,6 +285,7 @@ export interface FileRoutesByTo {
   '/admin/customers/new': typeof AdminCustomersNewRoute
   '/admin/inventory/new': typeof AdminInventoryNewRoute
   '/admin/orders/new': typeof AdminOrdersNewRoute
+  '/admin/inventory/edit/$id': typeof AdminInventoryEditIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -305,7 +313,7 @@ export interface FileRoutesById {
   '/admin/appointments': typeof AdminAppointmentsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
-  '/admin/inventory': typeof AdminInventoryRoute
+  '/admin/inventory': typeof AdminInventoryRouteWithChildren
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/_storefront/': typeof StorefrontIndexRoute
@@ -314,6 +322,7 @@ export interface FileRoutesById {
   '/admin/customers_/new': typeof AdminCustomersNewRoute
   '/admin/inventory_/new': typeof AdminInventoryNewRoute
   '/admin/orders_/new': typeof AdminOrdersNewRoute
+  '/admin/inventory/edit/$id': typeof AdminInventoryEditIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -350,6 +359,7 @@ export interface FileRouteTypes {
     | '/admin/customers/new'
     | '/admin/inventory/new'
     | '/admin/orders/new'
+    | '/admin/inventory/edit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/forgot-password'
@@ -383,6 +393,7 @@ export interface FileRouteTypes {
     | '/admin/customers/new'
     | '/admin/inventory/new'
     | '/admin/orders/new'
+    | '/admin/inventory/edit/$id'
   id:
     | '__root__'
     | '/_storefront'
@@ -418,6 +429,7 @@ export interface FileRouteTypes {
     | '/admin/customers_/new'
     | '/admin/inventory_/new'
     | '/admin/orders_/new'
+    | '/admin/inventory/edit/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -661,6 +673,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrdersNewRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/inventory/edit/$id': {
+      id: '/admin/inventory/edit/$id'
+      path: '/edit/$id'
+      fullPath: '/admin/inventory/edit/$id'
+      preLoaderRoute: typeof AdminInventoryEditIdRouteImport
+      parentRoute: typeof AdminInventoryRoute
+    }
   }
 }
 
@@ -708,12 +727,24 @@ const StorefrontRouteWithChildren = StorefrontRoute._addFileChildren(
   StorefrontRouteChildren,
 )
 
+interface AdminInventoryRouteChildren {
+  AdminInventoryEditIdRoute: typeof AdminInventoryEditIdRoute
+}
+
+const AdminInventoryRouteChildren: AdminInventoryRouteChildren = {
+  AdminInventoryEditIdRoute: AdminInventoryEditIdRoute,
+}
+
+const AdminInventoryRouteWithChildren = AdminInventoryRoute._addFileChildren(
+  AdminInventoryRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminAppointmentsRoute: typeof AdminAppointmentsRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
   AdminInquiriesRoute: typeof AdminInquiriesRoute
-  AdminInventoryRoute: typeof AdminInventoryRoute
+  AdminInventoryRoute: typeof AdminInventoryRouteWithChildren
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -727,7 +758,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAppointmentsRoute: AdminAppointmentsRoute,
   AdminCustomersRoute: AdminCustomersRoute,
   AdminInquiriesRoute: AdminInquiriesRoute,
-  AdminInventoryRoute: AdminInventoryRoute,
+  AdminInventoryRoute: AdminInventoryRouteWithChildren,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
