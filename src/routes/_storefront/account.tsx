@@ -203,17 +203,17 @@ function Account() {
                     ) : (
                       <div className="bg-white border border-muted-gold/10 p-8 group transition-all duration-500 hover:shadow-xl hover:shadow-regal-navy/5">
                         <div className="flex flex-col md:flex-row justify-between mb-8 gap-6">
-                          <div className="flex gap-6">
-                            <div className="w-32 h-32 bg-soft-cream flex-shrink-0">
+                          <div className="flex flex-col sm:flex-row gap-6">
+                            <div className="w-24 h-24 sm:w-32 sm:h-32 bg-soft-cream flex-shrink-0 mx-auto sm:mx-0">
                               <img className="w-full h-full object-cover" alt={recentOrder.items?.[0]?.product?.name || 'Product'} src={recentOrder.items?.[0]?.product?.images?.find((img:any) => img.isPrimary)?.url || recentOrder.items?.[0]?.product?.image || "https://lh3.googleusercontent.com/aida-public/AB6AXuAd_AphXFJ6JPWCldDhn9DpoaPiHYLjmk_1iQZEEuTEhTqHdQVlje8ZsE5AxNucIcBsproMIeby25jUjy5xzTrUU5ZJWy2XBEghkyl1YzI5D355Vt8dNrdt68f_FTh5FS8CaR5-46-zXHLVsxf6La8NgBAuute4GYndMB1Z9g2hmObUcyeNSe_x4frjCeAWtf6k3o1ZPEr1rK119ngUYJoSTkS5SoYLwbFQ1_IJWGiwWCFs9lyXW4RQ"}/>
                             </div>
-                            <div className="flex flex-col justify-center">
+                            <div className="flex flex-col justify-center text-center sm:text-left">
                               <span className="text-label-md text-metallic-gold mb-1">ORDER #{recentOrder.id?.substring(0,8).toUpperCase()}</span>
                               <h4 className="text-headline-md font-headline-md mb-2">{recentOrder.items?.[0]?.product?.name || 'Multiple Items'}</h4>
                               <p className="text-body-md text-on-surface-variant italic">Ordered on {new Date(recentOrder.createdAt).toLocaleDateString()} • {recentOrder.items?.reduce((acc: number, item: any) => acc + item.quantity, 0)} Items</p>
                             </div>
                           </div>
-                          <div className="flex flex-col items-end justify-center">
+                          <div className="flex flex-col items-center sm:items-end justify-center mt-4 md:mt-0">
                             <p className="text-price-lg font-price-lg text-regal-navy">₦{recentOrder.totalAmount?.toLocaleString()}</p>
                             <span className="inline-flex items-center px-3 py-1 mt-2 text-xs font-bold uppercase tracking-widest bg-yellow-100 text-yellow-800">
                               {recentOrder.status}
@@ -232,28 +232,28 @@ function Account() {
                           </div>
                           <div className="relative z-10 flex justify-between">
                             <div className="flex flex-col items-center">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-3 ${recentOrder.status !== 'PENDING' ? 'bg-metallic-gold text-white' : 'bg-metallic-gold text-white outline outline-8 outline-soft-cream'}`}>
-                                <span className="material-symbols-outlined text-[20px]">check</span>
+                              <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-3 ${recentOrder.status !== 'PENDING' ? 'bg-metallic-gold text-white' : 'bg-metallic-gold text-white outline outline-8 outline-soft-cream'}`}>
+                                <span className="material-symbols-outlined text-[16px] sm:text-[20px]">check</span>
                               </div>
-                              <span className="text-label-md font-bold text-regal-navy">Confirmed</span>
+                              <span className="text-[10px] sm:text-label-md font-bold text-regal-navy">Confirmed</span>
                             </div>
                             <div className="flex flex-col items-center">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-3 ${['SHIPPED', 'DELIVERED'].includes(recentOrder.status) ? 'bg-metallic-gold text-white' : recentOrder.status === 'PROCESSING' ? 'bg-metallic-gold text-white outline outline-8 outline-soft-cream' : 'bg-gray-200 text-gray-400'}`}>
-                                <span className="material-symbols-outlined text-[20px]">check</span>
+                              <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-3 ${['SHIPPED', 'DELIVERED'].includes(recentOrder.status) ? 'bg-metallic-gold text-white' : recentOrder.status === 'PROCESSING' ? 'bg-metallic-gold text-white outline outline-8 outline-soft-cream' : 'bg-gray-200 text-gray-400'}`}>
+                                <span className="material-symbols-outlined text-[16px] sm:text-[20px]">check</span>
                               </div>
-                              <span className="text-label-md font-bold text-regal-navy">Processing</span>
+                              <span className="text-[10px] sm:text-label-md font-bold text-regal-navy">Processing</span>
                             </div>
                             <div className="flex flex-col items-center">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-3 ${['DELIVERED'].includes(recentOrder.status) ? 'bg-metallic-gold text-white' : recentOrder.status === 'SHIPPED' ? 'bg-metallic-gold text-white outline outline-8 outline-soft-cream' : 'bg-gray-200 text-gray-400'}`}>
-                                <span className="material-symbols-outlined text-[20px]">local_shipping</span>
+                              <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-3 ${['DELIVERED'].includes(recentOrder.status) ? 'bg-metallic-gold text-white' : recentOrder.status === 'SHIPPED' ? 'bg-metallic-gold text-white outline outline-8 outline-soft-cream' : 'bg-gray-200 text-gray-400'}`}>
+                                <span className="material-symbols-outlined text-[16px] sm:text-[20px]">local_shipping</span>
                               </div>
-                              <span className="text-label-md font-bold text-regal-navy">Shipped</span>
+                              <span className="text-[10px] sm:text-label-md font-bold text-regal-navy">Shipped</span>
                             </div>
                             <div className="flex flex-col items-center">
-                              <div className={`w-10 h-10 rounded-full flex items-center justify-center mb-3 ${recentOrder.status === 'DELIVERED' ? 'bg-metallic-gold text-white outline outline-8 outline-soft-cream' : 'bg-gray-200 text-gray-400'}`}>
-                                <span className="material-symbols-outlined text-[20px]">inventory_2</span>
+                              <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center mb-3 ${recentOrder.status === 'DELIVERED' ? 'bg-metallic-gold text-white outline outline-8 outline-soft-cream' : 'bg-gray-200 text-gray-400'}`}>
+                                <span className="material-symbols-outlined text-[16px] sm:text-[20px]">inventory_2</span>
                               </div>
-                              <span className="text-label-md text-gray-400">Delivered</span>
+                              <span className="text-[10px] sm:text-label-md text-gray-400">Delivered</span>
                             </div>
                           </div>
                         </div>
@@ -271,8 +271,8 @@ function Account() {
               </div>
 
               {/* Orders Table Container */}
-              <div className="bg-white border border-gray-300 overflow-hidden">
-                <table className="w-full text-left border-collapse">
+              <div className="bg-white border border-gray-300 overflow-x-auto">
+                <table className="w-full min-w-[600px] text-left border-collapse">
                   <thead>
                     <tr className="bg-regal-navy text-metallic-gold">
                       <th className="p-6 font-label-md text-label-md uppercase tracking-wider">Order ID</th>
