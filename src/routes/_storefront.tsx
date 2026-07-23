@@ -9,6 +9,7 @@ export const Route = createFileRoute('/_storefront')({
 
 function StorefrontLayout() {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
 
   const { data: cartData } = useQuery({
@@ -26,6 +27,11 @@ function StorefrontLayout() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    // Close mobile menu when route changes
+    setMobileMenuOpen(false)
+  }, [location.pathname])
+
   const isHomePage = location.pathname === '/'
   const textColor = isHomePage && !isScrolled ? 'text-soft-cream' : 'text-regal-navy'
 
@@ -38,6 +44,14 @@ function StorefrontLayout() {
       {/* TopNavBar */}
       <nav className={navClass} id="navbar">
         <div className="flex items-center gap-8">
+          <div className="md:hidden flex items-center">
+            <button 
+              onClick={() => setMobileMenuOpen(true)}
+              className={`material-symbols-outlined transition-colors duration-300 ${textColor} hover:text-metallic-gold`}
+            >
+              menu
+            </button>
+          </div>
           <Link to="/" className="flex items-center">
             <img src="/logo.jpg" alt="Roymall Scents" className="h-10 md:h-14 object-contain drop-shadow-md" />
           </Link>
@@ -50,8 +64,8 @@ function StorefrontLayout() {
             <Link to="/fragrance-guide" className={`nav-item relative text-label-md font-label-md transition-colors duration-300 ${location.pathname === '/fragrance-guide' ? 'text-metallic-gold font-bold border-b-2 border-metallic-gold pb-1' : `${textColor} hover:text-metallic-gold`}`}>Fragrance Guide</Link>
           </div>
         </div>
-        <div className="flex items-center gap-6">
-          <button className={`material-symbols-outlined transition-colors duration-300 ${textColor} hover:text-metallic-gold`}>search</button>
+        <div className="flex items-center gap-4 md:gap-6">
+          <button className={`material-symbols-outlined transition-colors duration-300 ${textColor} hover:text-metallic-gold hidden sm:block`}>search</button>
           
           <button 
             onClick={() => {
@@ -78,6 +92,36 @@ function StorefrontLayout() {
           </Link>
         </div>
       </nav>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-[100] md:hidden bg-white overflow-y-auto">
+          <div className="p-6 flex justify-between items-center border-b border-muted-gold/10">
+            <img src="/logo.jpg" alt="Roymall Scents" className="h-10 object-contain" />
+            <button 
+              onClick={() => setMobileMenuOpen(false)}
+              className="material-symbols-outlined text-regal-navy hover:text-metallic-gold transition-colors text-3xl"
+            >
+              close
+            </button>
+          </div>
+          <div className="flex flex-col p-6 space-y-6">
+            <Link to="/shop" className="text-2xl font-headline-md text-regal-navy hover:text-metallic-gold transition-colors">Shop All</Link>
+            <Link to="/new-arrivals" className="text-2xl font-headline-md text-regal-navy hover:text-metallic-gold transition-colors">New Arrivals</Link>
+            <Link to="/shop" className="text-2xl font-headline-md text-regal-navy hover:text-metallic-gold transition-colors">Men's Fragrances</Link>
+            <Link to="/shop" className="text-2xl font-headline-md text-regal-navy hover:text-metallic-gold transition-colors">Women's Fragrances</Link>
+            <Link to="/gifts" className="text-2xl font-headline-md text-regal-navy hover:text-metallic-gold transition-colors">Gift Sets</Link>
+            <Link to="/fragrance-guide" className="text-2xl font-headline-md text-regal-navy hover:text-metallic-gold transition-colors">Fragrance Guide</Link>
+            
+            <div className="pt-8 mt-4 border-t border-muted-gold/10">
+              <Link to="/account" className="flex items-center gap-3 text-lg font-label-md text-regal-navy hover:text-metallic-gold transition-colors">
+                <span className="material-symbols-outlined">person</span>
+                My Account
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <main className="flex-1">
