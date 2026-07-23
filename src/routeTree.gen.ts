@@ -38,6 +38,7 @@ import { Route as AdminInquiriesRouteImport } from './routes/admin/inquiries'
 import { Route as AdminInventoryRouteImport } from './routes/admin/inventory'
 import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
 import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
+import { Route as InvoiceIdRouteImport } from './routes/invoice.$id'
 import { Route as StorefrontProductIdRouteImport } from './routes/_storefront/product.$id'
 import { Route as AdminCustomersNewRouteImport } from './routes/admin/customers_.new'
 import { Route as AdminInventoryNewRouteImport } from './routes/admin/inventory_.new'
@@ -192,6 +193,11 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRoute,
 } as any)
+const InvoiceIdRoute = InvoiceIdRouteImport.update({
+  id: '/invoice/$id',
+  path: '/invoice/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StorefrontProductIdRoute = StorefrontProductIdRouteImport.update({
   id: '/product/$id',
   path: '/product/$id',
@@ -246,6 +252,7 @@ export interface FileRoutesByFullPath {
   '/admin/inventory': typeof AdminInventoryRouteWithChildren
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/invoice/$id': typeof InvoiceIdRoute
   '/admin/': typeof AdminIndexRoute
   '/product/$id': typeof StorefrontProductIdRoute
   '/admin/customers/new': typeof AdminCustomersNewRoute
@@ -279,6 +286,7 @@ export interface FileRoutesByTo {
   '/admin/inventory': typeof AdminInventoryRouteWithChildren
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/invoice/$id': typeof InvoiceIdRoute
   '/': typeof StorefrontIndexRoute
   '/admin': typeof AdminIndexRoute
   '/product/$id': typeof StorefrontProductIdRoute
@@ -316,6 +324,7 @@ export interface FileRoutesById {
   '/admin/inventory': typeof AdminInventoryRouteWithChildren
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
+  '/invoice/$id': typeof InvoiceIdRoute
   '/_storefront/': typeof StorefrontIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_storefront/product/$id': typeof StorefrontProductIdRoute
@@ -354,6 +363,7 @@ export interface FileRouteTypes {
     | '/admin/inventory'
     | '/admin/orders'
     | '/admin/settings'
+    | '/invoice/$id'
     | '/admin/'
     | '/product/$id'
     | '/admin/customers/new'
@@ -387,6 +397,7 @@ export interface FileRouteTypes {
     | '/admin/inventory'
     | '/admin/orders'
     | '/admin/settings'
+    | '/invoice/$id'
     | '/'
     | '/admin'
     | '/product/$id'
@@ -423,6 +434,7 @@ export interface FileRouteTypes {
     | '/admin/inventory'
     | '/admin/orders'
     | '/admin/settings'
+    | '/invoice/$id'
     | '/_storefront/'
     | '/admin/'
     | '/_storefront/product/$id'
@@ -438,6 +450,7 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   SigninRoute: typeof SigninRoute
   SignupRoute: typeof SignupRoute
+  InvoiceIdRoute: typeof InvoiceIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -645,6 +658,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/invoice/$id': {
+      id: '/invoice/$id'
+      path: '/invoice/$id'
+      fullPath: '/invoice/$id'
+      preLoaderRoute: typeof InvoiceIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_storefront/product/$id': {
       id: '/_storefront/product/$id'
       path: '/product/$id'
@@ -775,6 +795,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   SigninRoute: SigninRoute,
   SignupRoute: SignupRoute,
+  InvoiceIdRoute: InvoiceIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

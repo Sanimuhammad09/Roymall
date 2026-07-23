@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { useState, type FormEvent } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { usePaystackPayment } from 'react-paystack'
 import { api } from '../../lib/api'
 
 export const Route = createFileRoute('/_storefront/checkout')({
@@ -78,21 +79,40 @@ function Checkout() {
       }).catch(err => console.error("Could not save address", err))
     }
 
-    const orderData = {
-      items: cartItems.map((item: any) => ({
-        productId: item.productId,
-        quantity: item.quantity,
-        price: item.price
-      })),
-      shippingAddress: formData,
-      subtotal,
-      tax,
-      shippingCost,
-      total
-    }
-
-    createOrderMutation.mutate(orderData)
+    // Instead of immediately creating the order, initialize Paystack if paying with Paystack
+    // We will use Paystack by default for "Standard Checkout"
+    initializePayment({
+      onSuccess: (reference: any) => {
+        // Payment complete! Add reference to order
+        const orderData = {
+          items: cartItems.map((item: any) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+            price: item.price
+          })),
+          shippingAddress: formData,
+          subtotal,
+          tax,
+          shippingCost,
+          total,
+          paymentReference: reference.reference,
+          paymentMethod: 'PAYSTACK'
+        }
+        createOrderMutation.mutate(orderData)
+      },
+      onClose: () => {
+        alert("Payment was not completed. Please try again.")
+      }
+    });
   }
+
+  const paystackConfig = {
+    reference: (new Date()).getTime().toString(),
+    email: formData.email || 'customer@example.com',
+    amount: total * 100, // Paystack uses Kobo (kobo = NGN * 100)
+    publicKey: typeof window !== 'undefined' ? (import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_d3a39e0bd58ed52b1136d8d6d61f5e278696d091') : '', 
+  };
+  const initializePayment = usePaystackPayment(paystackConfig);
 
   if (isCartLoading) {
     return <div className="pt-32 pb-20 text-center font-label-md text-regal-navy">Loading secure checkout...</div>
@@ -204,8 +224,8 @@ function Checkout() {
               <div className="border border-regal-navy p-6 bg-regal-navy/5 flex items-center gap-4">
                 <input type="radio" checked readOnly className="w-5 h-5 accent-regal-navy"/>
                 <div>
-                  <h4 className="font-label-md font-bold text-regal-navy">Standard Checkout</h4>
-                  <p className="text-sm text-gray-600 mt-1">Your order will be processed and you will be contacted for payment.</p>
+                  <h4 className="font-label-md font-bold text-regal-navy">Pay with Paystack</h4>
+                  <p className="text-sm text-gray-600 mt-1">Pay securely via Paystack (Cards, USSD, Bank Transfer).</p>
                 </div>
               </div>
             </section>

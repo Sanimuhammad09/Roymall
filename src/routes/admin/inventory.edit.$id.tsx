@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useState, useRef, useEffect } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
+import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal'
 
 export const Route = createFileRoute('/admin/inventory/edit/$id')({
   component: EditProduct,
@@ -14,6 +15,11 @@ function EditProduct() {
   const [showModal, setShowModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState('')
+
+  const [deleteModal, setDeleteModal] = useState<{isOpen: boolean, imageId: string | null}>({
+    isOpen: false,
+    imageId: null
+  })
 
   // Form State
   const [name, setName] = useState('')
@@ -108,13 +114,19 @@ function EditProduct() {
     }
   }
 
-  const handleDeleteImage = async (imageId: string) => {
-    if(window.confirm('Are you sure you want to delete this image?')) {
+  const handleDeleteImageClick = (imageId: string) => {
+    setDeleteModal({ isOpen: true, imageId })
+  }
+
+  const handleDeleteConfirm = async () => {
+    if(deleteModal.imageId) {
       try {
         setError('')
-        await deleteImageMutation.mutateAsync({ productId: id, imageId })
+        await deleteImageMutation.mutateAsync({ productId: id as string, imageId: deleteModal.imageId })
+        setDeleteModal({ isOpen: false, imageId: null })
       } catch (err: any) {
         setError(err.message || 'Failed to delete image')
+        setDeleteModal({ isOpen: false, imageId: null })
       }
     }
   }
@@ -337,7 +349,7 @@ function EditProduct() {
                     )}
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                       <button 
-                        onClick={() => handleDeleteImage(img.id)}
+                        onClick={() => handleDeleteImageClick(img.id)}
                         disabled={deleteImageMutation.isPending}
                         className="bg-white/90 text-red-600 p-2 rounded hover:bg-white transition-colors"
                         title="Delete Image"
@@ -440,6 +452,16 @@ function EditProduct() {
           </div>
         </div>
       )}
+
+      {/* Delete Image Modal */}
+      <ConfirmDeleteModal 
+        isOpen={deleteModal.isOpen}
+        title="Delete Image"
+        message="Are you sure you want to delete this product image? This action cannot be undone."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteModal({ ...deleteModal, isOpen: false })}
+        isDeleting={deleteImageMutation.isPending}
+      />
     </div>
   )
 }

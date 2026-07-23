@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     localStorage.removeItem('token')
     setUser(null)
-    router.navigate({ to: '/' })
+    router.navigate({ to: '/signin' })
   }
 
   return (

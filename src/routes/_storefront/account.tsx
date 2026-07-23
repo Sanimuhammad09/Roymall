@@ -2,6 +2,8 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
+import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal'
+import { OrderDetailsModal } from '../../components/OrderDetailsModal'
 
 const COUNTRIES = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Côte d'Ivoire", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo (Congo-Brazzaville)", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czechia (Czech Republic)", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Holy See", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar (formerly Burma)", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"
@@ -26,6 +28,10 @@ function Account() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null)
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
+  const [deleteModal, setDeleteModal] = useState<{isOpen: boolean, addressId: string | null}>({
+    isOpen: false,
+    addressId: null
+  })
 
   // Fetch Profile
   const { data: profileResponse, isLoading: isProfileLoading } = useQuery({
@@ -69,13 +75,44 @@ function Account() {
   })
 
   const deleteAddressMutation = useMutation({
-    mutationFn: api.deleteAddress,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['profile'] })
+    mutationFn: (id: string) => api.deleteAddress(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['profile'] })
+      setDeleteModal({ isOpen: false, addressId: null })
+    }
   })
+
+  const handleDeleteAddressClick = (id: string) => {
+    setDeleteModal({ isOpen: true, addressId: id })
+  }
+
+  const handleDeleteAddressConfirm = () => {
+    if (deleteModal.addressId) {
+      deleteAddressMutation.mutate(deleteModal.addressId)
+    }
+  }
 
   const removeFromWishlistMutation = useMutation({
     mutationFn: api.removeFromWishlist,
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['profile'] })
+  })
+
+  const addToCartMutation = useMutation({
+    mutationFn: (productId: string) => api.addToCart(productId, 1),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] })
+      alert('Item added to your bag')
+    }
+  })
+
+  const addAllToCartMutation = useMutation({
+    mutationFn: async (items: any[]) => {
+      await Promise.all(items.map(item => api.addToCart(item.productId, 1)))
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] })
+      alert('All saved items added to your bag')
+    }
   })
 
   const profile = profileResponse?.data || profileResponse
@@ -330,11 +367,11 @@ function Account() {
                           }} className="text-on-surface-variant hover:text-metallic-gold transition-colors">
                             <span className="material-symbols-outlined">edit</span>
                           </button>
-                          <button onClick={() => {
-                            if (confirm('Are you sure you want to delete this address?')) {
-                              deleteAddressMutation.mutate(address.id)
-                            }
-                          }} className="text-on-surface-variant hover:text-error transition-colors">
+                          <button 
+                            disabled={deleteAddressMutation.isPending}
+                            onClick={() => handleDeleteAddressClick(address.id)} 
+                            className="text-on-surface-variant hover:text-error transition-colors"
+                          >
                             <span className="material-symbols-outlined">delete</span>
                           </button>
                         </div>
@@ -374,7 +411,17 @@ function Account() {
                   <p className="font-body-lg text-body-lg text-on-surface-variant max-w-xl">Curate your personal scent collection. Review your favorites and add them to your signature rotation.</p>
                 </div>
                 <div className="hidden lg:block">
-                  <button className="bg-regal-navy text-white px-8 py-4 font-label-md text-label-md uppercase tracking-widest hover:bg-[#001b44]/90 transition-colors">Add All To Bag</button>
+                  <button 
+                    onClick={() => {
+                      if (profile?.wishlist?.items?.length) {
+                        addAllToCartMutation.mutate(profile.wishlist.items)
+                      }
+                    }}
+                    disabled={addAllToCartMutation.isPending || !profile?.wishlist?.items?.length}
+                    className="bg-regal-navy text-white px-8 py-4 font-label-md text-label-md uppercase tracking-widest hover:bg-[#001b44]/90 transition-colors disabled:opacity-50"
+                  >
+                    {addAllToCartMutation.isPending ? 'Adding...' : 'Add All To Bag'}
+                  </button>
                 </div>
               </div>
               
@@ -388,7 +435,13 @@ function Account() {
                         <span className="material-symbols-outlined">close</span>
                       </button>
                       <div className="absolute inset-0 bg-regal-navy/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                        <button className="w-full bg-regal-navy text-metallic-gold py-4 font-label-md text-label-md uppercase tracking-widest hover:bg-[#001b44]/90 transition-colors">Add to Bag</button>
+                        <button 
+                          onClick={() => addToCartMutation.mutate(item.productId)}
+                          disabled={addToCartMutation.isPending}
+                          className="w-full bg-regal-navy text-metallic-gold py-4 font-label-md text-label-md uppercase tracking-widest hover:bg-[#001b44]/90 transition-colors disabled:opacity-50"
+                        >
+                          Add to Bag
+                        </button>
                       </div>
                     </div>
                     <div className="flex flex-col">
@@ -611,86 +664,21 @@ function Account() {
       )}
 
       {/* Order Details Modal */}
-      {selectedOrderId && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-regal-navy/60 backdrop-blur-sm" onClick={() => setSelectedOrderId(null)}></div>
-          <div className="relative bg-[#faf8fd] w-full max-w-3xl shadow-2xl p-10 max-h-[90vh] overflow-y-auto transform transition-all">
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="font-headline-lg text-headline-lg text-regal-navy">Order Details</h2>
-              <button className="text-on-surface-variant hover:text-regal-navy" onClick={() => setSelectedOrderId(null)}>
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-            {(() => {
-              const order = orders.find((o: any) => o.id === selectedOrderId);
-              if (!order) return <p>Order not found</p>;
-              return (
-                <div className="space-y-8">
-                  <div className="flex flex-col md:flex-row justify-between bg-white p-6 border border-gray-200">
-                    <div>
-                      <p className="text-label-md font-bold uppercase text-gray-500">Order ID</p>
-                      <p className="font-body-lg font-bold text-regal-navy">#{order.id.substring(0,8).toUpperCase()}</p>
-                    </div>
-                    <div>
-                      <p className="text-label-md font-bold uppercase text-gray-500">Date</p>
-                      <p className="font-body-lg text-regal-navy">{new Date(order.createdAt).toLocaleDateString()}</p>
-                    </div>
-                    <div>
-                      <p className="text-label-md font-bold uppercase text-gray-500">Status</p>
-                      <span className={`inline-flex items-center px-3 py-1 mt-1 text-[12px] font-bold uppercase tracking-tighter ${
-                        order.status === 'DELIVERED' ? 'bg-green-100 text-green-800' :
-                        order.status === 'CANCELLED' ? 'bg-red-100 text-red-800' :
-                        'bg-blue-100 text-blue-800'
-                      }`}>
-                        {order.status}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h3 className="font-headline-md text-regal-navy mb-4 border-b border-gray-200 pb-2">Items in Order</h3>
-                    <ul className="space-y-4">
-                      {order.items?.map((item: any) => (
-                        <li key={item.id} className="flex justify-between items-center bg-white p-4 border border-gray-100">
-                          <div className="flex items-center gap-4">
-                            <div className="w-16 h-16 bg-soft-cream border border-gray-200">
-                              <img className="w-full h-full object-cover" src={item.product?.images?.find((img:any) => img.isPrimary)?.url || item.product?.image || "https://placehold.co/400x500"} alt={item.product?.name} />
-                            </div>
-                            <div>
-                              <p className="font-bold text-regal-navy">{item.product?.name}</p>
-                              <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
-                            </div>
-                          </div>
-                          <p className="font-bold text-regal-navy text-lg">₦{(item.price * item.quantity).toLocaleString()}</p>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+      <OrderDetailsModal 
+        isOpen={!!selectedOrderId}
+        orderId={selectedOrderId}
+        onClose={() => setSelectedOrderId(null)}
+      />
 
-                  <div className="bg-white p-6 border border-gray-200">
-                    <div className="flex justify-between mb-2">
-                      <p className="text-gray-500">Subtotal</p>
-                      <p className="font-bold text-regal-navy">₦{order.subtotal?.toLocaleString()}</p>
-                    </div>
-                    <div className="flex justify-between mb-2">
-                      <p className="text-gray-500">Shipping</p>
-                      <p className="font-bold text-regal-navy">₦{order.shippingCost?.toLocaleString()}</p>
-                    </div>
-                    <div className="flex justify-between mb-2">
-                      <p className="text-gray-500">Tax</p>
-                      <p className="font-bold text-regal-navy">₦{order.tax?.toLocaleString()}</p>
-                    </div>
-                    <div className="flex justify-between pt-4 mt-4 border-t border-gray-200">
-                      <p className="font-bold uppercase tracking-widest text-regal-navy">Total</p>
-                      <p className="font-price-lg font-bold text-2xl text-regal-navy">₦{order.totalAmount?.toLocaleString()}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })()}
-          </div>
-        </div>
-      )}
+      {/* Delete Address Modal */}
+      <ConfirmDeleteModal 
+        isOpen={deleteModal.isOpen}
+        title="Delete Address"
+        message="Are you sure you want to delete this address? It will be removed from your saved addresses."
+        onConfirm={handleDeleteAddressConfirm}
+        onCancel={() => setDeleteModal({ ...deleteModal, isOpen: false })}
+        isDeleting={deleteAddressMutation.isPending}
+      />
     </main>
   )
 }

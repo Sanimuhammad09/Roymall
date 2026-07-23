@@ -37,7 +37,9 @@ function AdminLayout() {
       {/* Side Navigation Bar */}
       <aside className="h-screen w-64 fixed left-0 top-0 bg-regal-navy border-r border-metallic-gold/20 flex flex-col py-8 px-4 z-50">
         <div className="mb-12 px-2">
-          <img src="/logo.jpg" alt="Roymall Scents" className="w-full max-w-[160px] object-contain mb-2" />
+          <Link to="/">
+            <img src="/logo.jpg" alt="Roymall Scents" className="w-full max-w-[160px] object-contain mb-2 hover:opacity-80 transition-opacity cursor-pointer" />
+          </Link>
           <p className="font-label-md text-label-md text-white/60 uppercase tracking-widest mt-1 text-[10px]">Admin Portal</p>
         </div>
         

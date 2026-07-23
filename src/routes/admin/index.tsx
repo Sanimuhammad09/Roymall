@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../../lib/api'
+import { useState } from 'react'
+import { OrderDetailsModal } from '../../components/OrderDetailsModal'
 
 export const Route = createFileRoute('/admin/')({
   component: Dashboard,
@@ -11,6 +13,8 @@ function Dashboard() {
     queryKey: ['admin-overview'],
     queryFn: () => api.adminGetOverview(),
   })
+
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
 
   if (isLoading) return <div className="p-8">Loading dashboard...</div>
   if (error) return <div className="p-8 text-red-500">Failed to load dashboard data.</div>
@@ -96,6 +100,7 @@ function Dashboard() {
                   <th className="pb-4 font-label-md text-label-md text-gray-500 uppercase font-bold text-xs">Date</th>
                   <th className="pb-4 font-label-md text-label-md text-gray-500 uppercase font-bold text-xs">Status</th>
                   <th className="pb-4 font-label-md text-label-md text-gray-500 uppercase font-bold text-xs text-right">Total</th>
+                  <th className="pb-4 font-label-md text-label-md text-gray-500 uppercase font-bold text-xs text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -116,6 +121,9 @@ function Dashboard() {
                     </td>
                     <td className="py-5 font-price-lg text-[18px] text-right font-bold text-regal-navy">
                       ${(order.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+                    </td>
+                    <td className="py-5 text-right">
+                      <button onClick={() => setSelectedOrderId(order.id)} className="font-label-md text-[10px] text-metallic-gold uppercase tracking-widest border-b border-metallic-gold pb-0.5 hover:text-yellow-600 transition-colors font-bold">View</button>
                     </td>
                   </tr>
                 ))}
@@ -184,6 +192,12 @@ function Dashboard() {
           <Link to="/admin/inquiries" className="block text-center border border-regal-navy text-regal-navy px-4 py-2 text-sm font-bold uppercase tracking-tighter hover:bg-regal-navy hover:text-white transition-all">Go to Inbox</Link>
         </div>
       </div>
+
+      <OrderDetailsModal 
+        isOpen={!!selectedOrderId}
+        orderId={selectedOrderId}
+        onClose={() => setSelectedOrderId(null)}
+      />
     </div>
   )
 }

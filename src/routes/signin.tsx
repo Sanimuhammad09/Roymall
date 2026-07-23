@@ -73,7 +73,8 @@ function SignIn() {
           
           {/* Branding */}
           <div className="text-center mb-10">
-            <Link to="/">
+            <Link to="/" className="inline-block">
+              <img src="/logo.jpg" alt="Roymall Scents Logo" className="mx-auto h-16 object-contain mb-4 hover:opacity-80 transition-opacity" />
               <h1 className="font-display-lg text-headline-md tracking-widest text-regal-navy uppercase mb-2 hover:text-metallic-gold transition-colors">
                   Roymall Scents
               </h1>

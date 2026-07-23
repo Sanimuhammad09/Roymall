@@ -200,18 +200,14 @@ export const api = {
   getMyOrders: async () => {
     return fetchApi('/orders/me')
   },
-  createOrder: async (orderData: {
-    items: { productId: string; quantity: number; price: number }[];
-    shippingAddress: any;
-    subtotal: number;
-    tax: number;
-    shippingCost: number;
-    total: number;
-  }) => {
+  createOrder: async (orderData: any) => {
     return fetchApi('/orders', {
       method: 'POST',
       body: JSON.stringify(orderData),
     })
+  },
+  getOrderById: async (id: string) => {
+    return fetchApi(`/orders/${id}`)
   },
 
   clearCart: async () => {
@@ -365,6 +361,31 @@ export const api = {
       method: 'PUT',
       body: JSON.stringify(settingsData),
     })
+  },
+
+  // --- Shipping Zones ---
+  getShippingZones: async () => {
+    return fetchApi('/admin/shipping-zones')
+  },
+  createShippingZone: async (data: any) => {
+    return fetchApi('/admin/shipping-zones', { method: 'POST', body: JSON.stringify(data) })
+  },
+  updateShippingZone: async (id: string, data: any) => {
+    return fetchApi(`/admin/shipping-zones/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+  },
+  deleteShippingZone: async (id: string) => {
+    return fetchApi(`/admin/shipping-zones/${id}`, { method: 'DELETE' })
+  },
+
+  // --- Admin Users ---
+  getAdminUsers: async () => {
+    return fetchApi('/admin/users')
+  },
+  inviteAdminUser: async (data: any) => {
+    return fetchApi('/admin/users', { method: 'POST', body: JSON.stringify(data) })
+  },
+  removeAdminAccess: async (id: string) => {
+    return fetchApi(`/admin/users/${id}`, { method: 'DELETE' })
   },
 
   submitReview: async (productId: string, data: { rating: number; comment?: string }) => {

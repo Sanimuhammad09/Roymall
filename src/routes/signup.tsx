@@ -70,8 +70,9 @@ function SignUp() {
     <div className="bg-[#faf8fd] text-[#1b1b1f] antialiased min-h-screen flex flex-col font-body-md overflow-x-hidden">
       {/* Top Navigation Bar */}
       <header className={`fixed top-0 left-0 w-full z-50 flex justify-between items-center px-8 md:px-16 py-6 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}>
-        <Link to="/" className="text-headline-md font-headline-md font-bold text-regal-navy">
-            Roymall Scents
+        <Link to="/" className="flex items-center gap-2">
+            <img src="/logo.jpg" alt="Roymall Scents Logo" className="h-8 w-8 object-contain" />
+            <span className="text-headline-sm font-headline-md font-bold text-regal-navy">Roymall Scents</span>
         </Link>
         <Link className="text-label-md font-label-md text-regal-navy hover:text-metallic-gold transition-colors duration-300" to="/">
             BACK TO SHOP

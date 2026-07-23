@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
+import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal'
 
 export const Route = createFileRoute('/admin/inquiries')({
   component: Inquiries,
@@ -30,12 +31,22 @@ function Inquiries() {
     mutationFn: (id: string) => api.adminDeleteInquiry(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-inquiries'] })
+      setDeleteModal({ isOpen: false, inquiryId: null })
     }
   })
 
-  const handleDelete = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this inquiry?')) {
-      deleteMutation.mutate(id)
+  const [deleteModal, setDeleteModal] = useState<{isOpen: boolean, inquiryId: string | null}>({
+    isOpen: false,
+    inquiryId: null
+  })
+
+  const handleDeleteClick = (id: string) => {
+    setDeleteModal({ isOpen: true, inquiryId: id })
+  }
+
+  const handleDeleteConfirm = () => {
+    if (deleteModal.inquiryId) {
+      deleteMutation.mutate(deleteModal.inquiryId)
     }
   }
 
@@ -101,7 +112,7 @@ function Inquiries() {
                       </button>
                       <button 
                         disabled={deleteMutation.isPending}
-                        onClick={() => handleDelete(inq.id)}
+                        onClick={() => handleDeleteClick(inq.id)}
                         className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-all"
                         title="Delete"
                       >
@@ -145,6 +156,15 @@ function Inquiries() {
         </div>
       </div>
 
+      {/* Delete Inquiry Modal */}
+      <ConfirmDeleteModal 
+        isOpen={deleteModal.isOpen}
+        title="Delete Inquiry"
+        message="Are you sure you want to delete this inquiry? This action cannot be undone."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteModal({ ...deleteModal, isOpen: false })}
+        isDeleting={deleteMutation.isPending}
+      />
     </div>
   )
 }

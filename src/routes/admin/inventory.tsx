@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
+import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal'
 
 export const Route = createFileRoute('/admin/inventory')({
   component: Inventory,
@@ -36,12 +37,27 @@ function Inventory() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-products'] })
       queryClient.invalidateQueries({ queryKey: ['admin-overview'] })
+      setDeleteModal({ isOpen: false, productId: null, productName: '' })
     }
   })
 
-  const handleDelete = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      deleteMutation.mutate(id)
+  const [deleteModal, setDeleteModal] = useState<{isOpen: boolean, productId: string | null, productName: string}>({
+    isOpen: false,
+    productId: null,
+    productName: ''
+  })
+
+  const handleDeleteClick = (product: any) => {
+    setDeleteModal({
+      isOpen: true,
+      productId: product.id,
+      productName: product.name
+    })
+  }
+
+  const handleDeleteConfirm = () => {
+    if (deleteModal.productId) {
+      deleteMutation.mutate(deleteModal.productId)
     }
   }
 
@@ -197,10 +213,7 @@ function Inventory() {
                         >
                           <span className="material-symbols-outlined text-[18px]">edit</span>
                         </button>
-                        <button 
-                          onClick={() => handleDelete(item.id)}
-                          className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded transition-all"
-                        >
+                        <button onClick={() => handleDeleteClick(item)} className="w-8 h-8 rounded-full hover:bg-red-50 text-red-500 flex items-center justify-center transition-colors">
                           <span className="material-symbols-outlined text-[18px]">delete</span>
                         </button>
                       </div>
@@ -243,6 +256,15 @@ function Inventory() {
           </div>
         </div>
       </div>
+      
+      <ConfirmDeleteModal 
+        isOpen={deleteModal.isOpen}
+        title="Delete Product"
+        message={`Are you sure you want to delete "${deleteModal.productName}"? This action will completely remove the product and all associated images from the catalog.`}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteModal({ ...deleteModal, isOpen: false })}
+        isDeleting={deleteMutation.isPending}
+      />
     </div>
   )
 }
