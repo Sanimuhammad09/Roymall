@@ -169,7 +169,7 @@ function Account() {
               <button onClick={() => {
                 localStorage.removeItem('token')
                 localStorage.removeItem('role')
-                navigate({ to: '/' })
+                navigate({ to: '/signin' })
               }} className="flex items-center space-x-4 py-3 px-4 w-full rounded-sm hover:bg-soft-cream transition-all text-left group">
                 <span className="material-symbols-outlined text-error">logout</span>
                 <span className="text-body-md font-body-md text-error">Sign Out</span>
