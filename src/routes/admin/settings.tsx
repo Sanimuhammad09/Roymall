@@ -208,10 +208,9 @@ function Settings() {
                   </div>
                   <div className="space-y-2">
                     <label className="block font-label-md text-xs uppercase tracking-widest text-gray-500">Base Currency</label>
-                    <select name="currency" value={formData.currency} onChange={handleChange} className="w-full bg-gray-50 border border-gray-200 focus:border-metallic-gold focus:ring-0 px-4 py-3 font-body-md appearance-none outline-none">
-                      <option value="EUR">Euro (€)</option>
-                      <option value="USD">US Dollar ($)</option>
+                    <select name="currency" value={formData.currency} onChange={handleChange} className="w-full border border-gray-300 p-4 bg-white font-body-md text-regal-navy outline-none focus:border-metallic-gold">
                       <option value="NGN">Nigerian Naira (₦)</option>
+                      <option value="EUR">Euro (€)</option>
                       <option value="GBP">British Pound (£)</option>
                     </select>
                   </div>

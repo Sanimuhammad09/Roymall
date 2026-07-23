@@ -48,7 +48,7 @@ function Analytics() {
     maintainAspectRatio: false,
     plugins: { legend: { display: false } },
     scales: {
-      y: { grid: { borderDash: [5, 5] }, ticks: { callback: (value: any) => '$' + value / 1000 + 'k' } },
+      y: { grid: { borderDash: [5, 5] }, ticks: { callback: (value: any) => '₦' + value / 1000 + 'k' } },
       x: { grid: { display: false } }
     }
   }
@@ -133,7 +133,7 @@ function Analytics() {
             <div>
               <p className="font-label-md text-label-md text-gray-500 uppercase mb-1 font-bold tracking-widest">Revenue</p>
               <h3 className="font-price-lg text-price-lg text-regal-navy text-2xl font-bold">
-                ${(metrics.totalRevenue || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+                ₦{(metrics.totalRevenue || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
               </h3>
             </div>
             <span className="material-symbols-outlined text-metallic-gold">trending_up</span>
@@ -268,7 +268,7 @@ function Analytics() {
                     </span>
                   </td>
                   <td className="py-6 text-right font-bold text-regal-navy">
-                    ${(order.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+                    ₦{(order.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
                   </td>
                 </tr>
               ))}

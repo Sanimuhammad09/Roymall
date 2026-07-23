@@ -34,7 +34,7 @@ function Dashboard() {
             <span className="text-yellow-700 font-bold text-[12px] flex items-center">+12.5%</span>
           </div>
           <h2 className={`font-price-lg text-price-lg text-regal-navy mb-4 font-bold text-3xl transition-colors duration-500`}>
-            ${(metrics.totalRevenue || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+            ₦{(metrics.totalRevenue || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
           </h2>
           <div className="h-12 w-full">
             <svg className="w-full h-full" viewBox="0 0 100 30">
@@ -120,8 +120,8 @@ function Dashboard() {
                         {order.status}
                       </span>
                     </td>
-                    <td className="py-5 font-price-lg text-[18px] text-right font-bold text-regal-navy">
-                      ${(order.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
+                    <td className="py-4 text-right font-bold text-regal-navy">
+                      ₦{(order.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}
                     </td>
                     <td className="py-5 text-right">
                       <button onClick={() => setSelectedOrderId(order.id)} className="font-label-md text-[10px] text-metallic-gold uppercase tracking-widest border-b border-metallic-gold pb-0.5 hover:text-yellow-600 transition-colors font-bold">View</button>
