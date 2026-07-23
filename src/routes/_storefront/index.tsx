@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import type { Product } from '../../lib/api'
-import { GlobalLoader } from '../../components/GlobalLoader'
 
 export const Route = createFileRoute('/_storefront/')({
   component: Home,
@@ -23,12 +22,10 @@ function Home() {
     queryFn: () => api.getProducts({ isNewArrival: true })
   })
 
-  const { data: metricsData, isLoading: isMetricsLoading } = useQuery({
+  const { data: metricsData } = useQuery({
     queryKey: ['metrics'],
     queryFn: api.getMetrics
   })
-
-  const isLoading = isBestSellersLoading || isNewArrivalsLoading || isMetricsLoading
 
   const bestSellers: Product[] = Array.isArray(bestSellersData) ? bestSellersData : (bestSellersData?.data || [])
   const newArrivals: Product[] = Array.isArray(newArrivalsData) ? newArrivalsData : (newArrivalsData?.data || [])
@@ -81,10 +78,6 @@ function Home() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-  if (isLoading) {
-    return <GlobalLoader />
-  }
 
   return (
     <>
@@ -174,7 +167,12 @@ function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-            {bestSellers.slice(0, 4).map((product, index) => (
+            {isBestSellersLoading ? (
+              <div className="col-span-full flex flex-col items-center justify-center py-10 opacity-70">
+                 <div className="w-8 h-8 rounded-full border-2 border-metallic-gold/30 border-t-metallic-gold animate-spin mb-4"></div>
+                 <p className="font-label-md text-regal-navy uppercase tracking-widest text-xs">Curating Collection...</p>
+              </div>
+            ) : bestSellers.slice(0, 4).map((product, index) => (
               <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="group cursor-pointer block">
                 <div className="relative aspect-[4/5] bg-soft-cream overflow-hidden mb-6">
                   <div className="absolute inset-0 scale-100 group-hover:scale-110 transition-transform duration-700 bg-cover bg-center" style={{backgroundImage: `url('${product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}')`}}></div>
@@ -215,7 +213,12 @@ function Home() {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {newArrivals.slice(0, 8).map((product) => (
+            {isNewArrivalsLoading ? (
+              <div className="col-span-full flex flex-col items-center justify-center py-10 opacity-70">
+                 <div className="w-8 h-8 rounded-full border-2 border-metallic-gold/30 border-t-metallic-gold animate-spin mb-4"></div>
+                 <p className="font-label-md text-regal-navy uppercase tracking-widest text-xs">Curating Collection...</p>
+              </div>
+            ) : newArrivals.slice(0, 8).map((product) => (
               <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="bg-white p-6 group transition-all duration-300 hover:shadow-xl block">
                 <div className="aspect-square bg-soft-cream mb-6 overflow-hidden">
                   <div className="w-full h-full scale-100 group-hover:scale-105 transition-transform duration-500 bg-cover bg-center" style={{backgroundImage: `url('${product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}')`}}></div>

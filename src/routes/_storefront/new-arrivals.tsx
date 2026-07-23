@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import type { Product } from '../../lib/api'
-import { GlobalLoader } from '../../components/GlobalLoader'
 
 export const Route = createFileRoute('/_storefront/new-arrivals')({
   component: NewArrivals,
@@ -45,10 +44,6 @@ function NewArrivals() {
   })
 
   const products: Product[] = Array.isArray(newArrivalsData) ? newArrivalsData : (newArrivalsData?.data || [])
-
-  if (isLoading) {
-    return <GlobalLoader />
-  }
 
   return (
     <main className="bg-background text-on-background font-body-md min-h-screen">
@@ -97,7 +92,13 @@ function NewArrivals() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[32px]">
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20 opacity-70">
+             <div className="w-10 h-10 rounded-full border-2 border-metallic-gold/30 border-t-metallic-gold animate-spin mb-4"></div>
+             <p className="font-label-md text-regal-navy uppercase tracking-widest text-xs">Curating Collection...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[32px]">
             {products.map(product => (
               <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="group flex flex-col cursor-pointer">
                 <div className="relative overflow-hidden bg-soft-cream aspect-[4/5] mb-6">
@@ -125,6 +126,7 @@ function NewArrivals() {
               </Link>
             ))}
           </div>
+        )}
       </section>
 
       {/* Story/About the Collection Section */}
