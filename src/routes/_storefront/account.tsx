@@ -127,45 +127,45 @@ function Account() {
     <main className="pt-32 pb-[120px] max-w-[1440px] mx-auto px-6 md:px-16">
       <div className="flex flex-col md:flex-row gap-12">
         {/* Sidebar Navigation */}
-        <aside className="w-full md:w-64 shrink-0 sticky top-[100px] h-fit">
-          <div className="mb-12">
-            <h2 className="text-headline-md font-headline-md mb-2 text-regal-navy">
+        <aside className="w-full md:w-64 shrink-0 md:sticky top-[100px] h-fit z-10 bg-soft-cream md:bg-transparent pb-4 md:pb-0 border-b md:border-b-0 border-muted-gold/10 mb-6 md:mb-0">
+          <div className="mb-6 md:mb-12">
+            <h2 className="text-2xl md:text-headline-md font-headline-md mb-1 md:mb-2 text-regal-navy">
               Welcome, {profile?.firstName || profile?.name?.split(' ')[0] || 'Guest'}
             </h2>
-            <p className="text-label-md text-on-surface-variant opacity-70">
+            <p className="text-xs md:text-label-md text-on-surface-variant opacity-70">
               {profile?.role === 'ADMIN' ? 'Administrator' : 'Exclusive Member'}
             </p>
           </div>
-          <nav className="flex flex-col space-y-2">
+          <nav className="flex flex-row md:flex-col overflow-x-auto md:overflow-visible no-scrollbar space-x-2 md:space-x-0 md:space-y-2 pb-2 md:pb-0 w-full snap-x">
             <button 
               onClick={() => handleTabChange('orders')}
-              className={`flex items-center space-x-4 py-3 px-4 rounded-sm transition-all text-left ${['orders', 'history'].includes(tab || '') ? 'border-r-[3px] border-metallic-gold bg-gradient-to-r from-transparent to-metallic-gold/5 text-regal-navy font-bold' : 'text-on-surface-variant hover:bg-soft-cream hover:translate-x-1 group'}`}
+              className={`flex items-center space-x-2 md:space-x-4 py-2 md:py-3 px-3 md:px-4 rounded-full md:rounded-sm transition-all text-left whitespace-nowrap snap-start flex-shrink-0 ${['orders', 'history'].includes(tab || '') ? 'bg-regal-navy md:bg-transparent md:border-r-[3px] md:border-metallic-gold md:bg-gradient-to-r from-transparent to-metallic-gold/5 text-metallic-gold md:text-regal-navy font-bold' : 'bg-white md:bg-transparent text-on-surface-variant border border-gray-200 md:border-transparent hover:bg-soft-cream md:hover:translate-x-1 group'}`}
             >
-              <span className={`material-symbols-outlined ${['orders', 'history'].includes(tab || '') ? 'text-metallic-gold' : 'text-outline group-hover:text-regal-navy'}`}>package_2</span>
-              <span className="text-body-md font-body-md">Orders &amp; Dashboard</span>
+              <span className={`material-symbols-outlined text-[18px] md:text-[24px] ${['orders', 'history'].includes(tab || '') ? 'text-metallic-gold' : 'text-outline group-hover:text-regal-navy'}`}>package_2</span>
+              <span className="text-sm md:text-body-md font-body-md">Orders &amp; Dashboard</span>
             </button>
             <button 
               onClick={() => handleTabChange('addresses')}
-              className={`flex items-center space-x-4 py-3 px-4 rounded-sm transition-all text-left ${tab === 'addresses' ? 'bg-regal-navy text-metallic-gold font-bold translate-x-1' : 'text-on-surface-variant hover:bg-soft-cream hover:translate-x-1 group'}`}
+              className={`flex items-center space-x-2 md:space-x-4 py-2 md:py-3 px-3 md:px-4 rounded-full md:rounded-sm transition-all text-left whitespace-nowrap snap-start flex-shrink-0 ${tab === 'addresses' ? 'bg-regal-navy text-metallic-gold md:font-bold md:translate-x-1' : 'bg-white md:bg-transparent text-on-surface-variant border border-gray-200 md:border-transparent hover:bg-soft-cream md:hover:translate-x-1 group'}`}
             >
-              <span className={`material-symbols-outlined ${tab === 'addresses' ? '' : 'text-outline group-hover:text-regal-navy'}`} style={tab === 'addresses' ? { fontVariationSettings: "'FILL' 1" } : {}}>location_on</span>
-              <span className="text-body-md font-body-md">Addresses</span>
+              <span className={`material-symbols-outlined text-[18px] md:text-[24px] ${tab === 'addresses' ? '' : 'text-outline group-hover:text-regal-navy'}`} style={tab === 'addresses' ? { fontVariationSettings: "'FILL' 1" } : {}}>location_on</span>
+              <span className="text-sm md:text-body-md font-body-md">Addresses</span>
             </button>
             <button 
               onClick={() => handleTabChange('wishlist')}
-              className={`flex items-center space-x-4 py-3 px-4 rounded-sm transition-all text-left ${tab === 'wishlist' ? 'bg-regal-navy text-metallic-gold font-bold translate-x-1' : 'text-on-surface-variant hover:bg-soft-cream hover:translate-x-1 group'}`}
+              className={`flex items-center space-x-2 md:space-x-4 py-2 md:py-3 px-3 md:px-4 rounded-full md:rounded-sm transition-all text-left whitespace-nowrap snap-start flex-shrink-0 ${tab === 'wishlist' ? 'bg-regal-navy text-metallic-gold md:font-bold md:translate-x-1' : 'bg-white md:bg-transparent text-on-surface-variant border border-gray-200 md:border-transparent hover:bg-soft-cream md:hover:translate-x-1 group'}`}
             >
-              <span className={`material-symbols-outlined ${tab === 'wishlist' ? '' : 'text-outline group-hover:text-regal-navy'}`} style={tab === 'wishlist' ? { fontVariationSettings: "'FILL' 1" } : {}}>favorite</span>
-              <span className="text-body-md font-body-md">Wishlist</span>
+              <span className={`material-symbols-outlined text-[18px] md:text-[24px] ${tab === 'wishlist' ? '' : 'text-outline group-hover:text-regal-navy'}`} style={tab === 'wishlist' ? { fontVariationSettings: "'FILL' 1" } : {}}>favorite</span>
+              <span className="text-sm md:text-body-md font-body-md">Wishlist</span>
             </button>
             <button 
               onClick={() => handleTabChange('details')}
-              className={`flex items-center space-x-4 py-3 px-4 rounded-sm transition-all text-left ${tab === 'details' ? 'bg-regal-navy text-metallic-gold font-bold translate-x-1' : 'text-on-surface-variant hover:bg-soft-cream hover:translate-x-1 group'}`}
+              className={`flex items-center space-x-2 md:space-x-4 py-2 md:py-3 px-3 md:px-4 rounded-full md:rounded-sm transition-all text-left whitespace-nowrap snap-start flex-shrink-0 ${tab === 'details' ? 'bg-regal-navy text-metallic-gold md:font-bold md:translate-x-1' : 'bg-white md:bg-transparent text-on-surface-variant border border-gray-200 md:border-transparent hover:bg-soft-cream md:hover:translate-x-1 group'}`}
             >
-              <span className={`material-symbols-outlined ${tab === 'details' ? '' : 'text-outline group-hover:text-regal-navy'}`} style={tab === 'details' ? { fontVariationSettings: "'FILL' 1" } : {}}>person</span>
-              <span className="text-body-md font-body-md">Details</span>
+              <span className={`material-symbols-outlined text-[18px] md:text-[24px] ${tab === 'details' ? '' : 'text-outline group-hover:text-regal-navy'}`} style={tab === 'details' ? { fontVariationSettings: "'FILL' 1" } : {}}>person</span>
+              <span className="text-sm md:text-body-md font-body-md">Details</span>
             </button>
-            <div className="pt-8 border-t border-muted-gold/10 mt-4">
+            <div className="hidden md:block pt-8 border-t border-muted-gold/10 mt-4">
               <button onClick={() => {
                 localStorage.removeItem('token')
                 localStorage.removeItem('role')
@@ -175,6 +175,15 @@ function Account() {
                 <span className="text-body-md font-body-md text-error">Sign Out</span>
               </button>
             </div>
+            {/* Mobile Sign Out */}
+            <button onClick={() => {
+              localStorage.removeItem('token')
+              localStorage.removeItem('role')
+              navigate({ to: '/signin' })
+            }} className="md:hidden flex items-center space-x-2 py-2 px-3 rounded-full transition-all text-left whitespace-nowrap snap-start flex-shrink-0 bg-red-50 text-error border border-red-100">
+              <span className="material-symbols-outlined text-[18px]">logout</span>
+              <span className="text-sm font-body-md">Sign Out</span>
+            </button>
           </nav>
         </aside>
 
@@ -186,9 +195,11 @@ function Account() {
             <>
               {tab === 'orders' && (
                 <>
-                  <div className="flex justify-between items-end mb-10">
-                    <h3 className="text-headline-lg font-headline-lg text-regal-navy">Recent Orders</h3>
-                    <button onClick={() => handleTabChange('history')} className="text-label-md font-label-md border-b border-metallic-gold pb-1 hover:text-metallic-gold transition-all">View All History</button>
+                  <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-10">
+                    <h3 className="text-3xl md:text-headline-lg font-headline-lg text-regal-navy">Recent Orders</h3>
+                    <div className="self-start md:self-auto">
+                      <button onClick={() => handleTabChange('history')} className="text-label-md font-label-md border-b border-metallic-gold pb-1 hover:text-metallic-gold transition-all">View All History</button>
+                    </div>
                   </div>
 
                   {/* Order List */}
@@ -266,7 +277,7 @@ function Account() {
           {tab === 'history' && (
             <>
               <div className="mb-8">
-                <h1 className="font-headline-lg text-headline-lg text-regal-navy mb-2">Order History</h1>
+                <h1 className="text-3xl md:text-headline-lg font-headline-lg text-regal-navy mb-2">Order History</h1>
                 <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Manage your past olfactory investments. View details, tracking info, and reorder your favorite scents.</p>
               </div>
 
@@ -505,10 +516,10 @@ function Account() {
 
           {tab === 'details' && (
             <div className="max-w-2xl">
-              <header className="mb-12">
-                <h1 className="font-headline-lg text-headline-lg text-regal-navy mb-4">Account Details</h1>
-                <p className="font-body-lg text-body-lg text-on-surface-variant">Manage your personal information and security settings to customize your fragrance experience.</p>
-              </header>
+              <div className="mb-8">
+                <h1 className="text-3xl md:text-headline-lg font-headline-lg text-regal-navy mb-2">Account Details</h1>
+                <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">Manage your personal information and preferences.</p>
+              </div>
 
               {/* Personal Information Form */}
               <div className="mb-32">
