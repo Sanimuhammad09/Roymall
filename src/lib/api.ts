@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://roymall-backend-production.up.railway.app/api'
+const API_BASE_URL = (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) ? import.meta.env.VITE_API_URL : 'https://roymall-backend-production.up.railway.app/api'
 
 // Helper to get or create a session ID for guest carts
 export const getSessionId = () => {
