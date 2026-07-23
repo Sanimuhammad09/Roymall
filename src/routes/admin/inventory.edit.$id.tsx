@@ -29,6 +29,8 @@ function EditProduct() {
   const [stockQuantity, setStockQuantity] = useState('50')
   const [tagline, setTagline] = useState('')
   const [description, setDescription] = useState('')
+  const [size, setSize] = useState('')
+  const [olfactoryFamily, setOlfactoryFamily] = useState('')
   
   // Array states
   const [topNotes, setTopNotes] = useState('')
@@ -65,6 +67,8 @@ function EditProduct() {
       setStockQuantity(product.stockQuantity !== undefined ? String(product.stockQuantity) : '50')
       setTagline(product.tagline || '')
       setDescription(product.description || '')
+      setSize(product.size || '')
+      setOlfactoryFamily(product.olfactoryFamily || '')
       setIsNewArrival(!!product.isNewArrival)
       setIsBestSeller(!!product.isBestSeller)
       setTopNotes(product.topNotes?.join(', ') || '')
@@ -150,6 +154,8 @@ function EditProduct() {
         categoryId,
         tagline,
         description,
+        size,
+        olfactoryFamily,
         isNewArrival,
         isBestSeller,
         topNotes: topNotes ? topNotes.split(',').map(n => n.trim()).filter(Boolean) : [],
@@ -161,6 +167,7 @@ function EditProduct() {
 
       queryClient.invalidateQueries({ queryKey: ['products'] })
       queryClient.invalidateQueries({ queryKey: ['admin-products'] })
+      queryClient.invalidateQueries({ queryKey: ['product', id] })
       setShowModal(true)
     } catch (err: any) {
       setError(err.message || 'Failed to update product.')
@@ -261,6 +268,27 @@ function EditProduct() {
                   className="w-full border border-gray-300 p-3 font-body-md text-body-md focus:border-metallic-gold focus:ring-1 focus:ring-metallic-gold outline-none transition-colors" 
                   placeholder="50" type="number" 
                 />
+              </div>
+              <div>
+                <label className="block font-label-md text-xs uppercase text-gray-500 mb-2 font-bold">Size (e.g., 100ml)</label>
+                <input 
+                  value={size} onChange={e => setSize(e.target.value)}
+                  className="w-full border border-gray-300 p-3 font-body-md text-body-md focus:border-metallic-gold focus:ring-1 focus:ring-metallic-gold outline-none transition-colors" 
+                  placeholder="100ml" type="text" 
+                />
+              </div>
+              <div>
+                <label className="block font-label-md text-xs uppercase text-gray-500 mb-2 font-bold">Olfactory Family</label>
+                <select 
+                  value={olfactoryFamily} onChange={e => setOlfactoryFamily(e.target.value)}
+                  className="w-full border border-gray-300 p-3 font-body-md text-body-md focus:border-metallic-gold focus:ring-1 focus:ring-metallic-gold outline-none transition-colors appearance-none bg-white"
+                >
+                  <option value="">Select Family</option>
+                  <option value="Floral">Floral</option>
+                  <option value="Woody">Woody</option>
+                  <option value="Fresh">Fresh</option>
+                  <option value="Oriental">Oriental</option>
+                </select>
               </div>
             </div>
           </section>
