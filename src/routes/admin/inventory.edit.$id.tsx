@@ -152,9 +152,9 @@ function EditProduct() {
         description,
         isNewArrival,
         isBestSeller,
-        topNotes: topNotes ? topNotes.split(',').map(n => n.trim()) : [],
-        heartNotes: heartNotes ? heartNotes.split(',').map(n => n.trim()) : [],
-        baseNotes: baseNotes ? baseNotes.split(',').map(n => n.trim()) : []
+        topNotes: topNotes ? topNotes.split(',').map(n => n.trim()).filter(Boolean) : [],
+        heartNotes: heartNotes ? heartNotes.split(',').map(n => n.trim()).filter(Boolean) : [],
+        baseNotes: baseNotes ? baseNotes.split(',').map(n => n.trim()).filter(Boolean) : []
       }
 
       await updateProductMutation.mutateAsync(productData)

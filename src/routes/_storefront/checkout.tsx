@@ -3,6 +3,7 @@ import { useState, type FormEvent } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { usePaystackPayment } from 'react-paystack'
 import { api } from '../../lib/api'
+import { useAuth } from '../../lib/auth'
 
 export const Route = createFileRoute('/_storefront/checkout')({
   component: Checkout,
@@ -11,10 +12,12 @@ export const Route = createFileRoute('/_storefront/checkout')({
 function Checkout() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const { user, login } = useAuth()
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    email: user?.email || '',
+    password: '',
     phone: '',
     street: '',
     city: '',
@@ -67,51 +70,88 @@ function Checkout() {
       return
     }
     
-    // Save address to profile if checked and authenticated
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-    if (token && formData.saveAddress) {
-      api.addAddress({
-        street: formData.street,
-        city: formData.city,
-        state: formData.state,
-        zipCode: formData.zipCode,
-        country: formData.country,
-        isDefault: false
-      }).catch(err => console.error("Could not save address", err))
+    const proceedWithOrder = (userIdOverride?: string) => {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      if (token && formData.saveAddress) {
+        api.addAddress({
+          street: formData.street,
+          city: formData.city,
+          state: formData.state,
+          zipCode: formData.zipCode,
+          country: formData.country,
+          isDefault: false
+        }).catch(err => console.error("Could not save address", err))
+      }
+
+      const orderData = {
+        items: cartItems.map((item: any) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        shippingAddress: formData,
+        subtotal,
+        tax,
+        shippingCost,
+        total,
+        paymentMethod,
+        paymentReference: '',
+        ...(userIdOverride ? { userId: userIdOverride } : {})
+      }
+
+      if (paymentMethod === 'PAYSTACK') {
+        if (!paystackConfig.publicKey) {
+          alert("Paystack Public Key is missing. Please configure VITE_PAYSTACK_PUBLIC_KEY in your .env file or choose Bank Transfer.")
+          return
+        }
+        initializePayment({
+          onSuccess: (reference: any) => {
+            orderData.paymentReference = reference.reference
+            createOrderMutation.mutate(orderData)
+          },
+          onClose: () => {
+            alert("Payment was not completed. Please try again.")
+          }
+        });
+      } else {
+        orderData.paymentReference = 'BANK_TRANSFER_' + Date.now()
+        createOrderMutation.mutate(orderData)
+      }
     }
 
-    const orderData = {
-      items: cartItems.map((item: any) => ({
-        productId: item.productId,
-        quantity: item.quantity,
-        price: item.price
-      })),
-      shippingAddress: formData,
-      subtotal,
-      tax,
-      shippingCost,
-      total,
-      paymentMethod,
-      paymentReference: ''
-    }
-
-    if (paymentMethod === 'PAYSTACK') {
-      if (!paystackConfig.publicKey) {
-        alert("Paystack Public Key is missing. Please configure VITE_PAYSTACK_PUBLIC_KEY in your .env file or choose Bank Transfer.")
+    if (!user) {
+      if (!formData.password) {
+        alert("Please enter a password to create your account and proceed with your order.")
         return
       }
-      initializePayment({
-        onSuccess: (reference: any) => {
-          orderData.paymentReference = reference.reference
-          createOrderMutation.mutate(orderData)
-        },
-        onClose: () => {
-          alert("Payment was not completed. Please try again.")
-        }
-      });
+      // Register the guest user
+      api.register({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password
+      })
+      .then(() => {
+        // Automatically login the newly registered user
+        api.login({ email: formData.email, password: formData.password })
+          .then(loginRes => {
+             const token = loginRes.data?.access_token || loginRes.access_token
+             const userData = loginRes.data?.user || loginRes.user
+             login(token, userData)
+             proceedWithOrder(userData.id)
+          })
+          .catch(err => {
+             console.error(err)
+             alert("Account created but failed to log in automatically. Proceeding as guest.")
+             proceedWithOrder()
+          })
+      })
+      .catch(err => {
+         console.error(err)
+         alert("Could not register account. You might already have an account with this email.")
+      })
     } else {
-      orderData.paymentReference = 'BANK_TRANSFER_' + Date.now()
-      createOrderMutation.mutate(orderData)
+      proceedWithOrder()
     }
   }
 
@@ -152,15 +192,43 @@ function Checkout() {
         <div className="lg:col-span-7">
           <form id="checkout-form" onSubmit={handleSubmit} className="space-y-10">
             
-            {/* Contact Information */}
+            {/* Account / Contact Information */}
             <section>
-              <h3 className="font-headline-md text-headline-md text-regal-navy mb-6 pb-2 border-b border-muted-gold/20">Contact Information</h3>
+              <h3 className="font-headline-md text-headline-md text-regal-navy mb-6 pb-2 border-b border-muted-gold/20">Account Information</h3>
+              {!user && (
+                <div className="mb-6 p-4 bg-muted-gold/10 border border-muted-gold/30 flex justify-between items-center">
+                  <p className="text-sm font-body-md text-regal-navy">Creating an account is required to place an order.</p>
+                  <Link to="/signin" className="text-sm font-label-md font-bold underline text-regal-navy">Already have an account? Log in</Link>
+                </div>
+              )}
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {!user && (
+                  <>
+                    <div className="flex flex-col gap-2">
+                      <label className="font-label-md text-label-md text-on-surface-variant uppercase text-xs">First Name *</label>
+                      <input required type="text" name="firstName" value={formData.firstName} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors" placeholder="First Name"/>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Last Name *</label>
+                      <input required type="text" name="lastName" value={formData.lastName} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors" placeholder="Last Name"/>
+                    </div>
+                  </>
+                )}
+
                 <div className="flex flex-col gap-2">
                   <label className="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Email Address *</label>
-                  <input required type="email" name="email" value={formData.email} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors" placeholder="your@email.com"/>
+                  <input required type="email" name="email" value={formData.email} onChange={handleChange} disabled={!!user} className={`border border-muted-gold/30 p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors ${user ? 'bg-gray-100 cursor-not-allowed' : 'bg-transparent'}`} placeholder="your@email.com"/>
                 </div>
-                <div className="flex flex-col gap-2">
+
+                {!user && (
+                  <div className="flex flex-col gap-2">
+                    <label className="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Create Password *</label>
+                    <input required type="password" name="password" value={formData.password} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors" placeholder="••••••••"/>
+                  </div>
+                )}
+                
+                <div className={`flex flex-col gap-2 ${!user ? 'md:col-span-2' : ''}`}>
                   <label className="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Phone Number *</label>
                   <input required type="tel" name="phone" value={formData.phone} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors" placeholder="+234 ..."/>
                 </div>
@@ -171,20 +239,11 @@ function Checkout() {
             <section>
               <h3 className="font-headline-md text-headline-md text-regal-navy mb-6 pb-2 border-b border-muted-gold/20">Shipping Address</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 gap-6 mb-6">
                 <div className="flex flex-col gap-2">
-                  <label className="font-label-md text-label-md text-on-surface-variant uppercase text-xs">First Name *</label>
-                  <input required type="text" name="firstName" value={formData.firstName} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors"/>
+                  <label className="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Street Address *</label>
+                  <input required type="text" name="street" value={formData.street} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors" placeholder="House number and street name"/>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Last Name *</label>
-                  <input required type="text" name="lastName" value={formData.lastName} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors"/>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2 mb-6">
-                <label className="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Street Address *</label>
-                <input required type="text" name="street" value={formData.street} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors" placeholder="House number and street name"/>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
