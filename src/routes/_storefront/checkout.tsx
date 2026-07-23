@@ -23,6 +23,7 @@ function Checkout() {
     zipCode: '',
     saveAddress: true,
   })
+  const [paymentMethod, setPaymentMethod] = useState<'PAYSTACK' | 'BANK_TRANSFER'>('PAYSTACK')
 
   // Fetch cart to get items and subtotal
   const { data: cartData, isLoading: isCartLoading } = useQuery({
@@ -79,38 +80,46 @@ function Checkout() {
       }).catch(err => console.error("Could not save address", err))
     }
 
-    // Instead of immediately creating the order, initialize Paystack if paying with Paystack
-    // We will use Paystack by default for "Standard Checkout"
-    initializePayment({
-      onSuccess: (reference: any) => {
-        // Payment complete! Add reference to order
-        const orderData = {
-          items: cartItems.map((item: any) => ({
-            productId: item.productId,
-            quantity: item.quantity,
-            price: item.price
-          })),
-          shippingAddress: formData,
-          subtotal,
-          tax,
-          shippingCost,
-          total,
-          paymentReference: reference.reference,
-          paymentMethod: 'PAYSTACK'
-        }
-        createOrderMutation.mutate(orderData)
-      },
-      onClose: () => {
-        alert("Payment was not completed. Please try again.")
+    const orderData = {
+      items: cartItems.map((item: any) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.price
+      })),
+      shippingAddress: formData,
+      subtotal,
+      tax,
+      shippingCost,
+      total,
+      paymentMethod,
+      paymentReference: ''
+    }
+
+    if (paymentMethod === 'PAYSTACK') {
+      if (!paystackConfig.publicKey) {
+        alert("Paystack Public Key is missing. Please configure VITE_PAYSTACK_PUBLIC_KEY in your .env file or choose Bank Transfer.")
+        return
       }
-    });
+      initializePayment({
+        onSuccess: (reference: any) => {
+          orderData.paymentReference = reference.reference
+          createOrderMutation.mutate(orderData)
+        },
+        onClose: () => {
+          alert("Payment was not completed. Please try again.")
+        }
+      });
+    } else {
+      orderData.paymentReference = 'BANK_TRANSFER_' + Date.now()
+      createOrderMutation.mutate(orderData)
+    }
   }
 
   const paystackConfig = {
     reference: (new Date()).getTime().toString(),
     email: formData.email || 'customer@example.com',
     amount: total * 100, // Paystack uses Kobo (kobo = NGN * 100)
-    publicKey: typeof window !== 'undefined' ? (import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || 'pk_test_d3a39e0bd58ed52b1136d8d6d61f5e278696d091') : '', 
+    publicKey: typeof window !== 'undefined' ? (import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || '') : '', 
   };
   const initializePayment = usePaystackPayment(paystackConfig);
 
@@ -221,11 +230,42 @@ function Checkout() {
             {/* Payment Method */}
             <section>
               <h3 className="font-headline-md text-headline-md text-regal-navy mb-6 pb-2 border-b border-muted-gold/20">Payment</h3>
-              <div className="border border-regal-navy p-6 bg-regal-navy/5 flex items-center gap-4">
-                <input type="radio" checked readOnly className="w-5 h-5 accent-regal-navy"/>
-                <div>
-                  <h4 className="font-label-md font-bold text-regal-navy">Pay with Paystack</h4>
-                  <p className="text-sm text-gray-600 mt-1">Pay securely via Paystack (Cards, USSD, Bank Transfer).</p>
+              
+              <div className="flex flex-col gap-4">
+                {/* Paystack Option */}
+                <div 
+                  className={`border p-6 cursor-pointer transition-colors ${paymentMethod === 'PAYSTACK' ? 'border-regal-navy bg-regal-navy/5' : 'border-gray-200 hover:border-regal-navy/50'}`}
+                  onClick={() => setPaymentMethod('PAYSTACK')}
+                >
+                  <div className="flex items-center gap-4">
+                    <input type="radio" checked={paymentMethod === 'PAYSTACK'} readOnly className="w-5 h-5 accent-regal-navy"/>
+                    <div>
+                      <h4 className="font-label-md font-bold text-regal-navy">Pay with Paystack</h4>
+                      <p className="text-sm text-gray-600 mt-1">Pay securely via Paystack (Cards, USSD, Bank Transfer).</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bank Transfer Option */}
+                <div 
+                  className={`border p-6 cursor-pointer transition-colors ${paymentMethod === 'BANK_TRANSFER' ? 'border-regal-navy bg-regal-navy/5' : 'border-gray-200 hover:border-regal-navy/50'}`}
+                  onClick={() => setPaymentMethod('BANK_TRANSFER')}
+                >
+                  <div className="flex items-start gap-4">
+                    <input type="radio" checked={paymentMethod === 'BANK_TRANSFER'} readOnly className="w-5 h-5 accent-regal-navy mt-1"/>
+                    <div>
+                      <h4 className="font-label-md font-bold text-regal-navy">Direct Bank Transfer</h4>
+                      <p className="text-sm text-gray-600 mt-1 mb-3">Make your payment directly into our bank account. Your order will not be shipped until the funds have cleared.</p>
+                      
+                      {paymentMethod === 'BANK_TRANSFER' && (
+                        <div className="bg-white p-4 border border-muted-gold/20 text-sm space-y-2">
+                          <div className="flex justify-between border-b pb-2"><span className="text-gray-500">Bank Name</span><span className="font-bold text-regal-navy">Moniepoint MFB</span></div>
+                          <div className="flex justify-between border-b pb-2"><span className="text-gray-500">Account Name</span><span className="font-bold text-regal-navy">Roymall Enterprise</span></div>
+                          <div className="flex justify-between"><span className="text-gray-500">Account Number</span><span className="font-bold text-regal-navy text-base tracking-wider">9133333824</span></div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </section>
