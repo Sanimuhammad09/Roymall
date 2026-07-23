@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import type { Product } from '../../lib/api'
-import CountUp from 'react-countup'
+import { AnimatedCounter } from '../../components/AnimatedCounter'
 
 export const Route = createFileRoute('/_storefront/')({
   component: Home,
@@ -134,9 +134,9 @@ function Home() {
               <div className="flex flex-col items-center">
                 <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
                   {metricsData?.scentsDelivered ? (
-                    <><CountUp end={Math.floor(metricsData.scentsDelivered / 1000)} enableScrollSpy />k+</>
+                    <><AnimatedCounter end={Math.floor(metricsData.scentsDelivered / 1000)} />k+</>
                   ) : (
-                    <><CountUp end={10} enableScrollSpy />k+</>
+                    <><AnimatedCounter end={10} />k+</>
                   )}
                 </span>
                 <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Scents Delivered</span>
@@ -144,9 +144,9 @@ function Home() {
               <div className="flex flex-col items-center">
                 <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
                   {metricsData?.globalStockists ? (
-                    <><CountUp end={metricsData.globalStockists} enableScrollSpy />+</>
+                    <><AnimatedCounter end={metricsData.globalStockists} />+</>
                   ) : (
-                    <><CountUp end={250} enableScrollSpy />+</>
+                    <><AnimatedCounter end={250} />+</>
                   )}
                 </span>
                 <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Global Stockists</span>
@@ -154,9 +154,9 @@ function Home() {
               <div className="flex flex-col items-center">
                 <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
                   {metricsData?.customerRating ? (
-                    <CountUp end={metricsData.customerRating} decimals={1} enableScrollSpy />
+                    <AnimatedCounter end={metricsData.customerRating} decimals={1} />
                   ) : (
-                    <CountUp end={4.9} decimals={1} enableScrollSpy />
+                    <AnimatedCounter end={4.9} decimals={1} />
                   )}
                 </span>
                 <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Customer Rating</span>
