@@ -133,30 +133,30 @@ function Home() {
             <div className="flex flex-wrap justify-center lg:justify-end gap-10 md:gap-16">
               <div className="flex flex-col items-center">
                 <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
-                  {metricsData?.scentsDelivered ? (
-                    <><AnimatedCounter end={Math.floor(metricsData.scentsDelivered / 1000)} />k+</>
+                  {metricsData?.scentsDelivered !== undefined ? (
+                    <AnimatedCounter end={metricsData.scentsDelivered} />
                   ) : (
-                    <><AnimatedCounter end={10} />k+</>
+                    <AnimatedCounter end={0} />
                   )}
                 </span>
                 <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Scents Delivered</span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
-                  {metricsData?.globalStockists ? (
-                    <><AnimatedCounter end={metricsData.globalStockists} />+</>
+                  {metricsData?.globalStockists !== undefined ? (
+                    <AnimatedCounter end={metricsData.globalStockists} />
                   ) : (
-                    <><AnimatedCounter end={250} />+</>
+                    <AnimatedCounter end={0} />
                   )}
                 </span>
                 <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Global Stockists</span>
               </div>
               <div className="flex flex-col items-center">
                 <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
-                  {metricsData?.customerRating ? (
+                  {metricsData?.customerRating !== undefined ? (
                     <AnimatedCounter end={metricsData.customerRating} decimals={1} />
                   ) : (
-                    <AnimatedCounter end={4.9} decimals={1} />
+                    <AnimatedCounter end={0} decimals={1} />
                   )}
                 </span>
                 <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Customer Rating</span>
