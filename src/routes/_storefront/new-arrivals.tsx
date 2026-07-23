@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import type { Product } from '../../lib/api'
+import { GlobalLoader } from '../../components/GlobalLoader'
 
 export const Route = createFileRoute('/_storefront/new-arrivals')({
   component: NewArrivals,
@@ -45,6 +46,10 @@ function NewArrivals() {
 
   const products: Product[] = Array.isArray(newArrivalsData) ? newArrivalsData : (newArrivalsData?.data || [])
 
+  if (isLoading) {
+    return <GlobalLoader />
+  }
+
   return (
     <main className="bg-background text-on-background font-body-md min-h-screen">
       <style>{`
@@ -75,7 +80,7 @@ function NewArrivals() {
       {/* Product Grid Section */}
       <section 
         ref={addToRefs} 
-        className="py-[120px] px-6 md:px-[64px] max-w-[1440px] mx-auto transition-all duration-1000 opacity-0 translate-y-10"
+        className="py-[120px] px-6 md:px-[64px] max-w-[1440px] mx-auto transition-all duration-1000"
       >
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div>
@@ -92,10 +97,7 @@ function NewArrivals() {
           </div>
         </div>
 
-        {isLoading ? (
-          <div className="flex justify-center py-20 text-regal-navy font-bold">Loading collection...</div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[32px]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[32px]">
             {products.map(product => (
               <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="group flex flex-col cursor-pointer">
                 <div className="relative overflow-hidden bg-soft-cream aspect-[4/5] mb-6">
@@ -123,13 +125,12 @@ function NewArrivals() {
               </Link>
             ))}
           </div>
-        )}
       </section>
 
       {/* Story/About the Collection Section */}
       <section 
         ref={addToRefs} 
-        className="bg-regal-navy text-white overflow-hidden transition-all duration-1000 opacity-0 translate-y-10"
+        className="bg-regal-navy text-white overflow-hidden transition-all duration-1000"
       >
         <div className="max-w-[1440px] mx-auto flex flex-col lg:flex-row items-stretch">
           <div className="flex-1 px-6 md:px-[64px] py-[120px] flex flex-col justify-center">
@@ -158,7 +159,7 @@ function NewArrivals() {
       {/* Newsletter / Join the Circle */}
       <section 
         ref={addToRefs} 
-        className="py-[120px] px-6 md:px-[64px] text-center bg-soft-cream transition-all duration-1000 opacity-0 translate-y-10"
+        className="py-[120px] px-6 md:px-[64px] text-center bg-soft-cream transition-all duration-1000"
       >
         <div className="max-w-2xl mx-auto">
           <span className="material-symbols-outlined text-metallic-gold text-5xl mb-6">loyalty</span>
