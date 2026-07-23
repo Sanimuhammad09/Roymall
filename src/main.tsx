@@ -24,8 +24,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
-// Create a client
-const queryClient = new QueryClient()
+// Create a client with performance optimizations
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Data is considered fresh for 5 minutes (prevents refetching when navigating around)
+      staleTime: 1000 * 60 * 5,
+      // Keep inactive data in cache for 30 minutes
+      gcTime: 1000 * 60 * 30,
+      // Don't refetch when user switches browser tabs
+      refetchOnWindowFocus: false,
+      // Only retry once if a request fails
+      retry: 1,
+    },
+  },
+})
 
 const rootElement = document.getElementById('root')!
 if (!rootElement.innerHTML) {
