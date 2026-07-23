@@ -15,7 +15,7 @@ function Dashboard() {
   if (isLoading) return <div className="p-8">Loading dashboard...</div>
   if (error) return <div className="p-8 text-red-500">Failed to load dashboard data.</div>
 
-  const metrics = data || {}
+  const metrics = data?.data || data || {}
 
   return (
     <div className="max-w-7xl mx-auto">

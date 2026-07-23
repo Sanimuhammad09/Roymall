@@ -42,7 +42,7 @@ function Analytics() {
     queryFn: () => api.adminGetOverview()
   })
 
-  const metrics = data || {}
+  const metrics = data?.data || data || {}
   const lineOptions = {
     responsive: true,
     maintainAspectRatio: false,
