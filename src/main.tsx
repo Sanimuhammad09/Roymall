@@ -9,8 +9,13 @@ import { AuthProvider } from './lib/auth'
 
 import './index.css'
 
+import { GlobalLoader } from './components/GlobalLoader'
+
 // Create a new router instance
-const router = createRouter({ routeTree })
+const router = createRouter({ 
+  routeTree,
+  defaultPendingComponent: GlobalLoader,
+})
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {

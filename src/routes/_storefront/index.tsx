@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import type { Product } from '../../lib/api'
+import { GlobalLoader } from '../../components/GlobalLoader'
 
 export const Route = createFileRoute('/_storefront/')({
   component: Home,
@@ -12,20 +13,22 @@ function Home() {
   const queryClient = useQueryClient()
   const [addedToast, setAddedToast] = useState(false)
   
-  const { data: bestSellersData } = useQuery({
+  const { data: bestSellersData, isLoading: isBestSellersLoading } = useQuery({
     queryKey: ['products', 'best-sellers'],
     queryFn: () => api.getProducts({ isBestSeller: true })
   })
   
-  const { data: newArrivalsData } = useQuery({
+  const { data: newArrivalsData, isLoading: isNewArrivalsLoading } = useQuery({
     queryKey: ['products', 'new-arrivals'],
     queryFn: () => api.getProducts({ isNewArrival: true })
   })
 
-  const { data: metricsData } = useQuery({
+  const { data: metricsData, isLoading: isMetricsLoading } = useQuery({
     queryKey: ['metrics'],
     queryFn: api.getMetrics
   })
+
+  const isLoading = isBestSellersLoading || isNewArrivalsLoading || isMetricsLoading
 
   const bestSellers: Product[] = Array.isArray(bestSellersData) ? bestSellersData : (bestSellersData?.data || [])
   const newArrivals: Product[] = Array.isArray(newArrivalsData) ? newArrivalsData : (newArrivalsData?.data || [])
@@ -78,6 +81,10 @@ function Home() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  if (isLoading) {
+    return <GlobalLoader />
+  }
 
   return (
     <>

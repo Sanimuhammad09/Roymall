@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import { useState } from 'react'
 import { OrderDetailsModal } from '../../components/OrderDetailsModal'
+import { GlobalLoader } from '../../components/GlobalLoader'
 
 export const Route = createFileRoute('/admin/')({
   component: Dashboard,
@@ -16,7 +17,7 @@ function Dashboard() {
 
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
 
-  if (isLoading) return <div className="p-8">Loading dashboard...</div>
+  if (isLoading) return <GlobalLoader />
   if (error) return <div className="p-8 text-red-500">Failed to load dashboard data.</div>
 
   const metrics = data?.data || data || {}

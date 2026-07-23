@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { GlobalLoader } from '../../components/GlobalLoader'
 import { api } from '../../lib/api'
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal'
 import { OrderDetailsModal } from '../../components/OrderDetailsModal'
@@ -190,7 +191,9 @@ function Account() {
         {/* Main Content Area */}
         <section className="flex-grow">
           {(isProfileLoading || isOrdersLoading) ? (
-            <div className="py-20 flex justify-center text-regal-navy font-bold">Loading dashboard...</div>
+            <div className="py-20 h-full w-full min-h-[400px] relative">
+              <GlobalLoader />
+            </div>
           ) : (
             <>
               {tab === 'orders' && (
