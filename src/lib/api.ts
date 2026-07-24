@@ -385,7 +385,7 @@ export const api = {
   inviteAdminUser: async (data: any) => {
     return fetchApi('/admin/users', { method: 'POST', body: JSON.stringify(data) })
   },
-  adminDeleteUser: async (id: string) => {
+  removeAdminAccess: async (id: string) => {
     return fetchApi(`/admin/users/${id}`, { method: 'DELETE' })
   },
 
