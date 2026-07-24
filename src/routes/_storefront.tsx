@@ -26,7 +26,8 @@ function StorefrontLayout() {
   const showBanner = settings?.enablePromotions && settings?.promoBannerText;
 
 
-  const cartItemsCount = cartData?.items?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0
+  const cartItems = cartData?.data?.items || cartData?.items || []
+  const cartItemsCount = cartItems.reduce((acc: number, item: any) => acc + (item.quantity || item.qty || 1), 0)
 
   useEffect(() => {
     const handleScroll = () => {
