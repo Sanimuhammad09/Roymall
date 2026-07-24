@@ -96,7 +96,7 @@ function Product() {
 
   return (
     <>
-    <main className="pt-32 pb-[120px] px-[64px] max-w-7xl mx-auto">
+    <main className="pt-40 md:pt-32 pb-[120px] px-4 md:px-[64px] max-w-7xl mx-auto">
       {/* Product Detail Section */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-[32px]">
         {/* Product Gallery */}
@@ -166,8 +166,8 @@ function Product() {
 
           {/* Actions */}
           <div className="flex flex-col gap-4 mb-12">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center border border-regal-navy/20 h-14 px-4 bg-white">
+            <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
+              <div className="flex items-center justify-between border border-regal-navy/20 h-14 px-4 bg-white min-w-[120px]">
                 <button className="p-2 hover:text-metallic-gold transition-colors" onClick={() => qty > 1 && setQty(qty - 1)}>
                   <span className="material-symbols-outlined">remove</span>
                 </button>
@@ -179,7 +179,7 @@ function Product() {
               <button 
                 onClick={() => addToCartMutation.mutate({ productId: prod.id, quantity: qty })}
                 disabled={addToCartMutation.isPending}
-                className="flex-1 bg-regal-navy text-metallic-gold h-14 font-label-md uppercase tracking-widest hover:bg-regal-navy/90 transition-all active:scale-95 disabled:opacity-70"
+                className="flex-1 bg-regal-navy text-metallic-gold h-14 font-label-md text-sm sm:text-base uppercase tracking-widest hover:bg-regal-navy/90 transition-all active:scale-95 disabled:opacity-70 whitespace-nowrap px-2 sm:px-4"
               >
                 {addToCartMutation.isPending ? 'Adding...' : 'Add to Bag'}
               </button>
