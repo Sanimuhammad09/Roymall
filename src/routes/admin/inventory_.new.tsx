@@ -149,8 +149,8 @@ function AddNewProduct() {
           {/* Basic Information Section */}
           <section className="bg-white p-8 border border-gray-200 shadow-sm">
             <h3 className="font-headline-md text-headline-md text-regal-navy mb-8 border-b border-gray-200 pb-4 font-bold text-2xl">Essential Details</h3>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="col-span-1 md:col-span-2">
                 <label className="block font-label-md text-xs uppercase text-gray-500 mb-2 font-bold">Product Name *</label>
                 <input 
                   value={name} onChange={e => setName(e.target.value)}
