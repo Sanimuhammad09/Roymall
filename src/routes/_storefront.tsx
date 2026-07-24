@@ -17,6 +17,15 @@ function StorefrontLayout() {
     queryFn: api.getCart
   })
 
+  const { data: settingsData } = useQuery({
+    queryKey: ['public-settings'],
+    queryFn: api.getPublicSettings
+  })
+  
+  const settings = settingsData?.data;
+  const showBanner = settings?.enablePromotions && settings?.promoBannerText;
+
+
   const cartItemsCount = cartData?.items?.reduce((acc: number, item: any) => acc + item.quantity, 0) || 0
 
   useEffect(() => {
@@ -35,12 +44,19 @@ function StorefrontLayout() {
   const isHomePage = location.pathname === '/'
   const textColor = isHomePage && !isScrolled ? 'text-soft-cream' : 'text-regal-navy'
 
-  const navClass = `fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-16 transition-all duration-500 ${
+  const navClass = `fixed left-0 w-full z-50 flex justify-between items-center px-6 md:px-16 transition-all duration-500 ${
     isScrolled ? 'bg-white/95 shadow-sm backdrop-blur-md py-4' : 'bg-transparent py-6'
-  }`
+  } ${showBanner ? 'top-8' : 'top-0'}`
 
   return (
     <div className="min-h-screen flex flex-col bg-soft-cream font-body-md text-regal-navy">
+      {/* Promotional Banner */}
+      {showBanner && (
+        <div className="bg-metallic-gold text-regal-navy text-center py-2 px-4 font-label-md text-xs font-bold tracking-widest fixed top-0 left-0 w-full z-[60] shadow-sm">
+          {settings.promoBannerText}
+        </div>
+      )}
+
       {/* TopNavBar */}
       <nav className={navClass} id="navbar">
         <div className="flex items-center gap-8">

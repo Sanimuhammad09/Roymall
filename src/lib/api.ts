@@ -385,8 +385,13 @@ export const api = {
   inviteAdminUser: async (data: any) => {
     return fetchApi('/admin/users', { method: 'POST', body: JSON.stringify(data) })
   },
-  removeAdminAccess: async (id: string) => {
+  adminDeleteUser: async (id: string) => {
     return fetchApi(`/admin/users/${id}`, { method: 'DELETE' })
+  },
+
+  // Public Store Settings
+  getPublicSettings: async () => {
+    return fetchApi('/settings')
   },
 
   submitReview: async (productId: string, data: { rating: number; comment?: string }) => {
