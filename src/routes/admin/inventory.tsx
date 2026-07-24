@@ -38,6 +38,10 @@ function Inventory() {
       queryClient.invalidateQueries({ queryKey: ['admin-products'] })
       queryClient.invalidateQueries({ queryKey: ['admin-overview'] })
       setDeleteModal({ isOpen: false, productId: null, productName: '' })
+    },
+    onError: (error: any) => {
+      alert(error.message || 'Failed to delete product')
+      setDeleteModal({ isOpen: false, productId: null, productName: '' })
     }
   })
 
@@ -208,7 +212,7 @@ function Inventory() {
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
                         <button 
-                          onClick={() => navigate({ to: `/admin/inventory/edit/${item.id}` })}
+                          onClick={() => navigate({ to: '/admin/inventory/edit/$id', params: { id: item.id } })}
                           className="p-2 text-gray-400 hover:text-metallic-gold hover:bg-regal-navy rounded transition-all"
                         >
                           <span className="material-symbols-outlined text-[18px]">edit</span>
