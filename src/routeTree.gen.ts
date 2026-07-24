@@ -43,7 +43,7 @@ import { Route as StorefrontProductIdRouteImport } from './routes/_storefront/pr
 import { Route as AdminCustomersNewRouteImport } from './routes/admin/customers_.new'
 import { Route as AdminInventoryNewRouteImport } from './routes/admin/inventory_.new'
 import { Route as AdminOrdersNewRouteImport } from './routes/admin/orders_.new'
-import { Route as AdminInventoryEditIdRouteImport } from './routes/admin/inventory.edit.$id'
+import { Route as AdminInventoryEditIdRouteImport } from './routes/admin/inventory_.edit.$id'
 
 const StorefrontRoute = StorefrontRouteImport.update({
   id: '/_storefront',
@@ -219,9 +219,9 @@ const AdminOrdersNewRoute = AdminOrdersNewRouteImport.update({
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminInventoryEditIdRoute = AdminInventoryEditIdRouteImport.update({
-  id: '/edit/$id',
-  path: '/edit/$id',
-  getParentRoute: () => AdminInventoryRoute,
+  id: '/inventory_/edit/$id',
+  path: '/inventory/edit/$id',
+  getParentRoute: () => AdminRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -249,7 +249,7 @@ export interface FileRoutesByFullPath {
   '/admin/appointments': typeof AdminAppointmentsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
-  '/admin/inventory': typeof AdminInventoryRouteWithChildren
+  '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/invoice/$id': typeof InvoiceIdRoute
@@ -283,7 +283,7 @@ export interface FileRoutesByTo {
   '/admin/appointments': typeof AdminAppointmentsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
-  '/admin/inventory': typeof AdminInventoryRouteWithChildren
+  '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/invoice/$id': typeof InvoiceIdRoute
@@ -321,7 +321,7 @@ export interface FileRoutesById {
   '/admin/appointments': typeof AdminAppointmentsRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/inquiries': typeof AdminInquiriesRoute
-  '/admin/inventory': typeof AdminInventoryRouteWithChildren
+  '/admin/inventory': typeof AdminInventoryRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/invoice/$id': typeof InvoiceIdRoute
@@ -331,7 +331,7 @@ export interface FileRoutesById {
   '/admin/customers_/new': typeof AdminCustomersNewRoute
   '/admin/inventory_/new': typeof AdminInventoryNewRoute
   '/admin/orders_/new': typeof AdminOrdersNewRoute
-  '/admin/inventory/edit/$id': typeof AdminInventoryEditIdRoute
+  '/admin/inventory_/edit/$id': typeof AdminInventoryEditIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -441,7 +441,7 @@ export interface FileRouteTypes {
     | '/admin/customers_/new'
     | '/admin/inventory_/new'
     | '/admin/orders_/new'
-    | '/admin/inventory/edit/$id'
+    | '/admin/inventory_/edit/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -693,12 +693,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrdersNewRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/inventory/edit/$id': {
-      id: '/admin/inventory/edit/$id'
-      path: '/edit/$id'
+    '/admin/inventory_/edit/$id': {
+      id: '/admin/inventory_/edit/$id'
+      path: '/inventory/edit/$id'
       fullPath: '/admin/inventory/edit/$id'
       preLoaderRoute: typeof AdminInventoryEditIdRouteImport
-      parentRoute: typeof AdminInventoryRoute
+      parentRoute: typeof AdminRoute
     }
   }
 }
@@ -747,30 +747,19 @@ const StorefrontRouteWithChildren = StorefrontRoute._addFileChildren(
   StorefrontRouteChildren,
 )
 
-interface AdminInventoryRouteChildren {
-  AdminInventoryEditIdRoute: typeof AdminInventoryEditIdRoute
-}
-
-const AdminInventoryRouteChildren: AdminInventoryRouteChildren = {
-  AdminInventoryEditIdRoute: AdminInventoryEditIdRoute,
-}
-
-const AdminInventoryRouteWithChildren = AdminInventoryRoute._addFileChildren(
-  AdminInventoryRouteChildren,
-)
-
 interface AdminRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminAppointmentsRoute: typeof AdminAppointmentsRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
   AdminInquiriesRoute: typeof AdminInquiriesRoute
-  AdminInventoryRoute: typeof AdminInventoryRouteWithChildren
+  AdminInventoryRoute: typeof AdminInventoryRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
   AdminCustomersNewRoute: typeof AdminCustomersNewRoute
   AdminInventoryNewRoute: typeof AdminInventoryNewRoute
   AdminOrdersNewRoute: typeof AdminOrdersNewRoute
+  AdminInventoryEditIdRoute: typeof AdminInventoryEditIdRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
@@ -778,13 +767,14 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminAppointmentsRoute: AdminAppointmentsRoute,
   AdminCustomersRoute: AdminCustomersRoute,
   AdminInquiriesRoute: AdminInquiriesRoute,
-  AdminInventoryRoute: AdminInventoryRouteWithChildren,
+  AdminInventoryRoute: AdminInventoryRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
   AdminCustomersNewRoute: AdminCustomersNewRoute,
   AdminInventoryNewRoute: AdminInventoryNewRoute,
   AdminOrdersNewRoute: AdminOrdersNewRoute,
+  AdminInventoryEditIdRoute: AdminInventoryEditIdRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)

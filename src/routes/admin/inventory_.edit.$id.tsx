@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal'
 
-export const Route = createFileRoute('/admin/inventory/edit/$id')({
+export const Route = createFileRoute('/admin/inventory_/edit/$id')({
   component: EditProduct,
 })
 
