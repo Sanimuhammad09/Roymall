@@ -13,6 +13,7 @@ function Shop() {
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [selectedFamily, setSelectedFamily] = useState<string>('')
   const [selectedBrand, setSelectedBrand] = useState<string>('')
+  const [page, setPage] = useState<number>(1)
   const [addedToast, setAddedToast] = useState(false)
 
   const addToCartMutation = useMutation({
@@ -26,17 +27,20 @@ function Shop() {
   })
 
   const { data, isLoading } = useQuery({
-    queryKey: ['products', { category: selectedCategory, olfactoryFamily: selectedFamily, brand: selectedBrand }],
+    queryKey: ['products', { category: selectedCategory, olfactoryFamily: selectedFamily, brand: selectedBrand, page }],
     queryFn: () => api.getProducts({ 
       ...(selectedCategory ? { category: selectedCategory } : {}),
       ...(selectedFamily ? { olfactoryFamily: selectedFamily } : {}),
-      ...(selectedBrand ? { brand: selectedBrand } : {})
+      ...(selectedBrand ? { brand: selectedBrand } : {}),
+      page,
+      limit: 12
     })
   })
 
   // The backend might return { data: Product[], meta: ... } or just Product[]
   // We'll safely extract the array.
   const products: Product[] = Array.isArray(data) ? data : (data?.data || [])
+  const meta = data?.meta || { totalPages: 1, page: 1, total: products.length }
 
   return (
     <>
@@ -62,7 +66,7 @@ function Shop() {
                     type="radio"
                     name="category"
                     checked={selectedCategory === ''}
-                    onChange={() => setSelectedCategory('')}
+                    onChange={() => { setSelectedCategory(''); setPage(1); }}
                   />
                   <label className="text-body-md font-body-md text-on-surface-variant cursor-pointer hover:text-regal-navy" htmlFor="cat-all">All Fragrances</label>
                 </li>
@@ -74,7 +78,7 @@ function Shop() {
                       type="radio"
                       name="category"
                       checked={selectedCategory === cat}
-                      onChange={() => setSelectedCategory(cat)}
+                      onChange={() => { setSelectedCategory(cat); setPage(1); }}
                     />
                     <label className="text-body-md font-body-md text-on-surface-variant cursor-pointer hover:text-regal-navy" htmlFor={`cat-${cat}`}>{cat}</label>
                   </li>
@@ -93,8 +97,8 @@ function Shop() {
                       type="radio"
                       name="brand"
                       checked={selectedBrand === brand}
-                      onChange={() => setSelectedBrand(selectedBrand === brand ? '' : brand)}
-                      onClick={() => { if(selectedBrand === brand) setSelectedBrand('') }}
+                      onChange={() => { setSelectedBrand(selectedBrand === brand ? '' : brand); setPage(1); }}
+                      onClick={() => { if(selectedBrand === brand) { setSelectedBrand(''); setPage(1); } }}
                     />
                     <span className="text-body-md font-body-md text-on-surface-variant group-hover:text-regal-navy transition-colors">{brand}</span>
                   </label>
@@ -121,7 +125,7 @@ function Shop() {
                 {['Woody', 'Oud', 'Floral', 'Citrus', 'Spicy', 'Aquatic'].map(scent => (
                   <button 
                     key={scent} 
-                    onClick={() => setSelectedFamily(selectedFamily === scent ? '' : scent)}
+                    onClick={() => { setSelectedFamily(selectedFamily === scent ? '' : scent); setPage(1); }}
                     className={`px-3 py-1 border border-muted-gold/30 text-xs font-label-md uppercase tracking-wider transition-all ${
                       selectedFamily === scent ? 'bg-regal-navy text-soft-cream' : 'text-regal-navy hover:bg-regal-navy hover:text-soft-cream'
                     }`}
@@ -183,19 +187,40 @@ function Shop() {
           )}
 
           {/* Pagination */}
-          <div className="mt-16 flex justify-center items-center gap-4">
-            <button className="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all">
-              <span className="material-symbols-outlined">chevron_left</span>
-            </button>
-            <button className="w-10 h-10 flex items-center justify-center bg-regal-navy text-on-primary font-label-md">1</button>
-            <button className="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all font-label-md">2</button>
-            <button className="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all font-label-md">3</button>
-            <span className="text-muted-gold">...</span>
-            <button className="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all font-label-md">12</button>
-            <button className="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all">
-              <span className="material-symbols-outlined">chevron_right</span>
-            </button>
-          </div>
+          {meta.totalPages > 1 && (
+            <div className="mt-16 flex justify-center items-center gap-4">
+              <button 
+                onClick={() => setPage(p => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                <span className="material-symbols-outlined">chevron_left</span>
+              </button>
+              
+              {Array.from({ length: meta.totalPages }).map((_, i) => {
+                const pageNum = i + 1;
+                if (pageNum === 1 || pageNum === meta.totalPages || (pageNum >= page - 1 && pageNum <= page + 1)) {
+                  return (
+                    <button 
+                      key={pageNum}
+                      onClick={() => setPage(pageNum)}
+                      className={`w-10 h-10 flex items-center justify-center border transition-all font-label-md ${page === pageNum ? 'bg-regal-navy text-on-primary border-regal-navy' : 'border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream'}`}>
+                      {pageNum}
+                    </button>
+                  )
+                } else if (pageNum === page - 2 || pageNum === page + 2) {
+                  return <span key={pageNum} className="text-muted-gold">...</span>
+                }
+                return null;
+              })}
+
+              <button 
+                onClick={() => setPage(p => Math.min(meta.totalPages, p + 1))}
+                disabled={page === meta.totalPages}
+                className="w-10 h-10 flex items-center justify-center border border-muted-gold/20 text-regal-navy hover:bg-regal-navy hover:text-soft-cream transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                <span className="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </main>
