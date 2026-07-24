@@ -54,11 +54,12 @@ export interface Product {
   stock: number
   isNewArrival?: boolean
   isBestSeller?: boolean
+  size?: string
 }
 
 export const api = {
   // --- Products ---
-  getProducts: async (params?: Record<string, string | boolean>) => {
+  getProducts: async (params?: Record<string, string | boolean | number>) => {
     const searchParams = new URLSearchParams()
     if (params) {
       Object.entries(params).forEach(([key, value]) => {

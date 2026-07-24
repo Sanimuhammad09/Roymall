@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import type { Product } from '../../lib/api'
@@ -9,265 +9,268 @@ export const Route = createFileRoute('/_storefront/')({
   component: Home,
 })
 
-function Home() {
-  const queryClient = useQueryClient()
-  const [addedToast, setAddedToast] = useState(false)
-  
-  const { data: bestSellersData, isLoading: isBestSellersLoading } = useQuery({
-    queryKey: ['products', 'best-sellers'],
-    queryFn: () => api.getProducts({ isBestSeller: true })
-  })
-  
-  const { data: newArrivalsData, isLoading: isNewArrivalsLoading } = useQuery({
-    queryKey: ['products', 'new-arrivals'],
-    queryFn: () => api.getProducts({ isNewArrival: true })
-  })
-
-  const { data: metricsData } = useQuery({
-    queryKey: ['metrics'],
-    queryFn: () => api.getMetrics().then(res => {
-      console.log('Metrics API Response:', res);
-      return res.data;
-    }),
-    staleTime: 60 * 1000 // 1 min
-  })
-
-  const bestSellers: Product[] = Array.isArray(bestSellersData) ? bestSellersData : (bestSellersData?.data || [])
-  const newArrivals: Product[] = Array.isArray(newArrivalsData) ? newArrivalsData : (newArrivalsData?.data || [])
-
+function ProductCard({ product, largePad = false }: { product: Product, largePad?: boolean }) {
+  const queryClient = useQueryClient();
+  const [added, setAdded] = useState(false);
   const addToCartMutation = useMutation({
     mutationFn: ({ productId, quantity }: { productId: string; quantity: number }) =>
       api.addToCart(productId, quantity),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cart'] })
-      setAddedToast(true)
-      setTimeout(() => setAddedToast(false), 2500)
+      setAdded(true);
+      setTimeout(() => setAdded(false), 2000);
     }
+  });
+
+  return (
+    <Link to="/product/$id" params={{ id: product.id }} className="product-card-hover group cursor-pointer flex flex-col h-full">
+      <div className={`aspect-[4/5] bg-white border border-regal-navy/5 relative overflow-hidden flex items-center justify-center ${largePad ? 'p-8' : 'p-4'} transition-shadow hover:shadow-lg`}>
+        <img alt={product.name} className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110" src={product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}/>
+        <div className="quick-view absolute inset-0 bg-regal-navy/5 opacity-0 transition-all duration-300 flex flex-col justify-end p-4 translate-y-4">
+            <button 
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if(!added) {
+                      addToCartMutation.mutate({ productId: product.id, quantity: 1 });
+                    }
+                }}
+                disabled={addToCartMutation.isPending || added}
+                className={`text-white px-6 py-3 font-label-md text-label-md uppercase tracking-wider font-bold text-sm w-full transition-colors ${added ? 'bg-green-600' : 'bg-regal-navy hover:bg-metallic-gold'}`}>
+                {added ? 'Added to Bag' : (addToCartMutation.isPending ? 'Adding...' : 'Add to Cart')}
+            </button>
+        </div>
+      </div>
+      <div className="mt-6 flex flex-col flex-grow">
+        <h3 className="text-body-md font-bold mb-1 truncate text-regal-navy">{product.name}</h3>
+        <p className="text-[12px] text-regal-navy/50 mb-2 uppercase tracking-tighter truncate">{product.size ? `${product.olfactoryFamily || 'EDP'} ${product.size}` : (product.olfactoryFamily || 'Eau de Parfum')}</p>
+        <p className="text-price-lg text-regal-navy font-bold mt-auto">₦{product.price.toLocaleString()}</p>
+      </div>
+    </Link>
+  )
+}
+
+function ProductGridSkeleton({ count = 4 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {Array.from({ length: count }).map((_, i) => (
+        <div key={i} className="animate-pulse flex flex-col">
+          <div className="aspect-[4/5] bg-gray-200 mb-6 rounded"></div>
+          <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
+          <div className="h-3 bg-gray-200 rounded w-1/2 mb-2"></div>
+          <div className="h-6 bg-gray-200 rounded w-1/4 mt-auto"></div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Home() {
+  const { data: metricsData } = useQuery({
+    queryKey: ['metrics'],
+    queryFn: () => api.getMetrics().then(res => res.data),
+    staleTime: 60 * 1000 // 1 min
   })
 
-  // Fade-in observer
-  const sectionRefs = useRef<(HTMLElement | null)[]>([])
+  const { data: bestSellersData, isLoading: isBestSellersLoading } = useQuery({
+    queryKey: ['products', 'best-sellers'],
+    queryFn: () => api.getProducts({ isBestSeller: true, limit: 8 })
+  })
+  
+  const { data: newArrivalsData, isLoading: isNewArrivalsLoading } = useQuery({
+    queryKey: ['products', 'new-arrivals'],
+    queryFn: () => api.getProducts({ isNewArrival: true, limit: 8 })
+  })
 
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('opacity-100', 'translate-y-0')
-          entry.target.classList.remove('opacity-0', 'translate-y-10')
-        }
-      })
-    }, { threshold: 0.1 })
+  const { data: floralData, isLoading: isFloralLoading } = useQuery({
+    queryKey: ['products', 'floral'],
+    queryFn: () => api.getProducts({ olfactoryFamily: 'Floral', limit: 8 })
+  })
 
-    sectionRefs.current.forEach(ref => {
-      if (ref) observer.observe(ref)
-    })
+  const { data: citrusData, isLoading: isCitrusLoading } = useQuery({
+    queryKey: ['products', 'citrus'],
+    queryFn: () => api.getProducts({ olfactoryFamily: 'Citrus', limit: 8 })
+  })
 
-    return () => observer.disconnect()
-  }, [])
+  const { data: oudData, isLoading: isOudLoading } = useQuery({
+    queryKey: ['products', 'oud'],
+    queryFn: () => api.getProducts({ olfactoryFamily: 'Woody', limit: 5 })
+  })
 
-  const addToRefs = (el: HTMLElement | null) => {
-    if (el && !sectionRefs.current.includes(el)) {
-      sectionRefs.current.push(el)
-    }
-  }
-
-  // Simple parallax for hero
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY
-      const heroImage = document.querySelector('[data-parallax="hero"]') as HTMLElement
-      if (heroImage) {
-        heroImage.style.transform = `translateY(${scrolled * 0.4}px)`
-      }
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const bestSellers: Product[] = Array.isArray(bestSellersData) ? bestSellersData : (bestSellersData?.data || [])
+  const newArrivals: Product[] = Array.isArray(newArrivalsData) ? newArrivalsData : (newArrivalsData?.data || [])
+  const floral: Product[] = Array.isArray(floralData) ? floralData : (floralData?.data || [])
+  const citrus: Product[] = Array.isArray(citrusData) ? citrusData : (citrusData?.data || [])
+  const oud: Product[] = Array.isArray(oudData) ? oudData : (oudData?.data || [])
 
   return (
     <>
       <style>{`
-        .text-stroke-gold {
-          -webkit-text-stroke: 1px #D4AF37;
-          color: transparent;
+        .product-card-hover:hover .quick-view {
+            opacity: 1;
+            transform: translateY(0);
         }
-        .glass-card {
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(212, 175, 55, 0.1);
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(0, 27, 68, 0.4) 0%, rgba(0, 27, 68, 0.7) 100%);
         }
       `}</style>
-
+      
       {/* Hero Section */}
-      <header className="relative w-full min-h-[85vh] flex items-center overflow-hidden bg-regal-navy pt-32 pb-20 md:pt-0 md:pb-0">
-        <div className="absolute inset-0 z-0 opacity-60">
-          <div 
-            data-parallax="hero"
-            className="w-full h-full bg-cover bg-center" 
-            style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBlVYdYLlLjEVw7NGB9mLDMtqFJK4CJ_BYIf4AbtQ4EGYzRsxPn3X_hfdrziq2wsYL5mLYb_e4iVC8MN0qN7Pc22c9yxbOx3Pbrnw3eamrLFtPfLOmTYWJxXEKxwK8ETTQtNis1WhHo6jm_ic1ggIk_uPxF7GWtiUMLa3CfU1iWNC8F2r1fIgpN_fWn5Bt77g9jcH9AXFVJIRawd3WmiM9rdesCcfooIyPoon2Lp5MQDGd9fn1hbNsK')" }}
-          ></div>
+      <section className="relative h-[85vh] flex items-center justify-center text-center overflow-hidden pt-16 mt-[-80px]">
+        <div className="absolute inset-0">
+          <img alt="Nocturne Luxury Fragrance" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLs7lhs59CWcBZRC3eBkA6gDOWd0Sd-R5pXnfXphe-jcRu95HoEwfwZycrZzvhAobVINgEgMS6A_X7LzmV7E3qIlQ-NSIpySuyPfnG_pNuH9RORySsIm8CDjT2VNxkdx-Qk_UR94Baa7RDWgISm30-0uO_XzVNojTrV5ZtQsODbZVtA3B1eiFv7NN09wpUUcSLxvHZlef1Od559dMaiEu1Aqzf6kyvgDrXdLejq5mUoaF2lzksLkjeniKec"/>
+          <div className="absolute inset-0 hero-overlay"></div>
         </div>
-        <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-16 w-full grid grid-cols-12 gap-8 items-center">
-          <div className="col-span-12 md:col-span-8 lg:col-span-7 flex flex-col gap-6 animate-fade-in mt-10 md:mt-0">
-            <span className="font-label-md text-label-md text-metallic-gold uppercase tracking-[0.2em]">Exclusively Crafted</span>
-            <h1 className="font-display-lg text-display-lg text-white leading-tight font-bold text-4xl sm:text-5xl md:text-7xl">Define Your <br/><span className="text-stroke-gold">Signature Aura</span></h1>
-            <p className="font-body-lg text-body-lg text-soft-cream/80 max-w-xl text-sm md:text-base">A curated collection of artisanal fragrances designed for the sophisticated individual. Experience olfactory excellence crafted with the world's finest essences.</p>
-            <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <Link to="/shop" className="bg-metallic-gold text-regal-navy font-label-md text-label-md px-10 py-4 uppercase tracking-wider font-bold transition-transform hover:scale-105 text-center">Explore Collection</Link>
-              <a href="/contact" className="border border-metallic-gold text-metallic-gold font-label-md text-label-md px-10 py-4 uppercase tracking-wider font-bold transition-all hover:bg-metallic-gold hover:text-regal-navy text-center">Book Consultation</a>
-            </div>
+        <div className="relative max-w-4xl mx-auto px-6 w-full text-white z-10 pt-16">
+          <span className="text-metallic-gold font-label-md uppercase tracking-[0.4em] mb-6 block font-bold">The Art of Olfaction</span>
+          <h1 className="text-headline-lg md:text-display-lg font-display-lg mb-8 leading-tight font-bold">Rare. Timeless. <br/>Masterpieces of Scent.</h1>
+          <div className="flex justify-center gap-6">
+            <a className="bg-metallic-gold text-regal-navy px-10 py-4 font-label-md uppercase tracking-widest hover:bg-white transition-all shadow-xl font-bold" href="#products">Explore Library</a>
           </div>
         </div>
-        <div className="absolute bottom-10 right-8 md:right-16 z-10 hidden md:block animate-fade-in">
-          <div className="flex flex-col items-end gap-2 border-r-2 border-metallic-gold pr-6 py-2">
-            <span className="font-label-md text-label-md text-metallic-gold uppercase tracking-widest font-bold">Est. 2018</span>
-            <span className="font-body-md text-body-md text-soft-cream">Lagos • London • Dubai</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Impact Metric / Order Counter */}
-      <section ref={addToRefs} className="bg-soft-cream py-20 transition-all duration-1000 opacity-0 translate-y-10">
+      </section>
+      
+      {/* Value Proposition Section */}
+      <section className="bg-white py-24 border-b border-regal-navy/5">
         <div className="max-w-[1440px] mx-auto px-6 md:px-16">
-          <div className="flex flex-col lg:flex-row justify-between items-center gap-12 text-center lg:text-left">
-            <div className="flex flex-col gap-2">
-              <h2 className="font-headline-lg text-headline-lg text-regal-navy text-4xl font-bold">Beyond the Fragrance</h2>
-              <p className="font-body-lg text-body-lg text-gray-600 max-w-md mx-auto lg:mx-0">Our commitment to quality has touched lives across continents, creating sensory memories that last a lifetime.</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-24">
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-soft-cream rounded-full flex items-center justify-center mb-6 border border-metallic-gold/20">
+                <span className="material-symbols-outlined text-metallic-gold text-3xl">verified</span>
+              </div>
+              <h3 className="text-headline-md font-headline-lg mb-3 font-bold text-regal-navy">Authentic Fragrances</h3>
+              <p className="text-regal-navy/60 text-body-md max-w-xs">Guaranteed 100% original and authentic from world-class perfume houses.</p>
             </div>
-            <div className="flex flex-wrap justify-center lg:justify-end gap-10 md:gap-16">
-              <div className="flex flex-col items-center">
-                <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
-                  {metricsData?.scentsDelivered !== undefined ? (
-                    <AnimatedCounter end={metricsData.scentsDelivered} />
-                  ) : (
-                    <AnimatedCounter end={0} />
-                  )}
-                </span>
-                <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Scents Delivered</span>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-soft-cream rounded-full flex items-center justify-center mb-6 border border-metallic-gold/20">
+                <span className="material-symbols-outlined text-metallic-gold text-3xl">stylus_note</span>
               </div>
-              <div className="flex flex-col items-center">
-                <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
-                  {metricsData?.globalStockists !== undefined ? (
-                    <AnimatedCounter end={metricsData.globalStockists} />
-                  ) : (
-                    <AnimatedCounter end={0} />
-                  )}
-                </span>
-                <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Global Stockists</span>
+              <h3 className="text-headline-md font-headline-lg mb-3 font-bold text-regal-navy">Bespoke Curation</h3>
+              <p className="text-regal-navy/60 text-body-md max-w-xs">Expertly selected for you, matching your personal style and mood.</p>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-soft-cream rounded-full flex items-center justify-center mb-6 border border-metallic-gold/20">
+                <span className="material-symbols-outlined text-metallic-gold text-3xl">local_shipping</span>
               </div>
-              <div className="flex flex-col items-center">
-                <span className="font-display-lg text-metallic-gold font-bold text-5xl md:text-6xl">
-                  {metricsData?.customerRating !== undefined ? (
-                    <AnimatedCounter end={metricsData.customerRating} decimals={1} />
-                  ) : (
-                    <AnimatedCounter end={0} decimals={1} />
-                  )}
-                </span>
-                <span className="font-label-md text-label-md text-regal-navy uppercase tracking-widest font-bold mt-2">Customer Rating</span>
-              </div>
+              <h3 className="text-headline-md font-headline-lg mb-3 font-bold text-regal-navy">Express Delivery</h3>
+              <p className="text-regal-navy/60 text-body-md max-w-xs">Secure nationwide shipping to your doorstep with premium packaging.</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Trending Now - Product Grid */}
-      <section ref={addToRefs} className="py-24 transition-all duration-1000 opacity-0 translate-y-10">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-16">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-4">
-            <div className="flex flex-col gap-2">
-              <span className="font-label-md text-label-md text-metallic-gold uppercase tracking-widest font-bold">Most Wanted</span>
-              <h2 className="font-headline-lg text-headline-lg text-regal-navy font-bold text-4xl">Trending Now</h2>
+          <div className="text-center pt-16 border-t border-regal-navy/5">
+            <p className="text-metallic-gold font-label-md uppercase tracking-widest mb-4 font-bold">A Legacy of Excellence</p>
+            <div className="text-[64px] md:text-[96px] font-display-lg text-regal-navy leading-none mb-4 font-bold">
+              {metricsData?.scentsDelivered !== undefined ? (
+                <><AnimatedCounter end={metricsData.scentsDelivered} />+</>
+              ) : (
+                '5,000+'
+              )}
             </div>
-            <Link to="/shop" className="font-label-md text-label-md text-regal-navy flex items-center gap-2 hover:text-metallic-gold transition-colors font-bold">
-              View All Collection <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
-            {isBestSellersLoading ? (
-              <div className="col-span-full flex flex-col items-center justify-center py-10 opacity-70">
-                 <div className="w-8 h-8 rounded-full border-2 border-metallic-gold/30 border-t-metallic-gold animate-spin mb-4"></div>
-                 <p className="font-label-md text-regal-navy uppercase tracking-widest text-xs">Curating Collection...</p>
-              </div>
-            ) : bestSellers.slice(0, 4).map((product, index) => (
-              <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="group cursor-pointer block">
-                <div className="relative aspect-[4/5] bg-soft-cream overflow-hidden mb-6">
-                  <div className="absolute inset-0 scale-100 group-hover:scale-110 transition-transform duration-700 bg-cover bg-center" style={{backgroundImage: `url('${product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}')`}}></div>
-                  {index === 0 && (
-                    <div className="absolute top-4 right-4 bg-white/90 px-3 py-1 font-label-md text-label-md text-regal-navy uppercase font-bold text-xs">Bestseller</div>
-                  )}
-                  <div className="absolute inset-0 bg-regal-navy/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <button className="bg-white text-regal-navy px-6 py-3 font-label-md text-label-md uppercase tracking-wider translate-y-4 group-hover:translate-y-0 transition-transform font-bold text-sm">Quick View</button>
-                  </div>
-                </div>
-                <h3 className="font-headline-md text-headline-md text-regal-navy mb-1 font-bold text-xl">{product.name}</h3>
-                <p className="font-body-md text-body-md text-gray-500 mb-3 text-sm">{product.notes?.top} • {product.notes?.heart} • {product.notes?.base}</p>
-                <span className="font-price-lg text-price-lg text-metallic-gold font-bold">₦{product.price.toLocaleString()}</span>
-              </Link>
-            ))}
+            <h2 className="text-headline-md font-headline-lg uppercase tracking-tight text-regal-navy/40 font-bold">Successful Luxury Deliveries</h2>
           </div>
         </div>
       </section>
 
-      {/* Thematic Pair Banner */}
-      <section ref={addToRefs} className="max-w-[1440px] mx-auto px-6 md:px-16 grid grid-cols-1 lg:grid-cols-2 transition-all duration-1000 opacity-0 translate-y-10 mb-24">
-        <div className="h-[400px] lg:h-[600px] bg-cover bg-center" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDw9s3R_uJCIEpunOTaoVJgxAZKV3_eFr9PzeRhPnFXECKlEEroqQLMf_jKX2jldYjrCoxfoDdged2kn_VSCmsoSYz4TeOhnXDToaO2jmJWKuHPsnWDq9_0Wu6M6kLDkoOu4f2uSEA1P5WdnOYBFxMvpGoSmomkb18uPGyuL1wqAnyD4ZhWIEgrd_3TRxh-vYpuN6yaVoJVa_lc6H0fWRFMIOhr3DRVy2qR3pmOjPM_GTPbGEYUSZSs')"}}></div>
-        <div className="h-auto lg:h-[600px] bg-regal-navy flex flex-col justify-center items-start p-12 lg:p-24 gap-8">
-          <span className="font-label-md text-label-md text-metallic-gold uppercase tracking-[0.2em] font-bold">The Scent Story</span>
-          <h2 className="font-display-lg text-headline-lg text-white font-bold text-4xl leading-snug">Artisanal Perfumery for the Modern Soul</h2>
-          <p className="font-body-lg text-body-lg text-soft-cream/70 leading-relaxed">Each bottle in our collection is a labor of love, blending rare botanicals with modern chemical precision to create scents that evolve with your skin throughout the day.</p>
-          <Link to="/our-story" className="border-b border-metallic-gold text-metallic-gold font-label-md text-label-md uppercase py-2 tracking-widest hover:text-white transition-colors font-bold">Our Craftsmanship Process</Link>
+      {/* Product Collections Container */}
+      <div className="max-w-[1440px] mx-auto px-6 md:px-16 py-24 space-y-32" id="products">
+        
+        {/* Best Sellers */}
+        <section>
+          <div className="flex justify-between items-end mb-12 border-b border-regal-navy/10 pb-6">
+            <h2 className="text-headline-lg font-headline-lg font-bold text-regal-navy text-4xl">Best Sellers</h2>
+            <Link to="/shop" search={{ isBestSeller: true }} className="text-label-md uppercase tracking-widest text-metallic-gold hover:text-regal-navy transition-colors font-bold">See All</Link>
+          </div>
+          {isBestSellersLoading ? <ProductGridSkeleton count={8} /> : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {bestSellers.length > 0 ? (
+                bestSellers.slice(0, 8).map(product => <ProductCard key={product.id} product={product} />)
+              ) : (
+                <p className="col-span-full text-center text-gray-500 py-12">No best sellers currently available.</p>
+              )}
+            </div>
+          )}
+        </section>
+
+        {/* The Niche Edit */}
+        <section>
+          <div className="flex justify-between items-end mb-12 border-b border-regal-navy/10 pb-6">
+            <h2 className="text-headline-lg font-headline-lg font-bold text-regal-navy text-4xl">The Niche Edit</h2>
+            <Link to="/shop" search={{ isNewArrival: true }} className="text-label-md uppercase tracking-widest text-metallic-gold hover:text-regal-navy transition-colors font-bold">Explore Niche</Link>
+          </div>
+          {isNewArrivalsLoading ? <ProductGridSkeleton count={8} /> : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {newArrivals.length > 0 ? (
+                newArrivals.slice(0, 8).map(product => <ProductCard key={product.id} product={product} />)
+              ) : (
+                <p className="col-span-full text-center text-gray-500 py-12">No new arrivals currently available.</p>
+              )}
+            </div>
+          )}
+        </section>
+
+        {/* Floral Collection */}
+        <section>
+          <div className="flex justify-between items-end mb-12 border-b border-regal-navy/10 pb-6">
+            <h2 className="text-headline-lg font-headline-lg font-bold text-regal-navy text-4xl">Floral Collection</h2>
+            <Link to="/shop" search={{ category: 'Floral' }} className="text-label-md uppercase tracking-widest text-metallic-gold hover:text-regal-navy transition-colors font-bold">Shop Florals</Link>
+          </div>
+          {isFloralLoading ? <ProductGridSkeleton count={8} /> : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {floral.length > 0 ? (
+                floral.slice(0, 8).map(product => <ProductCard key={product.id} product={product} />)
+              ) : (
+                <p className="col-span-full text-center text-gray-500 py-12">No floral scents currently available.</p>
+              )}
+            </div>
+          )}
+        </section>
+
+        {/* Citrus & Fresh */}
+        <section>
+          <div className="flex justify-between items-end mb-12 border-b border-regal-navy/10 pb-6">
+            <h2 className="text-headline-lg font-headline-lg font-bold text-regal-navy text-4xl">Citrus & Fresh</h2>
+            <Link to="/shop" search={{ category: 'Citrus' }} className="text-label-md uppercase tracking-widest text-metallic-gold hover:text-regal-navy transition-colors font-bold">Explore Fresh</Link>
+          </div>
+          {isCitrusLoading ? <ProductGridSkeleton count={8} /> : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {citrus.length > 0 ? (
+                citrus.slice(0, 8).map(product => <ProductCard key={product.id} product={product} />)
+              ) : (
+                <p className="col-span-full text-center text-gray-500 py-12">No citrus scents currently available.</p>
+              )}
+            </div>
+          )}
+        </section>
+
+        {/* Signature Ouds */}
+        <section>
+          <div className="flex justify-between items-end mb-12 border-b border-regal-navy/10 pb-6">
+            <h2 className="text-headline-lg font-headline-lg font-bold text-regal-navy text-4xl">Signature Ouds</h2>
+            <Link to="/shop" search={{ category: 'Oud' }} className="text-label-md uppercase tracking-widest text-metallic-gold hover:text-regal-navy transition-colors font-bold">The Oud Vault</Link>
+          </div>
+          {isOudLoading ? <ProductGridSkeleton count={5} /> : (
+            <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+              {oud.length > 0 ? (
+                oud.slice(0, 5).map(product => <ProductCard key={product.id} product={product} largePad={true} />)
+              ) : (
+                <p className="col-span-full text-center text-gray-500 py-12">No oud scents currently available.</p>
+              )}
+            </div>
+          )}
+        </section>
+      </div>
+
+      {/* Newsletter */}
+      <section className="bg-regal-navy py-32 border-t border-metallic-gold/10">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <span className="text-metallic-gold font-label-md uppercase tracking-[0.4em] mb-6 block font-bold">The Inner Circle</span>
+          <h2 className="text-white text-headline-lg font-headline-lg mb-6 font-bold text-4xl">Join the Royal Circle</h2>
+          <p className="text-body-lg text-soft-cream/60 mb-12 max-w-xl mx-auto">Access private allocations of rare vintages and niche arrivals before they reach the library.</p>
+          <form className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto" onSubmit={(e) => { e.preventDefault(); alert('Subscribed!') }}>
+            <input required className="flex-grow bg-white/5 border border-white/10 text-white px-6 py-5 font-label-md focus:border-metallic-gold focus:ring-0 outline-none transition-all placeholder:text-white/30" placeholder="Email address" type="email"/>
+            <button type="submit" className="bg-metallic-gold text-regal-navy px-12 py-5 font-label-md uppercase tracking-widest hover:bg-white transition-colors whitespace-nowrap shadow-lg font-bold">Subscribe</button>
+          </form>
         </div>
       </section>
-
-      {/* Curated for You - Bento Grid / Large Grid */}
-      <section ref={addToRefs} className="py-24 bg-gray-50 transition-all duration-1000 opacity-0 translate-y-10">
-        <div className="max-w-[1440px] mx-auto px-6 md:px-16">
-          <div className="text-center mb-16 flex flex-col items-center">
-            <span className="font-label-md text-label-md text-metallic-gold uppercase tracking-widest font-bold">Personalized Selection</span>
-            <h2 className="font-headline-lg text-headline-lg text-regal-navy mb-4 font-bold text-4xl">Curated for You</h2>
-            <div className="w-16 h-0.5 bg-metallic-gold"></div>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {isNewArrivalsLoading ? (
-              <div className="col-span-full flex flex-col items-center justify-center py-10 opacity-70">
-                 <div className="w-8 h-8 rounded-full border-2 border-metallic-gold/30 border-t-metallic-gold animate-spin mb-4"></div>
-                 <p className="font-label-md text-regal-navy uppercase tracking-widest text-xs">Curating Collection...</p>
-              </div>
-            ) : newArrivals.slice(0, 8).map((product) => (
-              <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="bg-white p-6 group transition-all duration-300 hover:shadow-xl block">
-                <div className="aspect-square bg-soft-cream mb-6 overflow-hidden">
-                  <div className="w-full h-full scale-100 group-hover:scale-105 transition-transform duration-500 bg-cover bg-center" style={{backgroundImage: `url('${product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}')`}}></div>
-                </div>
-                <h4 className="font-headline-md text-body-lg font-bold text-regal-navy text-xl">{product.name}</h4>
-                <p className="font-label-md text-label-md text-gray-500 mb-4 uppercase text-[10px] font-bold">{product.notes?.top} • {product.notes?.heart}</p>
-                <div className="flex justify-between items-center pt-4 border-t border-gray-200">
-                  <span className="font-price-lg text-body-lg font-bold text-metallic-gold text-lg">₦{product.price.toLocaleString()}</span>
-                  <button 
-                    onClick={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                      addToCartMutation.mutate({ productId: product.id, quantity: 1 })
-                    }}
-                    className="material-symbols-outlined text-regal-navy group-hover:text-metallic-gold transition-colors"
-                  >
-                    add_shopping_cart
-                  </button>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Added to Cart Toast */}
-      {addedToast && (
-        <div className="fixed bottom-10 right-10 bg-regal-navy text-metallic-gold px-8 py-4 flex items-center gap-4 z-50 border border-metallic-gold shadow-2xl">
-          <span className="material-symbols-outlined text-green-400">check_circle</span>
-          <span className="font-label-md text-sm uppercase tracking-widest">Added to your bag</span>
-        </div>
-      )}
     </>
   )
 }
