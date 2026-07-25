@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import type { Product } from '../../lib/api'
 import { AnimatedCounter } from '../../components/AnimatedCounter'
+import { SEO } from '../../components/SEO'
 
 export const Route = createFileRoute('/_storefront/')({
   component: Home,
@@ -115,6 +116,7 @@ function Home() {
 
   return (
     <>
+      <SEO />
       <style>{`
         .product-card-hover:hover .quick-view {
             opacity: 1;

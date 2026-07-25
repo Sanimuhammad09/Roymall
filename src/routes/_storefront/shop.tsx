@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import type { Product } from '../../lib/api'
 import { useState } from 'react'
+import { SEO } from '../../components/SEO'
 
 export const Route = createFileRoute('/_storefront/shop')({
   component: Shop,
@@ -44,6 +45,11 @@ function Shop() {
 
   return (
     <>
+    <SEO 
+      title="Fragrance Library" 
+      description="Explore our complete collection of authentic luxury, designer, and niche perfumes. Filter by category, brand, and scent profile."
+      url="https://www.roymallscents.com.ng/shop"
+    />
     <main className="pt-32 pb-[120px] px-[64px] max-w-[1440px] mx-auto">
       {/* Page Header */}
       <div className="mb-12">

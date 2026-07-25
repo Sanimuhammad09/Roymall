@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import { useState } from 'react'
+import { SEO } from '../../components/SEO'
 
 export const Route = createFileRoute('/_storefront/product/$id')({
   component: Product,
@@ -96,6 +97,13 @@ function Product() {
 
   return (
     <>
+    <SEO 
+      title={prod.name} 
+      description={prod.tagline || prod.description || `Buy ${prod.name} online at Roymall Scents.`}
+      image={primaryImage || 'https://www.roymallscents.com.ng/logo.jpg'}
+      url={`https://www.roymallscents.com.ng/product/${prod.id}`}
+      type="product"
+    />
     <main className="pt-40 md:pt-32 pb-[120px] px-4 md:px-[64px] max-w-7xl mx-auto">
       {/* Product Detail Section */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-[32px]">
