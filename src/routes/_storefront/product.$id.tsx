@@ -136,7 +136,17 @@ function Product() {
             <span className="hover:text-regal-navy capitalize">{prod.category?.name || 'Fragrance'}</span>
           </nav>
           <h1 className="font-headline-lg text-headline-lg text-regal-navy mb-2">{prod.name}</h1>
-          <p className="font-price-lg text-price-lg text-metallic-gold mb-8">₦{(prod.price || 0).toLocaleString()}</p>
+          <div className="flex items-center gap-4 mb-8">
+            <p className="font-price-lg text-price-lg text-metallic-gold">₦{(prod.price || 0).toLocaleString()}</p>
+            {prod.originalPrice && prod.originalPrice > prod.price && (
+              <p className="text-xl text-gray-400 line-through">₦{prod.originalPrice.toLocaleString()}</p>
+            )}
+            {prod.discountPercentage && (
+              <span className="bg-[#8B0000] text-white px-3 py-1 text-xs font-bold uppercase tracking-widest shadow-sm">
+                {prod.discountPercentage}% OFF
+              </span>
+            )}
+          </div>
           
           <div className="space-y-6 mb-10">
             <div className="p-6 bg-white border-l-4 border-metallic-gold">

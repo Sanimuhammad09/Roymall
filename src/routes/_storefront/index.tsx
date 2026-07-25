@@ -25,6 +25,11 @@ function ProductCard({ product, largePad = false }: { product: Product, largePad
   return (
     <Link to="/product/$id" params={{ id: product.id }} className="product-card-hover group cursor-pointer flex flex-col h-full">
       <div className={`aspect-[4/5] bg-white border border-regal-navy/5 relative overflow-hidden flex items-center justify-center ${largePad ? 'p-8' : 'p-4'} transition-shadow hover:shadow-lg`}>
+        {product.discountPercentage && (
+          <div className="absolute top-4 left-4 z-10 bg-[#8B0000] text-white px-2 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm">
+            {product.discountPercentage}% OFF
+          </div>
+        )}
         <img alt={product.name} className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110" src={product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}/>
         <div className="quick-view absolute inset-0 bg-regal-navy/5 opacity-0 transition-all duration-300 flex flex-col justify-end p-4 translate-y-4">
             <button 
@@ -44,7 +49,12 @@ function ProductCard({ product, largePad = false }: { product: Product, largePad
       <div className="mt-6 flex flex-col flex-grow">
         <h3 className="text-body-md font-bold mb-1 truncate text-regal-navy">{product.name}</h3>
         <p className="text-[12px] text-regal-navy/50 mb-2 uppercase tracking-tighter truncate">{product.size ? `${product.olfactoryFamily || 'EDP'} ${product.size}` : (product.olfactoryFamily || 'Eau de Parfum')}</p>
-        <p className="text-price-lg text-regal-navy font-bold mt-auto">₦{product.price.toLocaleString()}</p>
+        <div className="mt-auto flex items-center gap-2">
+          <p className="text-price-lg text-regal-navy font-bold">₦{product.price.toLocaleString()}</p>
+          {product.originalPrice && product.originalPrice > product.price && (
+            <p className="text-[13px] text-gray-400 line-through">₦{product.originalPrice.toLocaleString()}</p>
+          )}
+        </div>
       </div>
     </Link>
   )

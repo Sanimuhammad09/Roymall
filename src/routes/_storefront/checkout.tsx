@@ -27,6 +27,7 @@ function Checkout() {
     saveAddress: true,
   })
   const [paymentMethod, setPaymentMethod] = useState<'PAYSTACK' | 'BANK_TRANSFER'>('PAYSTACK')
+  const [shippingMethod, setShippingMethod] = useState<'STANDARD' | 'FASTEST'>('STANDARD')
 
   // Fetch cart to get items and subtotal
   const { data: cartData, isLoading: isCartLoading } = useQuery({
@@ -36,7 +37,7 @@ function Checkout() {
 
   const cartItems = cartData?.data?.items || []
   const subtotal = cartItems.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0)
-  const shippingCost = cartItems.length > 0 ? 5000 : 0
+  const shippingCost = cartItems.length > 0 ? (shippingMethod === 'FASTEST' ? 5000 : 0) : 0
   const tax = 0
   const total = subtotal + shippingCost + tax
 
@@ -92,6 +93,7 @@ function Checkout() {
         shippingAddress: formData,
         subtotal,
         tax,
+        shippingMethod,
         shippingCost,
         total,
         paymentMethod,
@@ -286,6 +288,45 @@ function Checkout() {
               </div>
             </section>
             
+            {/* Delivery Method */}
+            <section>
+              <h3 className="font-headline-md text-headline-md text-regal-navy mb-6 pb-2 border-b border-muted-gold/20">Delivery Method</h3>
+              
+              <div className="flex flex-col gap-4">
+                <div 
+                  className={`border p-6 cursor-pointer transition-colors ${shippingMethod === 'STANDARD' ? 'border-regal-navy bg-regal-navy/5' : 'border-gray-200 hover:border-regal-navy/50'}`}
+                  onClick={() => setShippingMethod('STANDARD')}
+                >
+                  <div className="flex items-center gap-4">
+                    <input type="radio" checked={shippingMethod === 'STANDARD'} readOnly className="w-5 h-5 accent-regal-navy"/>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center w-full">
+                        <h4 className="font-label-md font-bold text-regal-navy">Standard Delivery</h4>
+                        <span className="font-label-md font-bold text-regal-navy">Free</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">Delivered within 3-5 business days.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div 
+                  className={`border p-6 cursor-pointer transition-colors ${shippingMethod === 'FASTEST' ? 'border-regal-navy bg-regal-navy/5' : 'border-gray-200 hover:border-regal-navy/50'}`}
+                  onClick={() => setShippingMethod('FASTEST')}
+                >
+                  <div className="flex items-center gap-4">
+                    <input type="radio" checked={shippingMethod === 'FASTEST'} readOnly className="w-5 h-5 accent-regal-navy mt-1"/>
+                    <div className="flex-1">
+                      <div className="flex justify-between items-center w-full">
+                        <h4 className="font-label-md font-bold text-regal-navy">Fastest Delivery</h4>
+                        <span className="font-label-md font-bold text-regal-navy">₦5,000</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-1">Delivered within 1-2 business days.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {/* Payment Method */}
             <section>
               <h3 className="font-headline-md text-headline-md text-regal-navy mb-6 pb-2 border-b border-muted-gold/20">Payment</h3>

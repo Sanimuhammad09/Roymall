@@ -46,6 +46,8 @@ export interface Product {
   name: string
   brand: string
   price: number
+  originalPrice?: number
+  discountPercentage?: number
   image?: string
   images?: { id: string; url: string; isPrimary: boolean; order: number }[]
   category: string | { name: string; slug: string; [key: string]: any }

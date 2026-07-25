@@ -161,6 +161,11 @@ function Shop() {
               {products.map((product) => (
                 <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="group cursor-pointer block">
                   <div className="relative bg-white aspect-square overflow-hidden mb-6 flex items-center justify-center p-8 border border-muted-gold/10">
+                    {product.discountPercentage && (
+                      <div className="absolute top-4 left-4 z-10 bg-[#8B0000] text-white px-2 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm">
+                        {product.discountPercentage}% OFF
+                      </div>
+                    )}
                     <img className="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" alt={product.name} src={product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}/>
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute inset-0 bg-regal-navy/10 flex items-center justify-center gap-3">
                       <button className="bg-regal-navy text-on-primary px-6 py-3 text-label-md font-label-md uppercase tracking-widest hover:bg-metallic-gold transition-colors duration-300">Quick View</button>
@@ -179,7 +184,12 @@ function Shop() {
                   <div className="text-center">
                     <p className="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest mb-1">{product.brand}</p>
                     <h4 className="text-headline-md font-headline-md text-regal-navy mb-2">{product.name}</h4>
-                    <p className="text-price-lg font-price-lg text-metallic-gold">₦{product.price.toLocaleString()}</p>
+                    <div className="flex justify-center items-center gap-2">
+                      <p className="text-price-lg font-price-lg text-metallic-gold">₦{product.price.toLocaleString()}</p>
+                      {product.originalPrice && product.originalPrice > product.price && (
+                        <p className="text-[14px] text-gray-400 line-through">₦{product.originalPrice.toLocaleString()}</p>
+                      )}
+                    </div>
                   </div>
                 </Link>
               ))}
