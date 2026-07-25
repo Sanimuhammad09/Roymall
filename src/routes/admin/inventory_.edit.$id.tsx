@@ -26,6 +26,7 @@ function EditProduct() {
   const [sku, setSku] = useState('')
   const [categoryId, setCategoryId] = useState('')
   const [price, setPrice] = useState('')
+  const [originalPrice, setOriginalPrice] = useState('')
   const [stockQuantity, setStockQuantity] = useState('50')
   const [tagline, setTagline] = useState('')
   const [description, setDescription] = useState('')
@@ -64,6 +65,7 @@ function EditProduct() {
       setSku(product.sku || '')
       setCategoryId(product.categoryId || '')
       setPrice(product.price ? String(product.price) : '')
+      setOriginalPrice(product.originalPrice ? String(product.originalPrice) : '')
       setStockQuantity(product.stockQuantity !== undefined ? String(product.stockQuantity) : '50')
       setTagline(product.tagline || '')
       setDescription(product.description || '')
@@ -150,6 +152,7 @@ function EditProduct() {
         name,
         sku,
         price: parseFloat(price),
+        originalPrice: originalPrice ? parseFloat(originalPrice) : undefined,
         stockQuantity: parseInt(stockQuantity) || 0,
         categoryId,
         tagline,
@@ -251,11 +254,22 @@ function EditProduct() {
                 </select>
               </div>
               <div>
-                <label className="block font-label-md text-xs uppercase text-gray-500 mb-2 font-bold">Price (₦) *</label>
+                <label className="block font-label-md text-xs uppercase text-gray-500 mb-2 font-bold">Sales Price (₦) *</label>
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 font-bold text-gray-500">₦</span>
                   <input 
                     value={price} onChange={e => setPrice(e.target.value)}
+                    className="w-full border border-gray-300 p-3 pl-8 font-body-md text-body-md focus:border-metallic-gold focus:ring-1 focus:ring-metallic-gold outline-none transition-colors" 
+                    placeholder="0.00" type="number" 
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block font-label-md text-xs uppercase text-gray-500 mb-2 font-bold">Original Price (₦)</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 font-bold text-gray-500">₦</span>
+                  <input 
+                    value={originalPrice} onChange={e => setOriginalPrice(e.target.value)}
                     className="w-full border border-gray-300 p-3 pl-8 font-body-md text-body-md focus:border-metallic-gold focus:ring-1 focus:ring-metallic-gold outline-none transition-colors" 
                     placeholder="0.00" type="number" 
                   />
@@ -411,7 +425,12 @@ function EditProduct() {
               <div className="text-center space-y-2">
                 <p className="font-label-md text-xs text-gray-500 uppercase tracking-tighter font-bold">{categories.find((c: any) => c.id === categoryId)?.name || 'Category'}</p>
                 <h4 className="font-headline-md text-headline-md text-regal-navy font-bold text-xl">{name || 'Product Name'}</h4>
-                <p className="font-price-lg text-price-lg text-metallic-gold font-bold text-xl">₦ {price ? parseFloat(price).toLocaleString() : '0.00'}</p>
+                <div className="flex justify-center items-center gap-2">
+                  <p className="font-price-lg text-price-lg text-metallic-gold font-bold text-xl">₦ {price ? parseFloat(price).toLocaleString() : '0.00'}</p>
+                  {originalPrice && parseFloat(originalPrice) > parseFloat(price) && (
+                    <p className="text-sm text-gray-400 line-through">₦ {parseFloat(originalPrice).toLocaleString()}</p>
+                  )}
+                </div>
               </div>
             </div>
           </section>
