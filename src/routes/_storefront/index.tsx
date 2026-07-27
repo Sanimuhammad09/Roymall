@@ -130,7 +130,7 @@ function Home() {
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center justify-center text-center overflow-hidden pt-16 mt-[-80px]">
         <div className="absolute inset-0">
-          <img alt="Nocturne Luxury Fragrance" className="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLs7lhs59CWcBZRC3eBkA6gDOWd0Sd-R5pXnfXphe-jcRu95HoEwfwZycrZzvhAobVINgEgMS6A_X7LzmV7E3qIlQ-NSIpySuyPfnG_pNuH9RORySsIm8CDjT2VNxkdx-Qk_UR94Baa7RDWgISm30-0uO_XzVNojTrV5ZtQsODbZVtA3B1eiFv7NN09wpUUcSLxvHZlef1Od559dMaiEu1Aqzf6kyvgDrXdLejq5mUoaF2lzksLkjeniKec"/>
+          <img alt="Nocturne Luxury Fragrance" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1594035910387-fea47794261f?q=80&w=2000&auto=format&fit=crop"/>
           <div className="absolute inset-0 hero-overlay"></div>
         </div>
         <div className="relative max-w-4xl mx-auto px-6 w-full text-white z-10 pt-16">
