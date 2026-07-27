@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 
@@ -8,6 +9,7 @@ export const Route = createFileRoute('/_storefront/cart')({
 
 function Cart() {
   const queryClient = useQueryClient()
+  const [isFastDelivery, setIsFastDelivery] = useState(false)
   
   const { data: cartResponse } = useQuery({
     queryKey: ['cart'],
@@ -20,9 +22,9 @@ function Cart() {
   const items = Array.isArray(cartData) ? cartData : (cartData.items || [])
 
   const subtotal = cartData.subtotal || items.reduce((acc: number, item: any) => acc + ((item.price || item.product?.price || 0) * item.quantity), 0)
-  const shipping = cartData.shippingCost || (items.length > 0 ? 5000 : 0)
+  const shipping = items.length > 0 ? (isFastDelivery ? 5000 : 0) : 0
   const tax = cartData.tax || 0
-  const total = cartData.total || (subtotal + shipping + tax)
+  const total = subtotal + shipping + tax
 
   const updateMutation = useMutation({
     mutationFn: ({ id, qty }: { id: string, qty: number }) => api.updateCartItem(id, qty),
@@ -151,14 +153,35 @@ function Cart() {
         <aside className="w-full lg:w-1/3 sticky top-32">
           <div className="bg-regal-navy p-10 text-soft-cream space-y-8 shadow-xl">
             <h2 className="font-headline-md text-headline-md border-b border-muted-gold/30 pb-6 uppercase tracking-widest">Order Summary</h2>
-            <div className="space-y-4">
+            
+            <div className="space-y-4 pt-2">
+              <div className="font-label-md text-label-md uppercase tracking-widest text-soft-cream/70 mb-3">Delivery Method</div>
+              <div className="flex flex-col gap-3 pb-6 border-b border-muted-gold/30">
+                <label className="flex items-center justify-between cursor-pointer group">
+                  <div className="flex items-center gap-3">
+                    <input type="radio" name="shipping" checked={!isFastDelivery} onChange={() => setIsFastDelivery(false)} className="accent-metallic-gold" />
+                    <span className="font-body-md text-body-md group-hover:text-metallic-gold transition-colors">Standard Delivery</span>
+                  </div>
+                  <span className="font-body-md text-body-md">Free</span>
+                </label>
+                <label className="flex items-center justify-between cursor-pointer group">
+                  <div className="flex items-center gap-3">
+                    <input type="radio" name="shipping" checked={isFastDelivery} onChange={() => setIsFastDelivery(true)} className="accent-metallic-gold" />
+                    <span className="font-body-md text-body-md group-hover:text-metallic-gold transition-colors">Fast Delivery</span>
+                  </div>
+                  <span className="font-body-md text-body-md">₦ 5,000</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="space-y-4 pt-2">
               <div className="flex justify-between font-body-md text-body-md">
                 <span className="text-soft-cream/70">Subtotal</span>
                 <span>₦ {subtotal.toLocaleString()}</span>
               </div>
               <div className="flex justify-between font-body-md text-body-md">
-                <span className="text-soft-cream/70">Shipping (Lagos Delivery)</span>
-                <span>₦ {shipping.toLocaleString()}</span>
+                <span className="text-soft-cream/70">Shipping</span>
+                <span>{shipping === 0 ? 'Free' : `₦ ${shipping.toLocaleString()}`}</span>
               </div>
               <div className="flex justify-between font-body-md text-body-md">
                 <span className="text-soft-cream/70">Taxes</span>
