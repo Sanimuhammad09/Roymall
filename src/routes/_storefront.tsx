@@ -124,9 +124,9 @@ function StorefrontLayout() {
                 ) : searchResults?.data?.length > 0 || (Array.isArray(searchResults) && searchResults.length > 0) ? (
                   <div className="py-2">
                     {(Array.isArray(searchResults) ? searchResults : searchResults.data).slice(0,5).map((product: any) => (
-                      <Link 
+                      <a 
                         key={product.id} 
-                        to={`/product/${product.id}`}
+                        href={`/product/${product.id}`}
                         className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
                       >
                         <div className="w-10 h-10 bg-gray-100 flex-shrink-0">
@@ -140,11 +140,11 @@ function StorefrontLayout() {
                           <p className="text-sm font-bold text-regal-navy truncate">{product.name}</p>
                           <p className="text-xs text-metallic-gold">₦{(product.price || 0).toLocaleString()}</p>
                         </div>
-                      </Link>
+                      </a>
                     ))}
-                    <Link to={`/shop?search=${encodeURIComponent(globalSearch)}`} className="block w-full text-center py-2 text-xs font-bold text-metallic-gold uppercase tracking-widest hover:bg-gray-50 border-t border-gray-100">
+                    <a href={`/shop?search=${encodeURIComponent(globalSearch)}`} className="block w-full text-center py-2 text-xs font-bold text-metallic-gold uppercase tracking-widest hover:bg-gray-50 border-t border-gray-100">
                       View All Results
-                    </Link>
+                    </a>
                   </div>
                 ) : (
                   <div className="p-4 text-center text-gray-500 font-body-md text-sm">No products found.</div>
