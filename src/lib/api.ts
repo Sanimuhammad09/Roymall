@@ -236,13 +236,16 @@ export const api = {
     })
   },
 
-  // --- Admin ---
   adminGetOverview: async (params?: { startDate?: string; endDate?: string }) => {
     const searchParams = new URLSearchParams()
     if (params?.startDate) searchParams.append('startDate', params.startDate)
     if (params?.endDate) searchParams.append('endDate', params.endDate)
     const qs = searchParams.toString()
     return fetchApi(`/admin/analytics/overview${qs ? `?${qs}` : ''}`)
+  },
+
+  adminGetNotifications: async () => {
+    return fetchApi('/admin/notifications')
   },
 
   // Admin Products

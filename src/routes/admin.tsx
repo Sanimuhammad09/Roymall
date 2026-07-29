@@ -1,6 +1,9 @@
 import { createFileRoute, Outlet, Link, useLocation, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../lib/auth'
+import { useQuery } from '@tanstack/react-query'
+import { api } from '../lib/api'
+import { useRef } from 'react'
 
 export const Route = createFileRoute('/admin')({
   component: AdminLayout,
@@ -11,6 +14,24 @@ function AdminLayout() {
   const navigate = useNavigate()
   const { user, isLoading, logout } = useAuth()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isNotifOpen, setIsNotifOpen] = useState(false)
+  const notifRef = useRef<HTMLDivElement>(null)
+
+  const { data: notifications } = useQuery({
+    queryKey: ['admin-notifications'],
+    queryFn: api.adminGetNotifications,
+    refetchInterval: 30000 // Refresh every 30s
+  })
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setIsNotifOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   useEffect(() => {
     if (!isLoading && (!user || user.role !== 'ADMIN')) {
@@ -111,11 +132,68 @@ function AdminLayout() {
           </div>
         </div>
         <div className="flex items-center gap-3 md:gap-6 text-gray-500 ml-2 md:ml-4 flex-shrink-0">
-          <button className="hover:text-regal-navy transition-all duration-200 relative">
-            <span className="material-symbols-outlined">notifications</span>
-            <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-          </button>
-          <button onClick={logout} title="Logout" className="hover:text-regal-navy transition-all duration-200">
+          <div className="relative" ref={notifRef}>
+            <button onClick={() => setIsNotifOpen(!isNotifOpen)} className="hover:text-regal-navy transition-all duration-200 relative p-1">
+              <span className="material-symbols-outlined">notifications</span>
+              {notifications?.length > 0 && (
+                <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                  {notifications.length}
+                </span>
+              )}
+            </button>
+            
+            {/* Notification Dropdown */}
+            {isNotifOpen && (
+              <div className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded shadow-xl border border-gray-200 z-50 overflow-hidden">
+                <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                  <h3 className="font-headline-md text-sm font-bold text-regal-navy">Notifications</h3>
+                  <span className="text-[10px] text-gray-500 bg-gray-200 px-2 py-1 rounded-full">{notifications?.length || 0} New</span>
+                </div>
+                <div className="max-h-96 overflow-y-auto custom-scrollbar">
+                  {notifications && notifications.length > 0 ? (
+                    <div className="divide-y divide-gray-100">
+                      {notifications.map((notif: any) => (
+                        <div 
+                          key={notif.id}
+                          onClick={() => {
+                            setIsNotifOpen(false)
+                            navigate({ to: notif.link })
+                          }}
+                          className="p-4 hover:bg-gray-50 transition-colors cursor-pointer flex gap-3 items-start"
+                        >
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-1 ${
+                            notif.type === 'ORDER' ? 'bg-blue-100 text-blue-600' :
+                            notif.type === 'LOW_STOCK' ? 'bg-red-100 text-red-600' :
+                            notif.type === 'APPOINTMENT' ? 'bg-purple-100 text-purple-600' :
+                            'bg-metallic-gold/20 text-metallic-gold'
+                          }`}>
+                            <span className="material-symbols-outlined text-[16px]">
+                              {notif.type === 'ORDER' ? 'shopping_bag' :
+                               notif.type === 'LOW_STOCK' ? 'warning' :
+                               notif.type === 'APPOINTMENT' ? 'calendar_month' : 'mail'}
+                            </span>
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-regal-navy">{notif.title}</h4>
+                            <p className="text-[11px] text-gray-600 font-body-md mt-1 leading-relaxed">{notif.message}</p>
+                            <p className="text-[9px] text-gray-400 mt-2 uppercase tracking-widest">
+                              {new Date(notif.createdAt).toLocaleString()}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-8 text-center text-gray-500">
+                      <span className="material-symbols-outlined text-4xl opacity-20 mb-2">notifications_off</span>
+                      <p className="text-xs font-body-md">No new notifications</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+          <button onClick={logout} title="Logout" className="hover:text-regal-navy transition-all duration-200 p-1">
             <span className="material-symbols-outlined">logout</span>
           </button>
         </div>
