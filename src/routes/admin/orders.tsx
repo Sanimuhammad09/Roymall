@@ -14,14 +14,16 @@ function Orders() {
   const [page, setPage] = useState(1)
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
   const limit = 10
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const queryKey = ['admin-orders', page, filter]
+  const queryKey = ['admin-orders', page, filter, searchQuery]
 
   const { data, isLoading } = useQuery({
     queryKey,
     queryFn: () => {
       const params: any = { page, limit }
       if (filter !== 'ALL') params.status = filter
+      if (searchQuery) params.search = searchQuery
       return api.adminGetOrders(params)
     }
   })
@@ -61,17 +63,30 @@ function Orders() {
         {/* Left Column: Filters & Table (Spans 4 columns if no order selected) */}
         <div className="lg:col-span-4">
           
-          {/* Filters */}
-          <div className="flex gap-4 mb-6 overflow-x-auto pb-2 no-scrollbar border-b border-gray-200">
-            {['ALL', 'PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'].map(tab => (
-              <button 
-                key={tab}
-                className={`pb-2 font-label-md text-xs uppercase tracking-widest whitespace-nowrap transition-all border-b-2 ${filter === tab ? 'border-metallic-gold text-metallic-gold font-bold' : 'border-transparent text-gray-500 hover:text-regal-navy'}`}
-                onClick={() => { setFilter(tab); setPage(1); }}
-              >
-                {tab}
-              </button>
-            ))}
+          {/* Filters and Search */}
+          <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6 border-b border-gray-200 pb-2">
+            <div className="flex gap-4 overflow-x-auto no-scrollbar">
+              {['ALL', 'PENDING', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'].map(tab => (
+                <button 
+                  key={tab}
+                  className={`pb-2 font-label-md text-xs uppercase tracking-widest whitespace-nowrap transition-all border-b-2 ${filter === tab ? 'border-metallic-gold text-metallic-gold font-bold' : 'border-transparent text-gray-500 hover:text-regal-navy'}`}
+                  onClick={() => { setFilter(tab); setPage(1); }}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+            
+            <div className="relative w-full sm:w-64">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[18px]">search</span>
+              <input 
+                type="text" 
+                placeholder="Search orders..." 
+                value={searchQuery}
+                onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded text-sm focus:outline-none focus:border-regal-navy"
+              />
+            </div>
           </div>
 
           {/* Orders Table */}

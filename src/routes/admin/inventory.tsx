@@ -14,8 +14,9 @@ function Inventory() {
   const [filter, setFilter] = useState('ALL')
   const [page, setPage] = useState(1)
   const limit = 10
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const queryKey = ['admin-products', page, filter]
+  const queryKey = ['admin-products', page, filter, searchQuery]
 
   const { data, isLoading } = useQuery({
     queryKey,
@@ -23,7 +24,7 @@ function Inventory() {
       // Backend might not support 'LOW STOCK' filter natively on /products, 
       // but we will fetch all and map them for the table. 
       // Assuming GET /products supports pagination and returns { data, meta }
-      const res = await api.getProducts({ page: String(page), limit: String(limit) })
+      const res = await api.getProducts({ page: String(page), limit: String(limit), ...(searchQuery ? { search: searchQuery } : {}) })
       // If the API returns raw array instead of paginated object, handle it:
       if (Array.isArray(res)) {
         return { data: res, meta: { total: res.length, page: 1, limit: res.length, totalPages: 1 } }
@@ -152,6 +153,17 @@ function Inventory() {
                 className={`px-3 py-1 text-[12px] font-bold rounded transition-colors ${filter === 'LOW STOCK' ? 'bg-regal-navy text-white' : 'text-gray-500 hover:text-regal-navy'}`}
               >LOW STOCK</button>
             </div>
+          </div>
+          
+          <div className="relative w-full sm:w-64">
+            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[18px]">search</span>
+            <input 
+              type="text" 
+              placeholder="Search products..." 
+              value={searchQuery}
+              onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded text-sm focus:outline-none focus:border-regal-navy"
+            />
           </div>
         </div>
         

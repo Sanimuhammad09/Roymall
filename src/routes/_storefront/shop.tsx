@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useLocation, useNavigate } from '@tanstack/react-router'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import type { Product } from '../../lib/api'
@@ -11,9 +11,13 @@ export const Route = createFileRoute('/_storefront/shop')({
 
 function Shop() {
   const queryClient = useQueryClient()
+  const searchObj: any = Route.useSearch()
+  const navigate = useNavigate()
+  
   const [selectedCategory, setSelectedCategory] = useState<string>('')
   const [selectedFamily, setSelectedFamily] = useState<string>('')
   const [selectedBrand, setSelectedBrand] = useState<string>('')
+  const [searchQuery, setSearchQuery] = useState<string>(searchObj?.search || '')
   const [page, setPage] = useState<number>(1)
   const [addedToast, setAddedToast] = useState(false)
 
@@ -28,11 +32,12 @@ function Shop() {
   })
 
   const { data, isLoading } = useQuery({
-    queryKey: ['products', { category: selectedCategory, olfactoryFamily: selectedFamily, brand: selectedBrand, page }],
+    queryKey: ['products', { category: selectedCategory, olfactoryFamily: selectedFamily, brand: selectedBrand, search: searchQuery, page }],
     queryFn: () => api.getProducts({ 
       ...(selectedCategory ? { category: selectedCategory } : {}),
       ...(selectedFamily ? { olfactoryFamily: selectedFamily } : {}),
       ...(selectedBrand ? { brand: selectedBrand } : {}),
+      ...(searchQuery ? { search: searchQuery } : {}),
       page,
       limit: 12
     })
@@ -51,10 +56,25 @@ function Shop() {
       url="https://www.roymallscents.com.ng/shop"
     />
     <main className="pt-32 pb-[120px] px-[64px] max-w-[1440px] mx-auto">
-      {/* Page Header */}
       <div className="mb-12">
         <h2 className="text-display-lg font-display-lg text-regal-navy mb-4">Our Fragrance Library</h2>
         <p className="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">Discover an olfactory journey curated with the world's most prestigious essences. From the depths of oriental spices to the freshness of Mediterranean blooms.</p>
+        
+        {searchQuery && (
+          <div className="mt-6 flex items-center gap-4 bg-white/50 p-4 border border-muted-gold/20 inline-flex">
+            <span className="text-regal-navy font-body-md">Search results for: <span className="font-bold">"{searchQuery}"</span></span>
+            <button 
+              onClick={() => {
+                setSearchQuery('');
+                setPage(1);
+                navigate({ to: '/shop', search: {} });
+              }}
+              className="text-muted-gold hover:text-error transition-colors flex items-center"
+            >
+              <span className="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-col md:flex-row gap-[32px]">

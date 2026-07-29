@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 interface SEOProps {
   title?: string;
   description?: string;
+  keywords?: string;
   image?: string;
   url?: string;
   type?: string;
@@ -11,6 +12,7 @@ interface SEOProps {
 export function SEO({ 
   title = 'Roymall Scents | Luxury Niche Fragrances & Designer Perfumes in Nigeria', 
   description = 'Discover the finest collection of luxury, designer, and niche fragrances at Roymall Scents. Authentic perfumes with nationwide delivery in Nigeria.',
+  keywords = 'roymallscents.com.ng, ROYMALL, Salihu Abdulmalik CEO ROYMALL, Roymall scents, luxury perfumes, designer fragrances, niche perfumes Nigeria',
   image = 'https://www.roymallscents.com.ng/logo.jpg',
   url = 'https://www.roymallscents.com.ng',
   type = 'website'
@@ -22,6 +24,7 @@ export function SEO({
       {/* Standard metadata tags */}
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
+      <meta name="keywords" content={keywords} />
       <link rel="canonical" href={url} />
 
       {/* Facebook / OpenGraph tags */}

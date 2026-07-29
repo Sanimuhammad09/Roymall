@@ -82,7 +82,25 @@ function StorefrontLayout() {
           </div>
         </div>
         <div className="flex items-center gap-4 md:gap-6">
-          <button className={`material-symbols-outlined transition-colors duration-300 ${textColor} hover:text-metallic-gold hidden sm:block`}>search</button>
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              const formData = new FormData(e.currentTarget);
+              const query = formData.get('search');
+              if (query) {
+                window.location.href = `/shop?search=${encodeURIComponent(query as string)}`;
+              }
+            }}
+            className="hidden sm:flex items-center border-b border-current pb-1 opacity-70 hover:opacity-100 transition-opacity focus-within:opacity-100"
+          >
+            <input 
+              name="search"
+              type="text" 
+              placeholder="Search..." 
+              className={`bg-transparent outline-none w-24 focus:w-40 transition-all duration-300 font-label-md text-[13px] ${textColor} placeholder:text-current`}
+            />
+            <button type="submit" className={`material-symbols-outlined text-[18px] ${textColor}`}>search</button>
+          </form>
           
           <button 
             onClick={() => {
