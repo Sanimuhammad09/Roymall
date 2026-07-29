@@ -123,8 +123,8 @@ function Orders() {
           {/* Orders Table */}
           <div className="bg-white border border-gray-200 relative">
             {isLoading && <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 font-bold text-regal-navy">Loading...</div>}
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+            <div className="overflow-x-auto custom-scrollbar shadow-[inset_-10px_0_10px_-10px_rgba(0,0,0,0.1)]">
+              <table className="w-full text-left border-collapse min-w-[800px]">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-200">
                     <th className="px-6 py-4 font-label-md text-xs uppercase tracking-widest text-gray-500">Order ID</th>

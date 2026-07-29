@@ -47,13 +47,13 @@ function ProductCard({ product, largePad = false }: { product: Product, largePad
             </button>
         </div>
       </div>
-      <div className="mt-6 flex flex-col flex-grow">
-        <h3 className="text-body-md font-bold mb-1 truncate text-regal-navy">{product.name}</h3>
-        <p className="text-[12px] text-regal-navy/50 mb-2 uppercase tracking-tighter truncate">{product.size ? `${product.olfactoryFamily || 'EDP'} ${product.size}` : (product.olfactoryFamily || 'Eau de Parfum')}</p>
-        <div className="mt-auto flex items-center gap-2">
-          <p className="text-price-lg text-regal-navy font-bold">₦{product.price.toLocaleString()}</p>
+      <div className="mt-4 flex flex-col flex-grow">
+        <h3 className="text-sm md:text-base font-bold mb-1 truncate text-regal-navy">{product.name}</h3>
+        <p className="text-[10px] md:text-[12px] text-regal-navy/50 mb-2 uppercase tracking-tighter truncate">{product.size ? `${product.olfactoryFamily || 'EDP'} ${product.size}` : (product.olfactoryFamily || 'Eau de Parfum')}</p>
+        <div className="mt-auto flex flex-wrap items-center gap-2">
+          <p className="text-sm md:text-base text-regal-navy font-bold">₦{product.price.toLocaleString()}</p>
           {product.originalPrice && product.originalPrice > product.price && (
-            <p className="text-[13px] text-gray-400 line-through">₦{product.originalPrice.toLocaleString()}</p>
+            <p className="text-[11px] md:text-[13px] text-gray-400 line-through">₦{product.originalPrice.toLocaleString()}</p>
           )}
         </div>
       </div>
@@ -63,7 +63,7 @@ function ProductCard({ product, largePad = false }: { product: Product, largePad
 
 function ProductGridSkeleton({ count = 4 }: { count?: number }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
       {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="animate-pulse flex flex-col">
           <div className="aspect-[4/5] bg-gray-200 mb-6 rounded"></div>
@@ -134,10 +134,10 @@ function Home() {
           <div className="absolute inset-0 hero-overlay"></div>
         </div>
         <div className="relative max-w-4xl mx-auto px-6 w-full text-white z-10 pt-16">
-          <span className="text-metallic-gold font-label-md uppercase tracking-[0.4em] mb-6 block font-bold">The Art of Olfaction</span>
-          <h1 className="text-headline-lg md:text-display-lg font-display-lg mb-8 leading-tight font-bold">Rare. Timeless. <br/>Masterpieces of Scent.</h1>
-          <div className="flex justify-center gap-6">
-            <a className="bg-metallic-gold text-regal-navy px-10 py-4 font-label-md uppercase tracking-widest hover:bg-white transition-all shadow-xl font-bold" href="#products">Explore Library</a>
+          <span className="text-metallic-gold font-label-md uppercase tracking-[0.4em] mb-4 md:mb-6 block font-bold text-xs md:text-sm">The Art of Olfaction</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display-lg mb-6 md:mb-8 leading-tight font-bold">Rare. Timeless. <br/>Masterpieces of Scent.</h1>
+          <div className="flex justify-center gap-4 md:gap-6">
+            <a className="bg-metallic-gold text-regal-navy px-8 md:px-10 py-3 md:py-4 font-label-md uppercase tracking-widest hover:bg-white transition-all shadow-xl font-bold text-xs md:text-sm" href="#products">Explore Library</a>
           </div>
         </div>
       </section>
@@ -192,7 +192,7 @@ function Home() {
             <Link to="/shop" search={{ isBestSeller: true }} className="text-label-md uppercase tracking-widest text-metallic-gold hover:text-regal-navy transition-colors font-bold">See All</Link>
           </div>
           {isBestSellersLoading ? <ProductGridSkeleton count={8} /> : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
               {bestSellers.length > 0 ? (
                 bestSellers.slice(0, 8).map(product => <ProductCard key={product.id} product={product} />)
               ) : (
@@ -209,7 +209,7 @@ function Home() {
             <Link to="/shop" search={{ isNewArrival: true }} className="text-label-md uppercase tracking-widest text-metallic-gold hover:text-regal-navy transition-colors font-bold">Explore Niche</Link>
           </div>
           {isNewArrivalsLoading ? <ProductGridSkeleton count={8} /> : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
               {newArrivals.length > 0 ? (
                 newArrivals.slice(0, 8).map(product => <ProductCard key={product.id} product={product} />)
               ) : (
@@ -226,7 +226,7 @@ function Home() {
             <Link to="/shop" search={{ category: 'Floral' }} className="text-label-md uppercase tracking-widest text-metallic-gold hover:text-regal-navy transition-colors font-bold">Shop Florals</Link>
           </div>
           {isFloralLoading ? <ProductGridSkeleton count={8} /> : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
               {floral.length > 0 ? (
                 floral.slice(0, 8).map(product => <ProductCard key={product.id} product={product} />)
               ) : (
@@ -243,7 +243,7 @@ function Home() {
             <Link to="/shop" search={{ category: 'Citrus' }} className="text-label-md uppercase tracking-widest text-metallic-gold hover:text-regal-navy transition-colors font-bold">Explore Fresh</Link>
           </div>
           {isCitrusLoading ? <ProductGridSkeleton count={8} /> : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-8">
               {citrus.length > 0 ? (
                 citrus.slice(0, 8).map(product => <ProductCard key={product.id} product={product} />)
               ) : (
@@ -260,7 +260,7 @@ function Home() {
             <Link to="/shop" search={{ category: 'Oud' }} className="text-label-md uppercase tracking-widest text-metallic-gold hover:text-regal-navy transition-colors font-bold">The Oud Vault</Link>
           </div>
           {isOudLoading ? <ProductGridSkeleton count={5} /> : (
-            <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8">
               {oud.length > 0 ? (
                 oud.slice(0, 5).map(product => <ProductCard key={product.id} product={product} largePad={true} />)
               ) : (

@@ -142,11 +142,11 @@ function Inventory() {
       <div className="bg-white border border-gray-200 shadow-sm overflow-hidden relative">
         {isLoading && <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 font-bold text-regal-navy">Loading...</div>}
         <div className="p-6 border-b border-gray-200 bg-gray-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div className="flex items-center gap-4">
-            <div className="flex bg-white border border-gray-200 rounded p-1">
+          <div className="flex items-center gap-4 w-full sm:w-auto">
+            <div className="flex flex-wrap sm:flex-nowrap bg-white border border-gray-200 rounded p-1 w-full sm:w-auto">
               <button 
                 onClick={() => setFilter('ALL')}
-                className={`px-3 py-1 text-[12px] font-bold rounded transition-colors ${filter === 'ALL' ? 'bg-regal-navy text-white' : 'text-gray-500 hover:text-regal-navy'}`}
+                className={`px-3 py-1 flex-1 sm:flex-none text-[12px] font-bold rounded transition-colors ${filter === 'ALL' ? 'bg-regal-navy text-white' : 'text-gray-500 hover:text-regal-navy'}`}
               >ALL</button>
               <button 
                 onClick={() => setFilter('IN STOCK')}
@@ -154,8 +154,8 @@ function Inventory() {
               >IN STOCK</button>
               <button 
                 onClick={() => setFilter('LOW STOCK')}
-                className={`px-3 py-1 text-[12px] font-bold rounded transition-colors ${filter === 'LOW STOCK' ? 'bg-regal-navy text-white' : 'text-gray-500 hover:text-regal-navy'}`}
-              >LOW STOCK</button>
+                className={`px-3 py-1 flex-1 sm:flex-none text-[12px] font-bold rounded transition-colors ${filter === 'LOW STOCK' ? 'bg-regal-navy text-white' : 'text-gray-500 hover:text-regal-navy'}`}
+              >LOW</button>
             </div>
           </div>
           
@@ -198,8 +198,8 @@ function Inventory() {
           </div>
         </div>
         
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
+        <div className="overflow-x-auto custom-scrollbar shadow-[inset_-10px_0_10px_-10px_rgba(0,0,0,0.1)]">
+          <table className="w-full text-left border-collapse min-w-[800px]">
             <thead className="bg-gray-50/50 border-b border-gray-200">
               <tr>
                 <th className="px-6 py-4 font-label-md text-label-md text-gray-500 uppercase tracking-wider text-xs font-bold">Product</th>

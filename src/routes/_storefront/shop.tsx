@@ -20,6 +20,7 @@ function Shop() {
   const [searchQuery, setSearchQuery] = useState<string>(searchObj?.search || '')
   const [page, setPage] = useState<number>(1)
   const [addedToast, setAddedToast] = useState(false)
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
 
   const addToCartMutation = useMutation({
     mutationFn: ({ productId, quantity }: { productId: string; quantity: number }) =>
@@ -55,9 +56,9 @@ function Shop() {
       description="Explore our complete collection of authentic luxury, designer, and niche perfumes. Filter by category, brand, and scent profile."
       url="https://www.roymallscents.com.ng/shop"
     />
-    <main className="pt-32 pb-[120px] px-[64px] max-w-[1440px] mx-auto">
-      <div className="mb-12">
-        <h2 className="text-display-lg font-display-lg text-regal-navy mb-4">Our Fragrance Library</h2>
+    <main className="pt-24 md:pt-32 pb-16 md:pb-32 px-4 md:px-16 max-w-[1440px] mx-auto">
+      <div className="mb-8 md:mb-12">
+        <h2 className="text-4xl md:text-5xl lg:text-[64px] font-display-lg text-regal-navy mb-4">Our Fragrance Library</h2>
         <p className="text-body-lg font-body-lg text-on-surface-variant max-w-2xl">Discover an olfactory journey curated with the world's most prestigious essences. From the depths of oriental spices to the freshness of Mediterranean blooms.</p>
         
         {searchQuery && (
@@ -77,10 +78,23 @@ function Shop() {
         )}
       </div>
 
-      <div className="flex flex-col md:flex-row gap-[32px]">
+      <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
+        
+        {/* Mobile Filter Toggle */}
+        <button 
+          onClick={() => setShowMobileFilters(!showMobileFilters)}
+          className="md:hidden flex items-center justify-between w-full bg-white border border-muted-gold/20 p-4 text-regal-navy font-label-md uppercase tracking-widest text-sm"
+        >
+          <span className="flex items-center gap-2">
+            <span className="material-symbols-outlined">filter_list</span>
+            Filters & Sorting
+          </span>
+          <span className="material-symbols-outlined">{showMobileFilters ? 'expand_less' : 'expand_more'}</span>
+        </button>
+
         {/* Sidebar Filters */}
-        <aside className="w-full md:w-64 flex-shrink-0">
-          <div className="sticky top-32 space-y-10">
+        <aside className={`w-full md:w-64 flex-shrink-0 ${showMobileFilters ? 'block' : 'hidden md:block'}`}>
+          <div className="md:sticky md:top-32 space-y-10">
             {/* Categories */}
             <div>
               <h3 className="text-label-md font-label-md text-regal-navy uppercase tracking-widest mb-6 pb-2 border-b border-muted-gold/20">Categories</h3>
@@ -183,37 +197,37 @@ function Shop() {
           {isLoading ? (
              <div className="py-20 text-center font-label-md text-regal-navy">Loading collections...</div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[32px]">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
               {products.map((product) => (
                 <Link to="/product/$id" params={{ id: product.id }} key={product.id} className="group cursor-pointer block">
-                  <div className="relative bg-white aspect-square overflow-hidden mb-6 flex items-center justify-center p-8 border border-muted-gold/10">
+                  <div className="relative bg-white aspect-[4/5] md:aspect-square overflow-hidden mb-4 md:mb-6 flex items-center justify-center p-4 md:p-8 border border-muted-gold/10">
                     {product.discountPercentage && (
-                      <div className="absolute top-4 left-4 z-10 bg-[#8B0000] text-white px-2 py-1 text-[10px] font-bold uppercase tracking-widest shadow-sm">
+                      <div className="absolute top-2 left-2 md:top-4 md:left-4 z-10 bg-[#8B0000] text-white px-2 py-1 text-[9px] md:text-[10px] font-bold uppercase tracking-widest shadow-sm">
                         {product.discountPercentage}% OFF
                       </div>
                     )}
                     <img className="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" alt={product.name} src={product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}/>
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute inset-0 bg-regal-navy/10 flex items-center justify-center gap-3">
-                      <button className="bg-regal-navy text-on-primary px-6 py-3 text-label-md font-label-md uppercase tracking-widest hover:bg-metallic-gold transition-colors duration-300">Quick View</button>
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute inset-0 bg-regal-navy/10 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 p-4">
+                      <button className="w-full md:w-auto bg-regal-navy text-on-primary px-4 py-2 md:px-6 md:py-3 text-[10px] md:text-[12px] font-label-md uppercase tracking-widest hover:bg-metallic-gold transition-colors duration-300">Quick View</button>
                       <button 
                         onClick={(e) => {
                           e.preventDefault()
                           e.stopPropagation()
                           addToCartMutation.mutate({ productId: product.id, quantity: 1 })
                         }}
-                        className="bg-metallic-gold text-on-primary p-3 hover:bg-regal-navy transition-colors duration-300 flex items-center justify-center"
+                        className="w-full md:w-auto bg-metallic-gold text-on-primary p-2 md:p-3 hover:bg-regal-navy transition-colors duration-300 flex items-center justify-center"
                       >
-                        <span className="material-symbols-outlined">shopping_bag</span>
+                        <span className="material-symbols-outlined text-[18px] md:text-[24px]">shopping_bag</span>
                       </button>
                     </div>
                   </div>
                   <div className="text-center">
-                    <p className="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest mb-1">{product.brand}</p>
-                    <h4 className="text-headline-md font-headline-md text-regal-navy mb-2">{product.name}</h4>
-                    <div className="flex justify-center items-center gap-2">
-                      <p className="text-price-lg font-price-lg text-metallic-gold">₦{product.price.toLocaleString()}</p>
+                    <p className="text-[10px] md:text-[12px] font-label-md text-on-surface-variant uppercase tracking-widest mb-1 truncate">{product.brand}</p>
+                    <h4 className="text-sm md:text-lg font-headline-md text-regal-navy mb-1 md:mb-2 truncate">{product.name}</h4>
+                    <div className="flex justify-center items-center gap-1 md:gap-2">
+                      <p className="text-sm md:text-lg font-price-lg font-bold text-metallic-gold">₦{product.price.toLocaleString()}</p>
                       {product.originalPrice && product.originalPrice > product.price && (
-                        <p className="text-[14px] text-gray-400 line-through">₦{product.originalPrice.toLocaleString()}</p>
+                        <p className="text-[11px] md:text-[14px] text-gray-400 line-through">₦{product.originalPrice.toLocaleString()}</p>
                       )}
                     </div>
                   </div>

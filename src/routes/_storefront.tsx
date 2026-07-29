@@ -101,7 +101,7 @@ function StorefrontLayout() {
                 window.location.href = `/shop?search=${encodeURIComponent(globalSearch)}`;
               }
             }}
-            className="hidden sm:flex items-center border-b border-current pb-1 opacity-70 hover:opacity-100 transition-opacity focus-within:opacity-100 relative"
+            className="hidden lg:flex items-center border-b border-current pb-1 opacity-70 hover:opacity-100 transition-opacity focus-within:opacity-100 relative"
           >
             <input 
               name="search"
@@ -215,7 +215,7 @@ function StorefrontLayout() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-section-gap px-container-margin grid grid-cols-1 md:grid-cols-4 gap-grid-gutter bg-regal-navy">
+      <footer className="w-full py-16 px-6 md:px-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 bg-regal-navy">
         <div>
           <div className="mb-8">
             <img src="/logo.jpg" alt="Roymall Scents" className="h-20 object-contain" />

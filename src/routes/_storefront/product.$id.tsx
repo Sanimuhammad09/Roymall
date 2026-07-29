@@ -104,11 +104,11 @@ function Product() {
       url={`https://www.roymallscents.com.ng/product/${prod.id}`}
       type="product"
     />
-    <main className="pt-40 md:pt-32 pb-[120px] px-4 md:px-[64px] max-w-7xl mx-auto">
+    <main className="pt-32 pb-16 md:pb-[120px] px-4 md:px-[64px] max-w-7xl mx-auto">
       {/* Product Detail Section */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-[32px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-[32px]">
         {/* Product Gallery */}
-        <div className="md:col-span-7 flex flex-col gap-6">
+        <div className="lg:col-span-7 flex flex-col gap-4 md:gap-6">
           <div className="aspect-square bg-white flex items-center justify-center overflow-hidden border border-muted-gold/10">
             {primaryImage ? (
               <img alt={prod.name} className="w-full h-full object-contain hover:scale-105 transition-transform duration-700" src={primaryImage}/>
@@ -137,8 +137,8 @@ function Product() {
         </div>
 
         {/* Product Info */}
-        <div className="md:col-span-5 flex flex-col">
-          <nav aria-label="Breadcrumb" className="flex text-label-md font-label-md text-muted-gold mb-4">
+        <div className="lg:col-span-5 flex flex-col mt-4 md:mt-0">
+          <nav aria-label="Breadcrumb" className="flex text-xs md:text-sm font-label-md text-muted-gold mb-4">
             <Link className="hover:text-regal-navy" to="/shop">Shop</Link>
             <span className="mx-2">/</span>
             <span className="hover:text-regal-navy capitalize">{prod.category?.name || 'Fragrance'}</span>
@@ -258,7 +258,7 @@ function Product() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-[64px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-[64px]">
           <div>
             <h3 className="font-headline-sm text-regal-navy mb-6">Write a Review</h3>
             {profile?.data ? (
@@ -327,7 +327,7 @@ function Product() {
           <Link to="/shop" className="font-label-md text-label-md text-muted-gold hover:text-regal-navy transition-colors border-b border-muted-gold">View Collection</Link>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[32px]">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-[32px]">
           {/* Static cross-sells for layout consistency with design */}
           <Link to="/shop" className="group cursor-pointer block">
             <div className="bg-white aspect-[4/5] overflow-hidden mb-4 relative">
@@ -336,8 +336,8 @@ function Product() {
                 <span className="text-white font-label-md text-label-md uppercase">Quick Add</span>
               </div>
             </div>
-            <h3 className="font-headline-md text-body-lg font-semibold text-regal-navy">Amouage Reflection Man</h3>
-            <p className="font-price-lg text-body-md text-metallic-gold">₦145,000.00</p>
+            <h3 className="font-headline-md text-sm md:text-lg font-semibold text-regal-navy truncate">Amouage Reflection Man</h3>
+            <p className="font-price-lg text-sm md:text-base text-metallic-gold">₦145,000.00</p>
           </Link>
 
           <Link to="/shop" className="group cursor-pointer block">
@@ -347,8 +347,8 @@ function Product() {
                 <span className="text-white font-label-md text-label-md uppercase">Quick Add</span>
               </div>
             </div>
-            <h3 className="font-headline-md text-body-lg font-semibold text-regal-navy">Parfums de Marly Layton</h3>
-            <p className="font-price-lg text-body-md text-metallic-gold">₦120,000.00</p>
+            <h3 className="font-headline-md text-sm md:text-lg font-semibold text-regal-navy truncate">Parfums de Marly Layton</h3>
+            <p className="font-price-lg text-sm md:text-base text-metallic-gold">₦120,000.00</p>
           </Link>
 
           <Link to="/shop" className="group cursor-pointer block">
@@ -358,8 +358,8 @@ function Product() {
                 <span className="text-white font-label-md text-label-md uppercase">Quick Add</span>
               </div>
             </div>
-            <h3 className="font-headline-md text-body-lg font-semibold text-regal-navy">Xerjoff Naxos</h3>
-            <p className="font-price-lg text-body-md text-metallic-gold">₦185,000.00</p>
+            <h3 className="font-headline-md text-sm md:text-lg font-semibold text-regal-navy truncate">Xerjoff Naxos</h3>
+            <p className="font-price-lg text-sm md:text-base text-metallic-gold">₦185,000.00</p>
           </Link>
 
           <Link to="/shop" className="group cursor-pointer block">
@@ -369,8 +369,8 @@ function Product() {
                 <span className="text-white font-label-md text-label-md uppercase">Quick Add</span>
               </div>
             </div>
-            <h3 className="font-headline-md text-body-lg font-semibold text-regal-navy">Creed Aventus</h3>
-            <p className="font-price-lg text-body-md text-metallic-gold">₦220,000.00</p>
+            <h3 className="font-headline-md text-sm md:text-lg font-semibold text-regal-navy truncate">Creed Aventus</h3>
+            <p className="font-price-lg text-sm md:text-base text-metallic-gold">₦220,000.00</p>
           </Link>
         </div>
       </section>

@@ -104,7 +104,8 @@ function Customers() {
       {/* Customer Table */}
       <div className="bg-white border border-gray-200 overflow-hidden relative">
         {isLoading && <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 font-bold text-regal-navy">Loading...</div>}
-        <table className="w-full text-left border-collapse">
+        <div className="overflow-x-auto custom-scrollbar shadow-[inset_-10px_0_10px_-10px_rgba(0,0,0,0.1)]">
+            <table className="w-full text-left border-collapse min-w-[800px]">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
               <th className="px-6 py-4 font-label-md text-label-md text-regal-navy">CUSTOMER</th>
@@ -161,6 +162,7 @@ function Customers() {
             )}
           </tbody>
         </table>
+        </div>
         
         {/* Pagination */}
         <div className="px-6 py-4 bg-gray-50 flex items-center justify-between border-t border-gray-200">

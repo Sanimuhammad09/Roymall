@@ -97,8 +97,8 @@ function Cart() {
         {/* Bag Items List */}
         <div className="flex-grow w-full lg:w-2/3 space-y-8">
           {items.map((item: any) => (
-            <div key={item.id} className="group relative flex flex-col md:flex-row gap-8 pb-8 border-b border-[#c5c6d0] hover:border-metallic-gold transition-colors duration-500">
-              <div className="w-full md:w-48 h-64 bg-soft-cream flex items-center justify-center overflow-hidden">
+            <div key={item.id} className="group relative flex flex-col md:flex-row gap-4 md:gap-8 pb-8 border-b border-[#c5c6d0] hover:border-metallic-gold transition-colors duration-500">
+              <div className="w-full md:w-48 h-48 md:h-64 bg-soft-cream flex items-center justify-center overflow-hidden">
                 <img 
                   className="object-contain w-full h-full transform group-hover:scale-105 transition-transform duration-700" 
                   alt={item.product?.name || item.name} 
@@ -108,8 +108,8 @@ function Cart() {
               <div className="flex-grow flex flex-col justify-between py-2">
                   <div>
                     <div className="flex justify-between items-start">
-                      <h3 className="font-headline-md text-headline-md text-regal-navy">{item.product?.name || item.name}</h3>
-                      <span className="font-price-lg text-price-lg text-regal-navy">₦ {((item.product?.price || item.price || 0) * (item.quantity || item.qty)).toLocaleString()}</span>
+                      <h3 className="font-headline-md text-lg md:text-headline-md text-regal-navy">{item.product?.name || item.name}</h3>
+                      <span className="font-price-lg text-base md:text-price-lg text-regal-navy">₦ {((item.product?.price || item.price || 0) * (item.quantity || item.qty)).toLocaleString()}</span>
                     </div>
                     <p className="font-label-md text-label-md text-muted-gold uppercase mt-1">{item.product?.brand || item.brand}</p>
                     <p className="font-body-md text-body-md text-[#44474f] mt-2">Volume: {item.product?.size || item.volume}</p>
@@ -237,10 +237,10 @@ function Cart() {
           </Link>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[32px]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-[32px]">
           {crossSells.map((product) => (
             <div key={product.id} className="group cursor-pointer">
-              <div className="relative aspect-[3/4] bg-soft-cream mb-6 overflow-hidden">
+              <div className="relative aspect-[3/4] bg-soft-cream mb-4 md:mb-6 overflow-hidden">
                 <img 
                   className="object-contain w-full h-full p-12 group-hover:scale-110 transition-transform duration-700" 
                   alt={product.name} 
@@ -258,9 +258,9 @@ function Cart() {
                   Quick Add
                 </button>
               </div>
-              <h4 className="font-headline-md text-[20px] text-regal-navy">{product.name}</h4>
-              <p className="font-label-md text-[12px] text-[#44474f] uppercase tracking-widest mt-1">{product.brand}</p>
-              <p className="font-price-lg text-[18px] text-muted-gold mt-2">₦ {product.price.toLocaleString()}</p>
+              <h4 className="font-headline-md text-sm md:text-[20px] text-regal-navy truncate">{product.name}</h4>
+              <p className="font-label-md text-[10px] md:text-[12px] text-[#44474f] uppercase tracking-widest mt-1 truncate">{product.brand}</p>
+              <p className="font-price-lg text-sm md:text-[18px] text-muted-gold mt-1 md:mt-2">₦ {product.price.toLocaleString()}</p>
             </div>
           ))}
         </div>
