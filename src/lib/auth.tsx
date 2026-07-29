@@ -30,9 +30,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           const response = await api.getMe()
           const userData = response.data || response.user || response
           setUser(userData)
+          if (userData.role) {
+            localStorage.setItem('role', userData.role)
+          }
         } catch (error) {
           console.error("Failed to authenticate token", error)
           localStorage.removeItem('token')
+          localStorage.removeItem('role')
         }
       }
       setIsLoading(false)
@@ -43,12 +47,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = (token: string, userData: User) => {
     localStorage.setItem('token', token)
+    if (userData.role) {
+      localStorage.setItem('role', userData.role)
+    }
     setUser(userData)
     // The redirect will be handled by the signin form component
   }
 
   const logout = () => {
     localStorage.removeItem('token')
+    localStorage.removeItem('role')
     setUser(null)
     window.location.href = '/signin'
   }
