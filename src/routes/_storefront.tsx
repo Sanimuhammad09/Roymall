@@ -2,6 +2,8 @@ import { createFileRoute, Outlet, Link, useLocation } from '@tanstack/react-rout
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../lib/api'
+import { WhatsAppWidget } from '../components/WhatsAppWidget'
+import { useDebounce } from '../hooks/useDebounce'
 
 export const Route = createFileRoute('/_storefront')({
   component: StorefrontLayout,
@@ -10,7 +12,17 @@ export const Route = createFileRoute('/_storefront')({
 function StorefrontLayout() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [globalSearch, setGlobalSearch] = useState('')
+  const [searchFocused, setSearchFocused] = useState(false)
   const location = useLocation()
+  
+  const debouncedSearch = useDebounce(globalSearch, 300)
+
+  const { data: searchResults, isLoading: isSearchLoading } = useQuery({
+    queryKey: ['global-search', debouncedSearch],
+    queryFn: () => api.getProducts({ search: debouncedSearch, limit: '5' }),
+    enabled: debouncedSearch.length > 1
+  })
 
   const { data: cartData } = useQuery({
     queryKey: ['cart'],
@@ -85,21 +97,60 @@ function StorefrontLayout() {
           <form 
             onSubmit={(e) => {
               e.preventDefault();
-              const formData = new FormData(e.currentTarget);
-              const query = formData.get('search');
-              if (query) {
-                window.location.href = `/shop?search=${encodeURIComponent(query as string)}`;
+              if (globalSearch) {
+                window.location.href = `/shop?search=${encodeURIComponent(globalSearch)}`;
               }
             }}
-            className="hidden sm:flex items-center border-b border-current pb-1 opacity-70 hover:opacity-100 transition-opacity focus-within:opacity-100"
+            className="hidden sm:flex items-center border-b border-current pb-1 opacity-70 hover:opacity-100 transition-opacity focus-within:opacity-100 relative"
           >
             <input 
               name="search"
               type="text" 
               placeholder="Search..." 
+              value={globalSearch}
+              onChange={(e) => setGlobalSearch(e.target.value)}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
               className={`bg-transparent outline-none w-24 focus:w-40 transition-all duration-300 font-label-md text-[13px] ${textColor} placeholder:text-current`}
+              autoComplete="off"
             />
             <button type="submit" className={`material-symbols-outlined text-[18px] ${textColor}`}>search</button>
+            
+            {/* Autocomplete Dropdown */}
+            {searchFocused && debouncedSearch.length > 1 && (
+              <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 shadow-xl rounded z-[100] max-h-96 overflow-y-auto">
+                {isSearchLoading ? (
+                  <div className="p-4 text-center text-gray-500 font-body-md text-sm">Searching...</div>
+                ) : searchResults?.data?.length > 0 || (Array.isArray(searchResults) && searchResults.length > 0) ? (
+                  <div className="py-2">
+                    {(Array.isArray(searchResults) ? searchResults : searchResults.data).slice(0,5).map((product: any) => (
+                      <Link 
+                        key={product.id} 
+                        to={`/product/${product.id}`}
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 transition-colors"
+                      >
+                        <div className="w-10 h-10 bg-gray-100 flex-shrink-0">
+                          <img 
+                            src={product.images?.find((img:any)=>img.isPrimary)?.url || product.images?.[0]?.url || product.image} 
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-bold text-regal-navy truncate">{product.name}</p>
+                          <p className="text-xs text-metallic-gold">₦{(product.price || 0).toLocaleString()}</p>
+                        </div>
+                      </Link>
+                    ))}
+                    <Link to={`/shop?search=${encodeURIComponent(globalSearch)}`} className="block w-full text-center py-2 text-xs font-bold text-metallic-gold uppercase tracking-widest hover:bg-gray-50 border-t border-gray-100">
+                      View All Results
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="p-4 text-center text-gray-500 font-body-md text-sm">No products found.</div>
+                )}
+              </div>
+            )}
           </form>
           
           <button 
@@ -211,6 +262,7 @@ function StorefrontLayout() {
           </div>
         </div>
       </footer>
+      <WhatsAppWidget />
     </div>
   )
 }

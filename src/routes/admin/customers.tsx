@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useDebounce } from '../../hooks/useDebounce'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 
@@ -12,14 +13,16 @@ function Customers() {
   const [searchTerm, setSearchTerm] = useState('')
   const [page, setPage] = useState(1)
   const limit = 10
+  
+  const debouncedSearchTerm = useDebounce(searchTerm, 300)
 
-  const queryKey = ['admin-users', page, searchTerm]
+  const queryKey = ['admin-users', page, debouncedSearchTerm]
 
   const { data, isLoading } = useQuery({
     queryKey,
     queryFn: () => {
       const params: any = { page, limit }
-      if (searchTerm) params.search = searchTerm
+      if (debouncedSearchTerm) params.search = debouncedSearchTerm
       return api.adminGetUsers(params)
     }
   })

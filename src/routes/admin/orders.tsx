@@ -1,5 +1,6 @@
 import { createFileRoute as createRoute } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useDebounce } from '../../hooks/useDebounce'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import { OrderDetailsModal } from '../../components/OrderDetailsModal'
@@ -15,15 +16,17 @@ function Orders() {
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null)
   const limit = 10
   const [searchQuery, setSearchQuery] = useState('')
+  
+  const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
-  const queryKey = ['admin-orders', page, filter, searchQuery]
+  const queryKey = ['admin-orders', page, filter, debouncedSearchQuery]
 
   const { data, isLoading } = useQuery({
     queryKey,
     queryFn: () => {
       const params: any = { page, limit }
       if (filter !== 'ALL') params.status = filter
-      if (searchQuery) params.search = searchQuery
+      if (debouncedSearchQuery) params.search = debouncedSearchQuery
       return api.adminGetOrders(params)
     }
   })

@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
+import { useDebounce } from '../../hooks/useDebounce'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '../../lib/api'
 import { ConfirmDeleteModal } from '../../components/ConfirmDeleteModal'
@@ -15,8 +16,10 @@ function Inventory() {
   const [page, setPage] = useState(1)
   const limit = 10
   const [searchQuery, setSearchQuery] = useState('')
+  
+  const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
-  const queryKey = ['admin-products', page, filter, searchQuery]
+  const queryKey = ['admin-products', page, filter, debouncedSearchQuery]
 
   const { data, isLoading } = useQuery({
     queryKey,
@@ -24,7 +27,7 @@ function Inventory() {
       // Backend might not support 'LOW STOCK' filter natively on /products, 
       // but we will fetch all and map them for the table. 
       // Assuming GET /products supports pagination and returns { data, meta }
-      const res = await api.getProducts({ page: String(page), limit: String(limit), ...(searchQuery ? { search: searchQuery } : {}) })
+      const res = await api.getProducts({ page: String(page), limit: String(limit), ...(debouncedSearchQuery ? { search: debouncedSearchQuery } : {}) })
       // If the API returns raw array instead of paginated object, handle it:
       if (Array.isArray(res)) {
         return { data: res, meta: { total: res.length, page: 1, limit: res.length, totalPages: 1 } }
