@@ -11,6 +11,7 @@ export const Route = createFileRoute('/admin/customers')({
 function Customers() {
   const queryClient = useQueryClient()
   const [searchTerm, setSearchTerm] = useState('')
+  const [searchFocused, setSearchFocused] = useState(false)
   const [page, setPage] = useState(1)
   const limit = 10
   
@@ -61,16 +62,42 @@ function Customers() {
 
       {/* Filters Section */}
       <div className="bg-white border border-gray-200 p-4 flex flex-wrap items-center justify-between gap-4 mb-6">
-        <div className="flex items-center gap-4 flex-1">
+        <div className="flex items-center gap-4 flex-1 relative">
           <input 
             value={searchTerm}
             onChange={(e) => {
               setSearchTerm(e.target.value)
               setPage(1)
             }}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
             placeholder="Search customers..."
             className="border border-gray-200 px-4 py-2 w-full max-w-sm outline-none focus:border-metallic-gold"
+            autoComplete="off"
           />
+          
+          {/* Autocomplete Dropdown */}
+          {searchFocused && debouncedSearchTerm.length > 1 && (
+            <div className="absolute top-full left-0 mt-2 w-full max-w-sm bg-white border border-gray-200 shadow-xl rounded z-[100] max-h-64 overflow-y-auto">
+              {isLoading ? (
+                <div className="p-3 text-center text-gray-500 text-xs">Searching...</div>
+              ) : customers.length > 0 ? (
+                <div className="py-1">
+                  {customers.slice(0, 5).map((customer: any) => (
+                    <div
+                      key={customer.id}
+                      className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-3 transition-colors pointer-events-none"
+                    >
+                      <span className="font-bold text-regal-navy text-sm truncate">{customer.firstName} {customer.lastName}</span>
+                      <span className="text-xs text-gray-400 ml-auto truncate">{customer.email}</span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-3 text-center text-gray-500 text-xs">No customers found.</div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

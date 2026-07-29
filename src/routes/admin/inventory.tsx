@@ -16,6 +16,7 @@ function Inventory() {
   const [page, setPage] = useState(1)
   const limit = 10
   const [searchQuery, setSearchQuery] = useState('')
+  const [searchFocused, setSearchFocused] = useState(false)
   
   const debouncedSearchQuery = useDebounce(searchQuery, 300)
 
@@ -165,8 +166,35 @@ function Inventory() {
               placeholder="Search products..." 
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
               className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded text-sm focus:outline-none focus:border-regal-navy"
+              autoComplete="off"
             />
+            
+            {/* Autocomplete Dropdown */}
+            {searchFocused && debouncedSearchQuery.length > 1 && (
+              <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-200 shadow-xl rounded z-[100] max-h-64 overflow-y-auto">
+                {isLoading ? (
+                  <div className="p-3 text-center text-gray-500 text-xs">Searching...</div>
+                ) : filteredProducts.length > 0 ? (
+                  <div className="py-1">
+                    {filteredProducts.slice(0, 5).map((item: any) => (
+                      <button
+                        key={item.id}
+                        onClick={() => navigate({ to: '/admin/inventory/edit/$id', params: { id: item.id } })}
+                        className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-3 transition-colors"
+                      >
+                        <span className="font-bold text-regal-navy text-sm truncate">{item.name}</span>
+                        <span className="text-xs text-gray-400 ml-auto">{item.sku || item.id?.substring(0,8)}</span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-3 text-center text-gray-500 text-xs">No products found.</div>
+                )}
+              </div>
+            )}
           </div>
         </div>
         
