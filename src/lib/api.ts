@@ -35,7 +35,9 @@ const fetchApi = async (endpoint: string, options: RequestInit = {}) => {
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}))
-    throw new Error(errorData.message || errorData.error || 'API Request Failed')
+    const rawMessage = errorData.message || errorData.error || 'API Request Failed'
+    const message = Array.isArray(rawMessage) ? rawMessage.join(', ') : rawMessage
+    throw new Error(message)
   }
 
   return response.json()

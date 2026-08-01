@@ -43,10 +43,12 @@ function Checkout() {
 
   const createOrderMutation = useMutation({
     mutationFn: async (orderData: any) => {
-      // Create the order
       const order = await api.createOrder(orderData)
-      // Clear the cart
-      await api.clearCart()
+      try {
+        await api.clearCart()
+      } catch (err) {
+        console.error('Order created but cart could not be cleared', err)
+      }
       return order
     },
     onSuccess: (data: any) => {
@@ -54,8 +56,10 @@ function Checkout() {
       queryClient.invalidateQueries({ queryKey: ['orders'] })
       
       const orderNumber = data?.data?.orderNumber || data?.orderNumber || 'PENDING'
-      // Navigate to success
       navigate({ to: '/order-success', search: { orderNumber } })
+    },
+    onError: (error: Error) => {
+      alert(error.message || 'Could not place your order. Please try again.')
     }
   })
 
@@ -71,7 +75,7 @@ function Checkout() {
       return
     }
     
-    const proceedWithOrder = (userIdOverride?: string) => {
+    const proceedWithOrder = () => {
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       if (token && formData.saveAddress) {
         api.addAddress({
@@ -84,13 +88,26 @@ function Checkout() {
         }).catch(err => console.error("Could not save address", err))
       }
 
+      // Only send address fields — never password / saveAddress (API rejects unknown top-level props; avoid storing secrets)
+      const shippingAddress = {
+        firstName: formData.firstName || user?.firstName || '',
+        lastName: formData.lastName || user?.lastName || '',
+        email: formData.email || user?.email || '',
+        phone: formData.phone,
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        country: formData.country,
+        zipCode: formData.zipCode,
+      }
+
       const orderData = {
         items: cartItems.map((item: any) => ({
-          productId: item.productId,
+          productId: item.productId || item.product?.id,
           quantity: item.quantity,
           price: item.price
         })),
-        shippingAddress: formData,
+        shippingAddress,
         subtotal,
         tax,
         shippingMethod,
@@ -98,7 +115,6 @@ function Checkout() {
         total,
         paymentMethod,
         paymentReference: '',
-        ...(userIdOverride ? { userId: userIdOverride } : {})
       }
 
       if (paymentMethod === 'PAYSTACK') {
@@ -134,13 +150,13 @@ function Checkout() {
         password: formData.password
       })
       .then(() => {
-        // Automatically login the newly registered user
+        // Automatically login — JWT attaches the order to the user (do not send userId in body; API rejects it)
         api.login({ email: formData.email, password: formData.password })
           .then(loginRes => {
              const token = loginRes.data?.access_token || loginRes.access_token
              const userData = loginRes.data?.user || loginRes.user
              login(token, userData)
-             proceedWithOrder(userData.id)
+             proceedWithOrder()
           })
           .catch(err => {
              console.error(err)
