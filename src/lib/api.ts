@@ -123,6 +123,21 @@ export const api = {
   },
 
   // --- Auth ---
+  /** Normalize login/register API payloads (wrapped or unwrapped). */
+  extractAuthSession: (response: any): { token: string; user: any } | null => {
+    const payload = response?.data ?? response
+    const token =
+      payload?.accessToken ||
+      payload?.access_token ||
+      response?.accessToken ||
+      response?.access_token ||
+      response?.token ||
+      ''
+    const user = payload?.user || response?.user || null
+    if (!token || !user) return null
+    return { token, user }
+  },
+
   login: async (credentials: any) => {
     return fetchApi('/auth/login', {
       method: 'POST',

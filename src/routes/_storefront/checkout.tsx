@@ -28,6 +28,7 @@ function Checkout() {
   })
   const [paymentMethod, setPaymentMethod] = useState<'PAYSTACK' | 'BANK_TRANSFER'>('PAYSTACK')
   const [shippingMethod, setShippingMethod] = useState<'STANDARD' | 'FASTEST'>('STANDARD')
+  const [isAuthenticating, setIsAuthenticating] = useState(false)
 
   // Fetch cart to get items and subtotal
   const { data: cartData, isLoading: isCartLoading } = useQuery({
@@ -63,123 +64,157 @@ function Checkout() {
     }
   })
 
+  const isPlacingOrder = isAuthenticating || createOrderMutation.isPending
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = (e: FormEvent) => {
+  /** Register (or sign in if email exists) and persist the session before payment. */
+  const ensureSignedIn = async () => {
+    if (user && localStorage.getItem('token')) return
+
+    if (!formData.password) {
+      throw new Error('Please enter a password to create your account and proceed with your order.')
+    }
+    if (formData.password.length < 8) {
+      throw new Error('Password must be at least 8 characters.')
+    }
+    if (!formData.firstName.trim() || !formData.lastName.trim()) {
+      throw new Error('Please enter your first and last name.')
+    }
+
+    const applySession = (response: any) => {
+      const session = api.extractAuthSession(response)
+      if (!session) {
+        throw new Error('Could not sign you in automatically. Please try again or sign in from the login page.')
+      }
+      login(session.token, session.user)
+      return session
+    }
+
+    try {
+      // Register returns tokens — use them immediately (no separate login needed)
+      const registerRes = await api.register({
+        firstName: formData.firstName.trim(),
+        lastName: formData.lastName.trim(),
+        email: formData.email.trim(),
+        password: formData.password,
+      })
+      applySession(registerRes)
+    } catch (registerErr: any) {
+      const message = (registerErr?.message || '').toLowerCase()
+      const emailTaken =
+        message.includes('already') ||
+        message.includes('exist') ||
+        message.includes('unique') ||
+        message.includes('conflict') ||
+        message.includes('taken')
+
+      if (!emailTaken) throw registerErr
+
+      // Existing account with same credentials — sign in instead
+      const loginRes = await api.login({
+        email: formData.email.trim(),
+        password: formData.password,
+      })
+      applySession(loginRes)
+    }
+  }
+
+  const buildOrderData = (paymentReference: string) => {
+    const shippingAddress = {
+      firstName: formData.firstName || user?.firstName || '',
+      lastName: formData.lastName || user?.lastName || '',
+      email: formData.email || user?.email || '',
+      phone: formData.phone,
+      street: formData.street,
+      city: formData.city,
+      state: formData.state,
+      country: formData.country,
+      zipCode: formData.zipCode,
+    }
+
+    return {
+      items: cartItems.map((item: any) => ({
+        productId: item.productId || item.product?.id,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      shippingAddress,
+      subtotal,
+      tax,
+      shippingMethod,
+      shippingCost,
+      total,
+      paymentMethod,
+      paymentReference,
+    }
+  }
+
+  const saveAddressIfNeeded = () => {
+    const token = localStorage.getItem('token')
+    if (!token || !formData.saveAddress) return
+    api.addAddress({
+      street: formData.street,
+      city: formData.city,
+      state: formData.state,
+      zipCode: formData.zipCode,
+      country: formData.country,
+      isDefault: false,
+    }).catch(err => console.error('Could not save address', err))
+  }
+
+  const proceedWithOrder = () => {
+    saveAddressIfNeeded()
+
+    if (paymentMethod === 'PAYSTACK') {
+      if (!paystackConfig.publicKey) {
+        alert('Paystack Public Key is missing. Please configure VITE_PAYSTACK_PUBLIC_KEY in your .env file or choose Bank Transfer.')
+        return
+      }
+      initializePayment({
+        onSuccess: (reference: any) => {
+          const paymentReference = reference?.reference || reference
+          createOrderMutation.mutate(buildOrderData(String(paymentReference)))
+        },
+        onClose: () => {
+          alert('Payment was not completed. Please try again.')
+        },
+      })
+      return
+    }
+
+    createOrderMutation.mutate(buildOrderData('BANK_TRANSFER_' + Date.now()))
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
 
     if (cartItems.length === 0) {
-      alert("Your cart is empty.")
+      alert('Your cart is empty.')
       return
     }
-    
-    const proceedWithOrder = () => {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-      if (token && formData.saveAddress) {
-        api.addAddress({
-          street: formData.street,
-          city: formData.city,
-          state: formData.state,
-          zipCode: formData.zipCode,
-          country: formData.country,
-          isDefault: false
-        }).catch(err => console.error("Could not save address", err))
-      }
 
-      // Only send address fields — never password / saveAddress (API rejects unknown top-level props; avoid storing secrets)
-      const shippingAddress = {
-        firstName: formData.firstName || user?.firstName || '',
-        lastName: formData.lastName || user?.lastName || '',
-        email: formData.email || user?.email || '',
-        phone: formData.phone,
-        street: formData.street,
-        city: formData.city,
-        state: formData.state,
-        country: formData.country,
-        zipCode: formData.zipCode,
-      }
-
-      const orderData = {
-        items: cartItems.map((item: any) => ({
-          productId: item.productId || item.product?.id,
-          quantity: item.quantity,
-          price: item.price
-        })),
-        shippingAddress,
-        subtotal,
-        tax,
-        shippingMethod,
-        shippingCost,
-        total,
-        paymentMethod,
-        paymentReference: '',
-      }
-
-      if (paymentMethod === 'PAYSTACK') {
-        if (!paystackConfig.publicKey) {
-          alert("Paystack Public Key is missing. Please configure VITE_PAYSTACK_PUBLIC_KEY in your .env file or choose Bank Transfer.")
-          return
-        }
-        initializePayment({
-          onSuccess: (reference: any) => {
-            orderData.paymentReference = reference.reference
-            createOrderMutation.mutate(orderData)
-          },
-          onClose: () => {
-            alert("Payment was not completed. Please try again.")
-          }
-        });
-      } else {
-        orderData.paymentReference = 'BANK_TRANSFER_' + Date.now()
-        createOrderMutation.mutate(orderData)
-      }
-    }
-
-    if (!user) {
-      if (!formData.password) {
-        alert("Please enter a password to create your account and proceed with your order.")
-        return
-      }
-      // Register the guest user
-      api.register({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        password: formData.password
-      })
-      .then(() => {
-        // Automatically login — JWT attaches the order to the user (do not send userId in body; API rejects it)
-        api.login({ email: formData.email, password: formData.password })
-          .then(loginRes => {
-             const token = loginRes.data?.access_token || loginRes.access_token
-             const userData = loginRes.data?.user || loginRes.user
-             login(token, userData)
-             proceedWithOrder()
-          })
-          .catch(err => {
-             console.error(err)
-             alert("Account created but failed to log in automatically. Proceeding as guest.")
-             proceedWithOrder()
-          })
-      })
-      .catch(err => {
-         console.error(err)
-         alert("Could not register account. You might already have an account with this email.")
-      })
-    } else {
+    try {
+      setIsAuthenticating(true)
+      await ensureSignedIn()
       proceedWithOrder()
+    } catch (err: any) {
+      console.error(err)
+      alert(err?.message || 'Could not complete checkout. Please try again.')
+    } finally {
+      setIsAuthenticating(false)
     }
   }
 
   const paystackConfig = {
     reference: (new Date()).getTime().toString(),
-    email: formData.email || 'customer@example.com',
-    amount: total * 100, // Paystack uses Kobo (kobo = NGN * 100)
-    publicKey: typeof window !== 'undefined' ? (import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || '') : '', 
-  };
-  const initializePayment = usePaystackPayment(paystackConfig);
+    email: formData.email || user?.email || 'customer@example.com',
+    amount: Math.round(total * 100), // Paystack uses Kobo (kobo = NGN * 100)
+    publicKey: typeof window !== 'undefined' ? (import.meta.env.VITE_PAYSTACK_PUBLIC_KEY || '') : '',
+  }
+  const initializePayment = usePaystackPayment(paystackConfig)
 
   if (isCartLoading) {
     return <div className="pt-32 pb-20 text-center font-label-md text-regal-navy">Loading secure checkout...</div>
@@ -242,7 +277,7 @@ function Checkout() {
                 {!user && (
                   <div className="flex flex-col gap-2">
                     <label className="font-label-md text-label-md text-on-surface-variant uppercase text-xs">Create Password *</label>
-                    <input required type="password" name="password" value={formData.password} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors" placeholder="••••••••"/>
+                    <input required type="password" name="password" minLength={8} value={formData.password} onChange={handleChange} className="border border-muted-gold/30 bg-transparent p-4 font-body-md focus:border-regal-navy focus:outline-none transition-colors" placeholder="At least 8 characters"/>
                   </div>
                 )}
                 
@@ -436,11 +471,11 @@ function Checkout() {
             <button 
               type="submit" 
               form="checkout-form"
-              disabled={createOrderMutation.isPending}
+              disabled={isPlacingOrder}
               className="w-full bg-regal-navy text-metallic-gold py-4 font-label-md uppercase tracking-widest hover:bg-metallic-gold hover:text-regal-navy transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
             >
-              {createOrderMutation.isPending ? 'Processing...' : 'Place Order'}
-              {!createOrderMutation.isPending && <span className="material-symbols-outlined text-[18px]">lock</span>}
+              {isPlacingOrder ? 'Processing...' : 'Place Order'}
+              {!isPlacingOrder && <span className="material-symbols-outlined text-[18px]">lock</span>}
             </button>
             <p className="text-center text-xs text-gray-500 mt-4 flex items-center justify-center gap-1">
               <span className="material-symbols-outlined text-[14px]">shield</span>
