@@ -70,8 +70,9 @@ export const api = {
 
   // --- Metrics ---
   getMetrics: async () => {
-    // In a real scenario, this would be an RPC call or edge function.
-    return { data: { totalSales: 0, totalOrders: 0, totalCustomers: 0 } }
+    const { count, error } = await supabase.from('orders').select('*', { count: 'exact', head: true })
+    if (error) throw error
+    return { data: { scentsDelivered: count || 0, totalSales: 0, totalOrders: count || 0, totalCustomers: 0 } }
   },
 
   // --- Auth ---
