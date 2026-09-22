@@ -27,7 +27,7 @@ function EditProduct() {
   const [categoryId, setCategoryId] = useState('')
   const [price, setPrice] = useState('')
   const [originalPrice, setOriginalPrice] = useState('')
-  const [stockQuantity, setStockQuantity] = useState('50')
+  const [stock, setStock] = useState('50')
   const [tagline, setTagline] = useState('')
   const [description, setDescription] = useState('')
   const [size, setSize] = useState('')
@@ -66,7 +66,7 @@ function EditProduct() {
       setCategoryId(product.categoryId || '')
       setPrice(product.price ? String(product.price) : '')
       setOriginalPrice(product.originalPrice ? String(product.originalPrice) : '')
-      setStockQuantity(product.stockQuantity !== undefined ? String(product.stockQuantity) : '50')
+      setStock(product.stock !== undefined ? String(product.stock) : '50')
       setTagline(product.tagline || '')
       setDescription(product.description || '')
       setSize(product.size || '')
@@ -153,7 +153,7 @@ function EditProduct() {
         sku,
         price: parseFloat(price),
         originalPrice: originalPrice ? parseFloat(originalPrice) : undefined,
-        stockQuantity: parseInt(stockQuantity) || 0,
+        stock: parseInt(stock) || 0,
         categoryId,
         tagline,
         description,
@@ -278,7 +278,7 @@ function EditProduct() {
               <div>
                 <label className="block font-label-md text-xs uppercase text-gray-500 mb-2 font-bold">Stock Quantity</label>
                 <input 
-                  value={stockQuantity} onChange={e => setStockQuantity(e.target.value)}
+                  value={stock} onChange={e => setStock(e.target.value)}
                   className="w-full border border-gray-300 p-3 font-body-md text-body-md focus:border-metallic-gold focus:ring-1 focus:ring-metallic-gold outline-none transition-colors" 
                   placeholder="50" type="number" 
                 />

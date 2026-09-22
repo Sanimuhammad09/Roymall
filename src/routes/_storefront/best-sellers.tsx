@@ -110,7 +110,7 @@ function BestSellers() {
                 <Link to="/product/$id" params={{ id: products[0].id }} className="relative overflow-hidden flex-grow aspect-square md:aspect-auto min-h-[400px] block">
                   <div 
                     className="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" 
-                    style={{ backgroundImage: `url('${products[0].images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}')` }}
+                    style={{ backgroundImage: `url('${products[0].image || products[0].images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}')` }}
                   />
                   <div className="absolute top-6 left-6">
                     <span className="bg-regal-navy text-metallic-gold font-label-md text-label-md px-4 py-2 uppercase tracking-widest shadow-lg">Customer Top Choice</span>
@@ -144,7 +144,7 @@ function BestSellers() {
                 <Link to="/product/$id" params={{ id: product.id }} className="relative aspect-[3/4] overflow-hidden bg-soft-cream block">
                   <div 
                     className="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" 
-                    style={{ backgroundImage: `url('${product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}')` }}
+                    style={{ backgroundImage: `url('${product.image || product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}')` }}
                   />
                   <button className="absolute top-4 right-4 text-on-surface-variant hover:text-regal-navy transition-colors">
                     <span className="material-symbols-outlined">favorite</span>

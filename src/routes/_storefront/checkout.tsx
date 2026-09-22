@@ -37,7 +37,7 @@ function Checkout() {
   })
 
   const cartItems = cartData?.data?.items || []
-  const subtotal = cartItems.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0)
+  const subtotal = cartItems.reduce((acc: number, item: any) => acc + ((item.product?.price || item.price || 0) * item.quantity), 0)
   const shippingCost = cartItems.length > 0 ? (shippingMethod === 'FASTEST' ? 5000 : 0) : 0
   const tax = 0
   const total = subtotal + shippingCost + tax
@@ -57,6 +57,9 @@ function Checkout() {
       queryClient.invalidateQueries({ queryKey: ['orders'] })
       
       const orderNumber = data?.data?.orderNumber || data?.orderNumber || 'PENDING'
+      const createdOrder = data?.data || data
+      api.sendOrderEmail(createdOrder, 'Processing').catch(err => console.error(err))
+      
       navigate({ to: '/order-success', search: { orderNumber } })
     },
     onError: (error: Error) => {
@@ -72,7 +75,7 @@ function Checkout() {
 
   /** Register (or sign in if email exists) and persist the session before payment. */
   const ensureSignedIn = async () => {
-    if (user && localStorage.getItem('token')) return
+    if (user) return
 
     if (!formData.password) {
       throw new Error('Please enter a password to create your account and proceed with your order.')
@@ -139,7 +142,7 @@ function Checkout() {
       items: cartItems.map((item: any) => ({
         productId: item.productId || item.product?.id,
         quantity: item.quantity,
-        price: item.price,
+        price: item.product?.price || item.price || 0,
       })),
       shippingAddress,
       subtotal,
@@ -433,7 +436,7 @@ function Checkout() {
                 <div key={item.id} className="flex gap-4 items-center">
                   <div className="w-20 h-20 bg-white border border-muted-gold/10 flex items-center justify-center shrink-0">
                     <img 
-                      src={item.product?.images?.[0]?.url || item.image || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'} 
+                      src={item.product?.image || item.product?.images?.[0]?.url || item.image || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'} 
                       alt={item.product?.name || 'Product'} 
                       className="w-full h-full object-contain p-2"
                     />
@@ -443,7 +446,7 @@ function Checkout() {
                     <p className="text-xs text-gray-500 mt-1">Qty: {item.quantity}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-price-md font-bold text-regal-navy">₦{(item.price * item.quantity).toLocaleString()}</p>
+                    <p className="font-price-md font-bold text-regal-navy">₦{((item.product?.price || item.price || 0) * item.quantity).toLocaleString()}</p>
                   </div>
                 </div>
               ))}

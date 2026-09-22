@@ -74,16 +74,16 @@ function Inventory() {
   const meta = data?.meta || { total: 0, page: 1, limit: 10, totalPages: 1 }
 
   const filteredProducts = products.filter((prod: any) => {
-    const stock = prod.stockQuantity || 0
-    if (filter === 'IN STOCK') return stock > 10
-    if (filter === 'LOW STOCK') return stock > 0 && stock <= 10
-    if (filter === 'OUT OF STOCK') return stock === 0
+    const stock = prod.stock ?? 0
+    if (filter === 'IN STOCK') return stock > 5
+    if (filter === 'LOW STOCK') return stock > 0 && stock <= 5
+    if (filter === 'OUT OF STOCK') return stock <= 0
     return true
   })
 
-  const totalValue = products.reduce((acc: number, prod: any) => acc + ((prod.price || 0) * (prod.stockQuantity || 0)), 0)
-  const lowStockCount = products.filter((p: any) => (p.stockQuantity || 0) > 0 && (p.stockQuantity || 0) <= 10).length
-  const outOfStockCount = products.filter((p: any) => (p.stockQuantity || 0) === 0).length
+  const totalValue = products.reduce((acc: number, prod: any) => acc + ((prod.price || 0) * (prod.stock ?? 0)), 0)
+  const lowStockCount = products.filter((p: any) => (p.stock ?? 0) > 0 && (p.stock ?? 0) <= 5).length
+  const outOfStockCount = products.filter((p: any) => (p.stock ?? 0) <= 0).length
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -211,9 +211,9 @@ function Inventory() {
             </thead>
             <tbody className="divide-y divide-gray-100">
               {filteredProducts.map((item: any) => {
-                const stock = item.stockQuantity || 0
-                const isLowStock = stock > 0 && stock <= 10
-                const isOutOfStock = stock === 0
+                const stock = item.stock ?? 0
+                const isLowStock = stock > 0 && stock <= 5
+                const isOutOfStock = stock <= 0
                 const primaryImage = item.images?.find((img: any) => img.isPrimary)?.url || item.images?.[0]?.url || item.image
 
                 return (

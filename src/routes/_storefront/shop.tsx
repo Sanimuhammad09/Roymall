@@ -206,18 +206,24 @@ function Shop() {
                         {product.discountPercentage}% OFF
                       </div>
                     )}
-                    <img className="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" alt={product.name} src={product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}/>
+                    <img className="max-w-full max-h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-500" alt={product.name} src={product.image || product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}/>
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute inset-0 bg-regal-navy/10 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3 p-4">
                       <button className="w-full md:w-auto bg-regal-navy text-on-primary px-4 py-2 md:px-6 md:py-3 text-[10px] md:text-[12px] font-label-md uppercase tracking-widest hover:bg-metallic-gold transition-colors duration-300">Quick View</button>
                       <button 
                         onClick={(e) => {
                           e.preventDefault()
                           e.stopPropagation()
-                          addToCartMutation.mutate({ productId: product.id, quantity: 1 })
+                          if (product.stock === undefined || product.stock > 5) {
+                            addToCartMutation.mutate({ productId: product.id, quantity: 1 })
+                          }
                         }}
-                        className="w-full md:w-auto bg-metallic-gold text-on-primary p-2 md:p-3 hover:bg-regal-navy transition-colors duration-300 flex items-center justify-center"
+                        disabled={product.stock !== undefined && product.stock <= 5}
+                        className={`w-full md:w-auto text-on-primary p-2 md:p-3 transition-colors duration-300 flex items-center justify-center ${product.stock !== undefined && product.stock <= 5 ? 'bg-red-600 opacity-70 cursor-not-allowed' : 'bg-metallic-gold hover:bg-regal-navy'}`}
+                        title={product.stock !== undefined && product.stock <= 5 ? 'Out of Stock' : 'Add to Bag'}
                       >
-                        <span className="material-symbols-outlined text-[18px] md:text-[24px]">shopping_bag</span>
+                        <span className="material-symbols-outlined text-[18px] md:text-[24px]">
+                          {product.stock !== undefined && product.stock <= 5 ? 'block' : 'shopping_bag'}
+                        </span>
                       </button>
                     </div>
                   </div>

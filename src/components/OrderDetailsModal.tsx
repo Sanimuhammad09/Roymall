@@ -16,7 +16,7 @@ export function OrderDetailsModal({
     queryKey: ['order-details', orderId, isAdmin],
     queryFn: () => {
       if (!orderId) return null;
-      return isAdmin ? api.adminGetOrder(orderId) : api.getOrderById(orderId);
+      return api.getOrderById(orderId);
     },
     enabled: !!orderId
   });
@@ -40,7 +40,7 @@ export function OrderDetailsModal({
           <div>
             <h3 className="font-headline-md text-xl sm:text-2xl font-bold text-regal-navy">Order {order?.orderNumber || 'Details'}</h3>
             <p className="text-xs sm:text-sm font-label-md uppercase tracking-widest text-gray-500 mt-1">
-              {order ? new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Loading...'}
+              {order ? new Date(order.created_at || order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Loading...'}
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -165,7 +165,7 @@ export function OrderDetailsModal({
                     </div>
                     <div className="flex justify-between font-bold text-lg pt-3 border-t border-gray-200 mt-3 text-metallic-gold">
                       <span>Total Amount</span>
-                      <span>₦{(order.totalAmount || 0).toLocaleString()}</span>
+                      <span>₦{(order.total || 0).toLocaleString()}</span>
                     </div>
                   </div>
                 </div>

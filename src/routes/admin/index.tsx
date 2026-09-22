@@ -153,7 +153,7 @@ function Dashboard() {
                   <p className="font-label-md text-[12px] text-white/60 uppercase tracking-widest font-bold">SKU: {prod.sku}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-price-lg text-[16px] font-bold text-red-400">{prod.stockQuantity} left</p>
+                  <p className="font-price-lg text-[16px] font-bold text-red-400">{prod.stock ?? 0} left</p>
                 </div>
               </div>
             ))}

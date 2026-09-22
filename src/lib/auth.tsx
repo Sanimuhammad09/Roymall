@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         // Try to fetch profile, fallback to metadata
-        supabase.from('users').select('*').eq('id', session.user.id).single()
+        supabase.from('users').select('*').eq('id', session.user.id).maybeSingle()
           .then(({ data }) => {
             setUser({
               id: session.user.id,
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        supabase.from('users').select('*').eq('id', session.user.id).single()
+        supabase.from('users').select('*').eq('id', session.user.id).maybeSingle()
           .then(({ data }) => {
             setUser({
               id: session.user.id,

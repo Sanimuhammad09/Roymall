@@ -31,7 +31,7 @@ function ProductCard({ product, largePad = false }: { product: Product, largePad
             {product.discountPercentage}% OFF
           </div>
         )}
-        <img alt={product.name} className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110" src={product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}/>
+        <img alt={product.name} className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110" src={product.image || product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}/>
         <div className="quick-view absolute inset-0 bg-regal-navy/5 opacity-0 transition-all duration-300 flex flex-col justify-end p-4 translate-y-4">
             <button 
                 onClick={(e) => {
@@ -41,9 +41,9 @@ function ProductCard({ product, largePad = false }: { product: Product, largePad
                       addToCartMutation.mutate({ productId: product.id, quantity: 1 });
                     }
                 }}
-                disabled={addToCartMutation.isPending || added}
-                className={`text-white px-6 py-3 font-label-md text-label-md uppercase tracking-wider font-bold text-sm w-full transition-colors ${added ? 'bg-green-600' : 'bg-regal-navy hover:bg-metallic-gold'}`}>
-                {added ? 'Added to Bag' : (addToCartMutation.isPending ? 'Adding...' : 'Add to Cart')}
+                disabled={addToCartMutation.isPending || added || (product.stock !== undefined && product.stock <= 5)}
+                className={`text-white px-6 py-3 font-label-md text-label-md uppercase tracking-wider font-bold text-sm w-full transition-colors ${added ? 'bg-green-600' : (product.stock !== undefined && product.stock <= 5) ? 'bg-red-600' : 'bg-regal-navy hover:bg-metallic-gold'}`}>
+                {added ? 'Added to Bag' : (product.stock !== undefined && product.stock <= 5) ? 'Out of Stock' : (addToCartMutation.isPending ? 'Adding...' : 'Add to Cart')}
             </button>
         </div>
       </div>

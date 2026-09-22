@@ -105,7 +105,7 @@ function NewArrivals() {
                   <img 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
                     alt={product.name} 
-                    src={product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}
+                    src={product.image || product.images?.[0]?.url || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}
                   />
                   <div className="absolute inset-0 bg-regal-navy/0 group-hover:bg-regal-navy/10 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                     <button className="bg-white text-regal-navy px-6 py-3 font-label-md text-label-md shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Quick View</button>

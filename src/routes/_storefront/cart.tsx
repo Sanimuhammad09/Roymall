@@ -102,7 +102,7 @@ function Cart() {
                 <img 
                   className="object-contain w-full h-full transform group-hover:scale-105 transition-transform duration-700" 
                   alt={item.product?.name || item.name} 
-                  src={item.product?.images?.[0]?.url || item.image || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}
+                  src={item.product?.image || item.product?.images?.[0]?.url || item.image || 'https://placehold.co/400x500/f3f4f6/a1a1aa?text=No+Image'}
                 />
               </div>
               <div className="flex-grow flex flex-col justify-between py-2">

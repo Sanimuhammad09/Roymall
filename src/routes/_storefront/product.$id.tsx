@@ -144,15 +144,30 @@ function Product() {
             <span className="hover:text-regal-navy capitalize">{prod.category?.name || 'Fragrance'}</span>
           </nav>
           <h1 className="font-headline-lg text-headline-lg text-regal-navy mb-2">{prod.name}</h1>
-          <div className="flex items-center gap-4 mb-8">
-            <p className="font-price-lg text-price-lg text-metallic-gold">₦{(prod.price || 0).toLocaleString()}</p>
-            {prod.originalPrice && prod.originalPrice > prod.price && (
-              <p className="text-xl text-gray-400 line-through">₦{prod.originalPrice.toLocaleString()}</p>
-            )}
-            {prod.discountPercentage && (
-              <span className="bg-[#8B0000] text-white px-3 py-1 text-xs font-bold uppercase tracking-widest shadow-sm">
-                {prod.discountPercentage}% OFF
-              </span>
+          <div className="flex flex-col gap-2 mb-8">
+            <div className="flex items-center gap-4">
+              <p className="font-price-lg text-price-lg text-metallic-gold">₦{(prod.price || 0).toLocaleString()}</p>
+              {prod.originalPrice && prod.originalPrice > prod.price && (
+                <p className="text-xl text-gray-400 line-through">₦{prod.originalPrice.toLocaleString()}</p>
+              )}
+              {prod.discountPercentage && (
+                <span className="bg-[#8B0000] text-white px-3 py-1 text-xs font-bold uppercase tracking-widest shadow-sm">
+                  {prod.discountPercentage}% OFF
+                </span>
+              )}
+            </div>
+            {prod.stock !== undefined && (
+              prod.stock > 5 ? (
+                <p className="font-label-md text-sm text-green-600 flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[16px]">check_circle</span>
+                  {prod.stock} available in stock
+                </p>
+              ) : (
+                <p className="font-label-md text-sm text-red-600 flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[16px]">error</span>
+                  Out of Stock
+                </p>
+              )
             )}
           </div>
           
@@ -186,20 +201,20 @@ function Product() {
           <div className="flex flex-col gap-4 mb-12">
             <div className="flex flex-wrap sm:flex-nowrap items-center gap-4">
               <div className="flex items-center justify-between border border-regal-navy/20 h-14 px-4 bg-white min-w-[120px]">
-                <button className="p-2 hover:text-metallic-gold transition-colors" onClick={() => qty > 1 && setQty(qty - 1)}>
+                <button className="p-2 hover:text-metallic-gold transition-colors" onClick={() => qty > 1 && setQty(qty - 1)} disabled={prod.stock !== undefined && prod.stock <= 5}>
                   <span className="material-symbols-outlined">remove</span>
                 </button>
                 <span className="w-12 text-center font-label-md" id="quantity">{qty}</span>
-                <button className="p-2 hover:text-metallic-gold transition-colors" onClick={() => setQty(qty + 1)}>
+                <button className="p-2 hover:text-metallic-gold transition-colors" onClick={() => setQty(qty + 1)} disabled={prod.stock !== undefined && prod.stock <= 5}>
                   <span className="material-symbols-outlined">add</span>
                 </button>
               </div>
               <button 
                 onClick={() => addToCartMutation.mutate({ productId: prod.id, quantity: qty })}
-                disabled={addToCartMutation.isPending}
+                disabled={addToCartMutation.isPending || (prod.stock !== undefined && prod.stock <= 5)}
                 className="flex-1 bg-regal-navy text-metallic-gold h-14 font-label-md text-sm sm:text-base uppercase tracking-widest hover:bg-regal-navy/90 transition-all active:scale-95 disabled:opacity-70 whitespace-nowrap px-2 sm:px-4"
               >
-                {addToCartMutation.isPending ? 'Adding...' : 'Add to Bag'}
+                {addToCartMutation.isPending ? 'Adding...' : (prod.stock !== undefined && prod.stock <= 5 ? 'Out of Stock' : 'Add to Bag')}
               </button>
               <button
                 onClick={() => isInWishlist ? removeFromWishlistMutation.mutate() : addToWishlistMutation.mutate()}
@@ -212,7 +227,7 @@ function Product() {
             </div>
             <button 
               onClick={() => buyNowMutation.mutate({ productId: prod.id, quantity: qty })}
-              disabled={buyNowMutation.isPending}
+              disabled={buyNowMutation.isPending || (prod.stock !== undefined && prod.stock <= 5)}
               className="w-full border border-metallic-gold text-metallic-gold h-14 font-label-md uppercase tracking-widest hover:bg-metallic-gold hover:text-white transition-all flex items-center justify-center disabled:opacity-70"
             >
               {buyNowMutation.isPending ? 'Processing...' : 'Buy Now'}

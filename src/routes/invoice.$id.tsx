@@ -14,7 +14,7 @@ function Invoice() {
 
   const { data: orderResponse, isLoading } = useQuery({
     queryKey: ['invoice', id],
-    queryFn: () => isAdmin ? api.adminGetOrder(id) : api.getOrderById(id),
+    queryFn: () => api.getOrderById(id),
   })
 
   // Trigger print dialog when data is ready
@@ -46,7 +46,7 @@ function Invoice() {
         <div className="text-right">
           <h1 className="font-headline-lg text-4xl text-regal-navy font-bold uppercase tracking-widest mb-2">INVOICE</h1>
           <p className="font-bold text-gray-800">#{order.orderNumber || order.id.substring(0,8).toUpperCase()}</p>
-          <p className="text-sm text-gray-500">Date: {new Date(order.createdAt).toLocaleDateString()}</p>
+          <p className="text-sm text-gray-500">Date: {new Date(order.created_at || order.createdAt).toLocaleDateString()}</p>
           <p className="text-sm text-gray-500 mt-2">
             Status: <span className="font-bold uppercase tracking-widest text-[10px] bg-gray-100 px-2 py-1">{order.status}</span>
           </p>
@@ -57,8 +57,8 @@ function Invoice() {
       <div className="flex justify-between mb-12">
         <div>
           <h3 className="font-label-md uppercase tracking-widest text-xs text-gray-500 font-bold mb-2">Billed To</h3>
-          <p className="font-bold text-regal-navy">{order.user?.firstName} {order.user?.lastName}</p>
-          <p className="text-sm text-gray-600">{order.user?.email}</p>
+          <p className="font-bold text-regal-navy">{order.shippingAddress?.firstName || order.user?.firstName} {order.shippingAddress?.lastName || order.user?.lastName}</p>
+          <p className="text-sm text-gray-600">{order.shippingAddress?.email || order.user?.email}</p>
         </div>
         {order.shippingAddress && (
           <div className="text-right">
@@ -111,7 +111,7 @@ function Invoice() {
         </div>
         <div className="flex justify-between py-4 mt-2 border-t-2 border-regal-navy">
           <span className="font-label-md uppercase tracking-widest font-bold text-regal-navy">Total Due</span>
-          <span className="font-price-lg font-bold text-2xl text-regal-navy">₦{(order.totalAmount || 0).toLocaleString()}</span>
+          <span className="font-price-lg font-bold text-2xl text-regal-navy">₦{(order.total || 0).toLocaleString()}</span>
         </div>
       </div>
 

@@ -33,7 +33,13 @@ function Orders() {
   })
 
   const updateStatusMutation = useMutation({
-    mutationFn: ({ id, status }: { id: string, status: string }) => api.adminUpdateOrderStatus(id, status),
+    mutationFn: async ({ order, status }: { order: any, status: string }) => {
+      const result = await api.adminUpdateOrderStatus(order.id, status)
+      if (['PROCESSING', 'SHIPPED', 'DELIVERED'].includes(status)) {
+         api.sendOrderEmail(order, status).catch(console.error)
+      }
+      return result
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-orders'] })
     }
@@ -143,11 +149,11 @@ function Orders() {
                         {order.orderNumber || order.id.slice(0,8).toUpperCase()}
                       </td>
                       <td className="px-6 py-5 text-sm text-gray-500 font-body-md">
-                        {new Date(order.createdAt).toLocaleDateString()}
+                        {new Date(order.created_at || order.createdAt).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-5">
-                        <p className="font-bold text-regal-navy text-sm font-body-md">{order.user?.firstName} {order.user?.lastName}</p>
-                        <p className="text-xs text-gray-500">{order.user?.email}</p>
+                        <p className="font-bold text-regal-navy text-sm font-body-md">{order.shippingAddress?.firstName || order.user?.firstName} {order.shippingAddress?.lastName || order.user?.lastName}</p>
+                        <p className="text-xs text-gray-500">{order.shippingAddress?.email || order.user?.email}</p>
                       </td>
                       <td className="px-6 py-5 text-sm text-gray-600 font-body-md">
                         {order.items?.length || 0} items
@@ -155,7 +161,7 @@ function Orders() {
                       <td className="px-6 py-5">
                         <select 
                           value={order.status}
-                          onChange={(e) => updateStatusMutation.mutate({ id: order.id, status: e.target.value })}
+                          onChange={(e) => updateStatusMutation.mutate({ order, status: e.target.value })}
                           className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 outline-none border border-transparent hover:border-gray-200 cursor-pointer ${statusColors[order.status] || 'bg-gray-100 text-gray-800'}`}
                         >
                           <option value="PENDING">PENDING</option>
@@ -166,7 +172,7 @@ function Orders() {
                         </select>
                       </td>
                       <td className="px-6 py-5 font-price-lg text-price-lg text-regal-navy font-bold">
-                        ₦{(order.totalAmount || 0).toLocaleString(undefined, {minimumFractionDigits:2})}
+                        ₦{(order.total || 0).toLocaleString(undefined, {minimumFractionDigits:2})}
                       </td>
                       <td className="px-6 py-5 text-right">
                         <button onClick={() => setSelectedOrderId(order.id)} className="font-label-md text-label-md text-metallic-gold uppercase tracking-widest border-b border-metallic-gold pb-0.5 hover:text-yellow-600 transition-colors font-bold text-xs">View Details</button>
