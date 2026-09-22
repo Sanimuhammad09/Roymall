@@ -50,6 +50,8 @@ function SignUp() {
       
       if (token && userData) {
         login(token, userData)
+        localStorage.setItem('token', token)
+        localStorage.setItem('role', userData.role || 'user')
       }
       
       setIsSuccess(true)

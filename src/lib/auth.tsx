@@ -91,6 +91,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = async () => {
     await supabase.auth.signOut()
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
     setUser(null)
     window.location.href = '/signin'
   }

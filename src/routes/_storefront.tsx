@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '../lib/api'
 import { WhatsAppWidget } from '../components/WhatsAppWidget'
 import { useDebounce } from '../hooks/useDebounce'
+import { useAuth } from '../lib/auth'
 
 export const Route = createFileRoute('/_storefront')({
   component: StorefrontLayout,
@@ -15,6 +16,7 @@ function StorefrontLayout() {
   const [globalSearch, setGlobalSearch] = useState('')
   const [searchFocused, setSearchFocused] = useState(false)
   const location = useLocation()
+  const { user } = useAuth()
   
   const debouncedSearch = useDebounce(globalSearch, 300)
 
@@ -155,10 +157,8 @@ function StorefrontLayout() {
           
           <button 
             onClick={() => {
-              const token = localStorage.getItem('token')
-              const role = localStorage.getItem('role')
-              if (token) {
-                window.location.href = role === 'ADMIN' ? '/admin' : '/account'
+              if (user) {
+                window.location.href = user.role === 'ADMIN' ? '/admin' : '/account'
               } else {
                 window.location.href = '/signin'
               }
