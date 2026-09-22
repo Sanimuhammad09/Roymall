@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '../lib/api'
 import { useEffect, useRef } from 'react'
 import { jsPDF } from 'jspdf'
-import html2canvas from 'html2canvas'
+import * as htmlToImage from 'html-to-image'
 
 export const Route = createFileRoute('/invoice/$id')({
   component: Invoice,
@@ -42,12 +42,16 @@ function Invoice() {
       const noPrintElements = element.querySelectorAll('.no-print');
       noPrintElements.forEach(el => (el as HTMLElement).style.display = 'none');
 
-      const canvas = await html2canvas(element, { scale: 2, useCORS: true });
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = await htmlToImage.toPng(element, { pixelRatio: 2 });
       
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      // Calculate height maintaining aspect ratio
+      const img = new Image();
+      img.src = imgData;
+      await new Promise((resolve) => { img.onload = resolve; });
+      const pdfHeight = (img.height * pdfWidth) / img.width;
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       
