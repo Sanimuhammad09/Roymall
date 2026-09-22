@@ -42,18 +42,32 @@ function Invoice() {
       const noPrintElements = element.querySelectorAll('.no-print');
       noPrintElements.forEach(el => (el as HTMLElement).style.display = 'none');
 
-      const imgData = await htmlToImage.toPng(element, { pixelRatio: 2 });
+      const imgData = await htmlToImage.toPng(element, { pixelRatio: 2, backgroundColor: '#ffffff' });
       
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
       
       // Calculate height maintaining aspect ratio
       const img = new Image();
       img.src = imgData;
       await new Promise((resolve) => { img.onload = resolve; });
-      const pdfHeight = (img.height * pdfWidth) / img.width;
+      const imgHeight = (img.height * pdfWidth) / img.width;
       
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      let heightLeft = imgHeight;
+      let position = 0;
+      
+      // Add first page
+      pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+      heightLeft -= pageHeight;
+      
+      // Add subsequent pages if the content is taller than one A4 page
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
       
       const orderNum = order?.orderNumber || order?.id.substring(0,8).toUpperCase();
       pdf.save(`Roymall_Invoice_${orderNum}.pdf`);
