@@ -130,7 +130,7 @@ function Home() {
       {/* Hero Section */}
       <section className="relative h-[85vh] flex items-center justify-center text-center overflow-hidden pt-16 mt-[-80px]">
         <div className="absolute inset-0">
-          <img alt="Nocturne Luxury Fragrance" className="w-full h-full object-cover" src="https://images.unsplash.com/photo-1523293182086-7651a899d37f?q=80&w=2000&auto=format&fit=crop"/>
+          <img alt="Nocturne Luxury Fragrance" className="w-full h-full object-cover" src="/roymall-hero-1.jpg"/>
           <div className="absolute inset-0 hero-overlay"></div>
         </div>
         <div className="relative max-w-4xl mx-auto px-6 w-full text-white z-10 pt-16">
@@ -271,8 +271,26 @@ function Home() {
         </section>
       </div>
 
+      {/* Featured Banner */}
+      <section className="relative h-[60vh] flex items-center justify-center text-center overflow-hidden">
+        <div className="absolute inset-0">
+          <img alt="Roymall Featured" className="w-full h-full object-cover" src="/roymall-featured-1.jpg"/>
+          <div className="absolute inset-0 bg-regal-navy/60"></div>
+        </div>
+        <div className="relative z-10 px-6 max-w-3xl mx-auto text-white">
+            <span className="text-metallic-gold font-label-md uppercase tracking-[0.4em] mb-4 block font-bold">The Signature Collection</span>
+            <h2 className="text-4xl md:text-5xl font-display-lg mb-6 font-bold">Discover Your Essence</h2>
+            <p className="text-lg md:text-xl text-soft-cream/80 mb-8 max-w-xl mx-auto font-body-lg">
+                Immerse yourself in our finest curation of luxury fragrances, handpicked to elevate your daily ritual.
+            </p>
+            <Link to="/shop" className="inline-block bg-metallic-gold text-regal-navy px-10 py-4 font-label-md uppercase tracking-widest hover:bg-white transition-all shadow-xl font-bold">
+                Shop The Edit
+            </Link>
+        </div>
+      </section>
+
       {/* Newsletter */}
-      <section className="bg-regal-navy py-32 border-t border-metallic-gold/10">
+      <section className="bg-regal-navy py-24 border-t border-metallic-gold/10">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <span className="text-metallic-gold font-label-md uppercase tracking-[0.4em] mb-6 block font-bold">The Inner Circle</span>
           <h2 className="text-white text-headline-lg font-headline-lg mb-6 font-bold text-4xl">Join the Royal Circle</h2>
