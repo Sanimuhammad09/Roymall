@@ -123,6 +123,144 @@ export const api = {
     
     return { data }
   },
+
+  adminGetUsers: async ({ page = 1, limit = 10, search = '' }: { page?: number, limit?: number, search?: string }) => {
+    let query = supabase.from('users').select('*', { count: 'exact' }).neq('role', 'ADMIN')
+
+    if (search) {
+      query = query.or(`firstName.ilike.%${search}%,lastName.ilike.%${search}%,email.ilike.%${search}%`)
+    }
+
+    const { data, error, count } = await query
+      .range((page - 1) * limit, page * limit - 1)
+      .order('createdAt', { ascending: false })
+
+    if (error) throw error
+
+    return { 
+      data, 
+      meta: { 
+        total: count || 0, 
+        page, 
+        limit, 
+        totalPages: Math.ceil((count || 0) / limit) 
+      } 
+    }
+  },
+
+  adminToggleUserStatus: async (id: string, isActive: boolean) => {
+    const { data, error } = await supabase.from('users').update({ isActive }).eq('id', id).select().single()
+    if (error) throw error
+    return { data }
+  },
+  
+  adminGetSettings: async () => {
+    const { data, error } = await supabase.from('settings').select('*')
+    if (error) {
+      console.warn("Settings table might not exist yet:", error)
+      return { data: {} }
+    }
+    
+    const combinedSettings: any = {}
+    data.forEach((row: any) => {
+      Object.assign(combinedSettings, row.value)
+    })
+    
+    return { data: combinedSettings }
+  },
+
+  adminUpdateSettings: async (newSettings: any) => {
+    // Split into general and payments
+    const general = {
+      storeName: newSettings.storeName,
+      supportEmail: newSettings.supportEmail,
+      contactPhone: newSettings.contactPhone,
+      storeAddress: newSettings.storeAddress,
+      taxRate: newSettings.taxRate,
+      currency: newSettings.currency,
+      enablePromotions: newSettings.enablePromotions,
+      promoBannerText: newSettings.promoBannerText
+    }
+    const payments = {
+      stripePublicKey: newSettings.stripePublicKey,
+      stripeSecretKey: newSettings.stripeSecretKey,
+      paypalClientId: newSettings.paypalClientId,
+      paymentMinTrans: newSettings.paymentMinTrans,
+      paymentMaxTrans: newSettings.paymentMaxTrans,
+      paymentServiceFee: newSettings.paymentServiceFee
+    }
+
+    const { error: e1 } = await supabase.from('settings').upsert({ key: 'general', value: general })
+    if (e1) throw e1
+    
+    const { error: e2 } = await supabase.from('settings').upsert({ key: 'payments', value: payments })
+    if (e2) throw e2
+
+    return { data: newSettings }
+  },
+
+  adminUpdateProfile: async (id: string, updates: any) => {
+    if (updates.email || updates.password) {
+      const authUpdates: any = {}
+      if (updates.email) authUpdates.email = updates.email
+      if (updates.password) authUpdates.password = updates.password
+      const { error: authError } = await supabase.auth.updateUser(authUpdates)
+      if (authError) throw authError
+    }
+
+    const profileUpdates = {
+      firstName: updates.firstName,
+      lastName: updates.lastName
+    }
+    const { data, error } = await supabase.from('users').update(profileUpdates).eq('id', id).select().single()
+    if (error) throw error
+    return { data }
+  },
+
+  getShippingZones: async () => {
+    const { data, error } = await supabase.from('shipping_zones').select('*').order('name')
+    if (error) {
+      console.warn("shipping_zones table might not exist yet:", error)
+      return { data: [] }
+    }
+    return { data }
+  },
+
+  createShippingZone: async (zoneData: any) => {
+    const { data, error } = await supabase.from('shipping_zones').insert([zoneData]).select().single()
+    if (error) throw error
+    return { data }
+  },
+
+  deleteShippingZone: async (id: string) => {
+    const { error } = await supabase.from('shipping_zones').delete().eq('id', id)
+    if (error) throw error
+    return { success: true }
+  },
+
+  getAdminUsers: async () => {
+    const { data, error } = await supabase.from('users').select('*').eq('role', 'ADMIN').order('firstName')
+    if (error) throw error
+    return { data }
+  },
+
+  removeAdminAccess: async (id: string) => {
+    const { data, error } = await supabase.from('users').update({ role: 'USER' }).eq('id', id).select().single()
+    if (error) throw error
+    return { data }
+  },
+
+  inviteAdminUser: async (userData: any) => {
+    // In a real app, this would use supabase.auth.admin.inviteUserByEmail (requires service role key)
+    // For now, we will create a dummy user in the users table with the role ADMIN
+    const { data, error } = await supabase.from('users').insert([{
+      ...userData,
+      role: 'ADMIN',
+      isActive: true
+    }]).select().single()
+    if (error) throw error
+    return { data }
+  },
   
   getMe: async () => {
     const { data: { user } } = await supabase.auth.getUser()

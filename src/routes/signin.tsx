@@ -99,6 +99,7 @@ function SignIn() {
                 className="w-full bg-transparent py-3 px-0 border-b border-regal-navy/20 focus:outline-none focus:border-metallic-gold transition-colors duration-300 font-body-lg text-regal-navy placeholder:text-outline/40" 
                 id="email" 
                 name="email" 
+                autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address" 
@@ -124,6 +125,7 @@ function SignIn() {
                 className="w-full bg-transparent py-3 px-0 border-b border-regal-navy/20 focus:outline-none focus:border-metallic-gold transition-colors duration-300 font-body-lg text-regal-navy placeholder:text-outline/40" 
                 id="password" 
                 name="password" 
+                autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your password" 
