@@ -42,7 +42,19 @@ function Invoice() {
       const noPrintElements = element.querySelectorAll('.no-print');
       noPrintElements.forEach(el => (el as HTMLElement).style.display = 'none');
 
-      const imgData = await htmlToImage.toPng(element, { pixelRatio: 2, backgroundColor: '#ffffff' });
+      // Force a specific width for the snapshot so it looks consistent across devices,
+      // and remove margins so it doesn't get offset or cut off horizontally.
+      const imgData = await htmlToImage.toPng(element, { 
+        pixelRatio: 2, 
+        backgroundColor: '#ffffff',
+        width: 800,
+        style: {
+          width: '800px',
+          maxWidth: '800px',
+          margin: '0',
+          transform: 'none'
+        }
+      });
       
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
