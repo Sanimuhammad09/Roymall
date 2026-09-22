@@ -84,12 +84,12 @@ function Invoice() {
           {order.items?.map((item: any, i: number) => (
             <tr key={item.id || i}>
               <td className="py-4">
-                <p className="font-bold text-gray-800">{item.product?.name}</p>
+                <p className="font-bold text-gray-800">{item.product?.name || 'Unknown Product'}</p>
                 {item.product?.sku && <p className="text-xs text-gray-500">SKU: {item.product.sku}</p>}
               </td>
               <td className="py-4 text-center">{item.quantity}</td>
-              <td className="py-4 text-right">₦{(item.price || 0).toLocaleString()}</td>
-              <td className="py-4 text-right font-bold">₦{((item.price || 0) * item.quantity).toLocaleString()}</td>
+              <td className="py-4 text-right">₦{(item.priceAtPurchase || item.price || 0).toLocaleString()}</td>
+              <td className="py-4 text-right font-bold">₦{((item.priceAtPurchase || item.price || 0) * item.quantity).toLocaleString()}</td>
             </tr>
           ))}
         </tbody>

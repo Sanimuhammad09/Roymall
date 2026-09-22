@@ -102,8 +102,10 @@ export function OrderDetailsModal({
                     <div key={item.id} className="flex flex-col sm:flex-row gap-4 sm:gap-6 sm:items-center">
                       <div className="flex gap-4 sm:gap-6 flex-grow items-center">
                         <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gray-50 border border-gray-100 flex-shrink-0">
-                          {item.product?.images?.[0] ? (
-                            <img src={item.product.images[0].url} alt={item.product.name} className="w-full h-full object-cover" />
+                          {item.product?.image ? (
+                            <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
+                          ) : item.product?.images?.[0] ? (
+                            <img src={item.product.images[0].url || item.product.images[0]} alt={item.product.name} className="w-full h-full object-cover" />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-gray-300">
                               <span className="material-symbols-outlined text-3xl">image</span>
@@ -116,9 +118,9 @@ export function OrderDetailsModal({
                         </div>
                       </div>
                       <div className="text-left sm:text-right mt-2 sm:mt-0 pl-24 sm:pl-0">
-                        <p className="font-price-lg font-bold text-regal-navy text-base sm:text-lg">₦{(item.priceAtPurchase * item.quantity).toLocaleString()}</p>
+                        <p className="font-price-lg font-bold text-regal-navy text-base sm:text-lg">₦{((item.priceAtPurchase || item.price || 0) * item.quantity).toLocaleString()}</p>
                         {item.quantity > 1 && (
-                          <p className="text-xs text-gray-400 font-label-md mt-1">₦{item.priceAtPurchase.toLocaleString()} each</p>
+                          <p className="text-xs text-gray-400 font-label-md mt-1">₦{(item.priceAtPurchase || item.price || 0).toLocaleString()} each</p>
                         )}
                       </div>
                     </div>

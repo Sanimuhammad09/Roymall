@@ -143,6 +143,13 @@ function Checkout() {
         productId: item.productId || item.product?.id,
         quantity: item.quantity,
         price: item.product?.price || item.price || 0,
+        priceAtPurchase: item.product?.price || item.price || 0,
+        product: {
+          id: item.productId || item.product?.id,
+          name: item.product?.name,
+          image: item.product?.image || (item.product?.images && item.product.images[0]?.url) || null,
+          sku: item.product?.sku
+        }
       })),
       shippingAddress,
       subtotal,

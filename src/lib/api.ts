@@ -54,18 +54,6 @@ export const api = {
     if (error) throw error
     return { data }
   },
-  
-  uploadProductImages: async (productId: string, formData: FormData) => {
-    // Requires Supabase Storage setup
-    const file = formData.get('file') as File
-    if (!file) throw new Error('No file provided')
-    
-    const { data, error } = await supabase.storage.from('product-images').upload(`${productId}/${Date.now()}_${file.name}`, file)
-    if (error) throw error
-    
-    const { data: publicUrlData } = supabase.storage.from('product-images').getPublicUrl(data.path)
-    return { data: { url: publicUrlData.publicUrl } }
-  },
 
   // --- Categories ---
   getCategories: async () => {
