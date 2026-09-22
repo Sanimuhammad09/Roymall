@@ -1,7 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../lib/api'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { jsPDF } from 'jspdf'
+import html2canvas from 'html2canvas'
 
 export const Route = createFileRoute('/invoice/$id')({
   component: Invoice,
@@ -17,14 +19,49 @@ function Invoice() {
     queryFn: () => api.getOrderById(id),
   })
 
+  const invoiceRef = useRef<HTMLDivElement>(null)
+
   // Trigger print dialog when data is ready
   useEffect(() => {
     if (orderResponse && typeof window !== 'undefined') {
-      setTimeout(() => {
-        window.print()
-      }, 500)
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('print') !== 'false') {
+        setTimeout(() => {
+          // window.print()
+        }, 500)
+      }
     }
   }, [orderResponse])
+
+  const handleDownloadPDF = async () => {
+    const element = invoiceRef.current;
+    if (!element) return;
+    
+    try {
+      // Temporarily hide elements with the no-print class
+      const noPrintElements = element.querySelectorAll('.no-print');
+      noPrintElements.forEach(el => (el as HTMLElement).style.display = 'none');
+
+      const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+      const imgData = canvas.toDataURL('image/png');
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      
+      const orderNum = order?.orderNumber || order?.id.substring(0,8).toUpperCase();
+      pdf.save(`Roymall_Invoice_${orderNum}.pdf`);
+      
+    } catch (err) {
+      console.error('Error generating PDF:', err);
+    } finally {
+      // Restore elements
+      const noPrintElements = element.querySelectorAll('.no-print');
+      noPrintElements.forEach(el => (el as HTMLElement).style.display = '');
+    }
+  };
 
   if (isLoading) return <div className="p-10 font-label-md text-regal-navy">Loading Invoice...</div>
   
@@ -32,7 +69,7 @@ function Invoice() {
   if (!order) return <div className="p-10 font-label-md text-red-500">Invoice not found</div>
 
   return (
-    <div className="bg-white min-h-screen text-gray-900 p-8 font-body-md" style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <div ref={invoiceRef} className="bg-white min-h-screen text-gray-900 p-8 font-body-md" style={{ maxWidth: '800px', margin: '0 auto' }}>
       
       {/* Header */}
       <div className="flex justify-between items-start border-b border-gray-200 pb-8 mb-8">
@@ -117,13 +154,19 @@ function Invoice() {
 
       {/* Footer */}
       <div className="mt-16 pt-8 border-t border-gray-200 text-center">
-        <p className="text-sm text-gray-500 italic">Thank you for your business.</p>
-        <div className="mt-4 flex justify-center gap-4 no-print">
-          <button onClick={() => window.print()} className="bg-metallic-gold text-regal-navy px-6 py-2 font-label-md uppercase tracking-widest font-bold text-xs hover:opacity-90">
+        <p className="text-sm text-gray-500 italic mb-6">Thank you for your business.</p>
+        <div className="flex justify-center gap-4 no-print flex-wrap">
+          <button onClick={handleDownloadPDF} className="bg-metallic-gold text-regal-navy px-6 py-2 font-label-md uppercase tracking-widest font-bold text-xs hover:opacity-90 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[18px]">download</span>
+            Download PDF
+          </button>
+          <button onClick={() => window.print()} className="border border-regal-navy text-regal-navy px-6 py-2 font-label-md uppercase tracking-widest font-bold text-xs hover:bg-gray-50 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[18px]">print</span>
             Print Invoice
           </button>
-          <button onClick={() => window.close()} className="border border-gray-300 text-gray-600 px-6 py-2 font-label-md uppercase tracking-widest font-bold text-xs hover:bg-gray-50">
-            Close Window
+          <button onClick={() => window.close()} className="border border-gray-300 text-gray-600 px-6 py-2 font-label-md uppercase tracking-widest font-bold text-xs hover:bg-gray-50 flex items-center gap-2">
+            <span className="material-symbols-outlined text-[18px]">close</span>
+            Close
           </button>
         </div>
       </div>
