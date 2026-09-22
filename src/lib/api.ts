@@ -169,6 +169,15 @@ export const api = {
     return { data: combinedSettings }
   },
 
+  getPublicSettings: async () => {
+    const { data, error } = await supabase.from('settings').select('value').eq('key', 'general').single()
+    if (error) {
+      console.warn("Settings might not exist yet:", error)
+      return { data: {} }
+    }
+    return { data: data.value }
+  },
+
   adminUpdateSettings: async (newSettings: any) => {
     // Split into general and payments
     const general = {
