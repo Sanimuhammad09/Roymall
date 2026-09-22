@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { api } from './api'
+import { supabase } from './supabase'
 
 interface User {
   id: string
@@ -13,7 +13,7 @@ interface AuthContextType {
   user: User | null
   isLoading: boolean
   login: (token: string, userData: User) => void
-  logout: () => void
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -23,40 +23,74 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      const token = localStorage.getItem('token')
-      if (token) {
-        try {
-          const response = await api.getMe()
-          const userData = response.data || response.user || response
-          setUser(userData)
-          if (userData.role) {
-            localStorage.setItem('role', userData.role)
-          }
-        } catch (error) {
-          console.error("Failed to authenticate token", error)
-          localStorage.removeItem('token')
-          localStorage.removeItem('role')
-        }
+    // Check active session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        // Try to fetch profile, fallback to metadata
+        supabase.from('users').select('*').eq('id', session.user.id).single()
+          .then(({ data }) => {
+            setUser({
+              id: session.user.id,
+              email: session.user.email || '',
+              firstName: data?.firstName || session.user.user_metadata?.firstName || '',
+              lastName: data?.lastName || session.user.user_metadata?.lastName || '',
+              role: data?.role || session.user.user_metadata?.role || 'user'
+            })
+            setIsLoading(false)
+          })
+          .catch(() => {
+            // Error fetching from users table (e.g. table doesn't exist yet)
+            setUser({
+              id: session.user.id,
+              email: session.user.email || '',
+              firstName: session.user.user_metadata?.firstName || '',
+              lastName: session.user.user_metadata?.lastName || '',
+              role: session.user.user_metadata?.role || 'user'
+            })
+            setIsLoading(false)
+          })
+      } else {
+        setIsLoading(false)
       }
-      setIsLoading(false)
-    }
+    })
 
-    initializeAuth()
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        supabase.from('users').select('*').eq('id', session.user.id).single()
+          .then(({ data }) => {
+            setUser({
+              id: session.user.id,
+              email: session.user.email || '',
+              firstName: data?.firstName || session.user.user_metadata?.firstName || '',
+              lastName: data?.lastName || session.user.user_metadata?.lastName || '',
+              role: data?.role || session.user.user_metadata?.role || 'user'
+            })
+          })
+          .catch(() => {
+            setUser({
+              id: session.user.id,
+              email: session.user.email || '',
+              firstName: session.user.user_metadata?.firstName || '',
+              lastName: session.user.user_metadata?.lastName || '',
+              role: session.user.user_metadata?.role || 'user'
+            })
+          })
+      } else {
+        setUser(null)
+      }
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
 
   const login = (token: string, userData: User) => {
-    localStorage.setItem('token', token)
-    if (userData.role) {
-      localStorage.setItem('role', userData.role)
-    }
+    // The actual token is managed by supabase client
     setUser(userData)
-    // The redirect will be handled by the signin form component
   }
 
-  const logout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('role')
+  const logout = async () => {
+    await supabase.auth.signOut()
     setUser(null)
     window.location.href = '/signin'
   }
